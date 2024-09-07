@@ -1,4 +1,4 @@
 packages:
   - 'events/*'
   - 'packages/*'
-  - 'admin/*'
+  - 'admin'
