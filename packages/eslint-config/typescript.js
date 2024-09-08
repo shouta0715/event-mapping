@@ -17,11 +17,9 @@ module.exports = {
     "turbo",
   ],
   plugins: ["import", "unused-imports"],
-  globals: {
-    React: true,
-    JSX: true,
-  },
   env: {
+    browser: false,
+    es6: true,
     node: true,
   },
   settings: {
@@ -39,14 +37,14 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ["*.js?(x)", "*.ts?(x)"],
+      files: ["*.ts", "*.js"],
     },
   ],
   rules: {
     "import/prefer-default-export": "off",
+    "arrow-body-style": "off",
     "import/no-extraneous-dependencies": "off",
     "no-console": "warn",
-    "unused-imports/no-unused-imports": "error",
     "lines-between-class-members": [
       "error",
       "always",
@@ -68,6 +66,7 @@ module.exports = {
         next: "return",
       },
     ],
+    "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -83,9 +82,7 @@ module.exports = {
       "ignorePackages",
       {
         js: "never",
-        jsx: "never",
         ts: "never",
-        tsx: "never",
       },
     ],
     "import/order": [
@@ -97,5 +94,10 @@ module.exports = {
         },
       },
     ],
+    "no-continue": "off",
+    "no-restricted-syntax": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "import/no-unresolved": "off",
+    "import/no-cycle": "off",
   },
 };
