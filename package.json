@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "dev:admin": "turbo dev --filter='./apps/admin'... --filter='./apps/api'...",
-    "dev:ripples": "turbo dev --filter='./apps/admin'... --filter='./apps/events/ripples'...",
+    "dev:ripples": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/ripples'...",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
