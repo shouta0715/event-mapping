@@ -21,7 +21,7 @@ importers:
         specifier: ^5.4.5
         version: 5.5.4
 
-  admin:
+  apps/admin:
     dependencies:
       next:
         specifier: 14.2.8
@@ -35,7 +35,7 @@ importers:
     devDependencies:
       '@event-mapping/eslint-config':
         specifier: workspace:*
-        version: link:../packages/eslint-config
+        version: link:../../packages/eslint-config
       '@types/node':
         specifier: ^20
         version: 20.16.5
@@ -61,11 +61,11 @@ importers:
         specifier: ^5
         version: 5.5.4
 
-  events/ripples:
+  apps/events/ripples:
     dependencies:
       '@event-mapping/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../../packages/ui
       next:
         specifier: 14.2.8
         version: 14.2.8(react-dom@18.3.1)(react@18.3.1)
@@ -78,13 +78,13 @@ importers:
     devDependencies:
       '@event-mapping/eslint-config':
         specifier: workspace:*
-        version: link:../../packages/eslint-config
+        version: link:../../../packages/eslint-config
       '@event-mapping/tailwind-config':
         specifier: workspace:*
-        version: link:../../packages/tailwind-config
+        version: link:../../../packages/tailwind-config
       '@event-mapping/typescript-config':
         specifier: workspace:*
-        version: link:../../packages/typescript-config
+        version: link:../../../packages/typescript-config
       '@types/node':
         specifier: ^20
         version: 20.16.5
