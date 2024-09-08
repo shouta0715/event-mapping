@@ -5,6 +5,5 @@
   "trailingComma": "es5",
   "singleQuote": false,
   "jsxSingleQuote": false,
-  "semi": true,
-  "plugins": ["tailwindcss"]
+  "semi": true
 }
