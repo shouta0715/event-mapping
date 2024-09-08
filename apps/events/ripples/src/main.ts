@@ -1,17 +1,24 @@
-import viteLogo from "@/public/vite.svg";
+/* eslint-disable new-cap */
+/* eslint-disable no-new */
+import p5 from "p5";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
+function sketch(pi: p5) {
+  const p = pi;
 
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+  };
+
+  p.draw = () => {
+    p.background(220);
+  };
+}
+
+function start() {
+  const parent = document.querySelector<HTMLDivElement>("#app");
+  if (!parent) throw new Error("No parent element found");
+
+  new p5(sketch, parent);
+}
+
+start();
