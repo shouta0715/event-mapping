@@ -1,0 +1,17 @@
+{
+  "name": "@event-mapping/tailwind-config",
+  "version": "1.0.0",
+  "description": "",
+  "exports": {
+    ".": "./tailwind.config.ts",
+    "./tailwind.css": "./tailwind.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@event-mapping/typescript-config": "workspace:*",
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7"
+  }
+}
