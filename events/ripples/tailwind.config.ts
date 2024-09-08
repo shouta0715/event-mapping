@@ -1,19 +1,9 @@
+import globalConfig from "@event-mapping/tailwind-config";
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
-  },
-  plugins: [],
+const config: Pick<Config, "presets" | "content"> = {
+  content: ["./src/**/*.tsx"],
+  presets: [globalConfig],
 };
+
 export default config;
