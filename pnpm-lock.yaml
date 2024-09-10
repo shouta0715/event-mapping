@@ -23,6 +23,12 @@ importers:
 
   apps/admin:
     dependencies:
+      '@event-mapping/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      comlink:
+        specifier: ^4.4.1
+        version: 4.4.1
       next:
         specifier: 14.2.8
         version: 14.2.8(react-dom@18.3.1)(react@18.3.1)
@@ -36,6 +42,9 @@ importers:
       '@event-mapping/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@event-mapping/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-config
       '@types/node':
         specifier: ^20
         version: 20.16.5
@@ -88,6 +97,9 @@ importers:
 
   apps/events/ripples:
     dependencies:
+      comlink:
+        specifier: ^4.4.1
+        version: 4.4.1
       p5:
         specifier: ^1.10.0
         version: 1.10.0
@@ -2559,6 +2571,10 @@ packages:
 
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  /comlink@4.4.1:
+    resolution: {integrity: sha512-+1dlx0aY5Jo1vHy/tSsIGpSkN4tS9rZSW8FIhG0JH/crs9wwweswIo/POr451r7bZww3hFbPAKnTpimzL/mm4Q==}
+    dev: false
 
   /commander@10.0.1:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
