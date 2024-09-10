@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
+import { expose, windowEndpoint } from "comlink";
 import p5 from "p5";
 
 type Ripple = {
@@ -10,6 +12,21 @@ type Ripple = {
 };
 
 const ripples: Ripple[] = [];
+
+function addRipple(x: number, y: number) {
+  ripples.push({
+    x,
+    y,
+    radius: 0,
+    alpha: 255,
+  });
+}
+
+function handleResizeFn(p: p5) {
+  return (w: number, h: number) => {
+    p.resizeCanvas(w, h);
+  };
+}
 
 function sketch(pi: p5) {
   const p = pi;
@@ -38,12 +55,11 @@ function sketch(pi: p5) {
   };
 
   p.mousePressed = () => {
-    ripples.push({
-      x: p.mouseX,
-      y: p.mouseY,
-      radius: 1,
-      alpha: 255,
-    });
+    addRipple(p.mouseX, p.mouseY);
+  };
+
+  p.windowResized = () => {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 }
 
@@ -51,7 +67,14 @@ function start() {
   const parent = document.querySelector<HTMLDivElement>("#app");
   if (!parent) throw new Error("No parent element found");
 
-  new p5(sketch, parent);
+  const i = new p5(sketch, parent);
+
+  // const isInnerIframe = window.self !== window.top;
+
+  expose(
+    { addRipple, handleResize: handleResizeFn(i) },
+    windowEndpoint(self.parent)
+  );
 }
 
 start();

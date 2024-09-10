@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@event-mapping/tailwind-config": "workspace:*",
     "@event-mapping/eslint-config": "workspace:*",
+    "@event-mapping/tailwind-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
     "@types/p5": "^1.7.6",
     "autoprefixer": "^10.4.20",
@@ -21,6 +21,7 @@
     "vite": "^5.4.1"
   },
   "dependencies": {
+    "comlink": "^4.4.1",
     "p5": "^1.10.0"
   }
 }
