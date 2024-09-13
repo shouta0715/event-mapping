@@ -7,11 +7,18 @@ const config: Pick<Config, "presets" | "content" | "theme"> = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       fontFamily: {
         sans: ["var(--font-roboto)", ...defaultTheme.fontFamily.sans],
+      },
+      minHeight: {
+        screen: "100dvh",
+      },
+      height: {
+        screen: "100dvh",
       },
     },
   },
