@@ -30,3 +30,17 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
       - run: pnpm format
+
+  type-check:
+    runs-on: ubuntu-latest
+    name: check type-checking
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: ./.github/actions/setup-pnpm
+
+      - run: pnpm type-check

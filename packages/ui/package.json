@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "build": "tailwindcss -i ./src/global.css -o ./dist/tailwind.css",
-    "dev": "tailwindcss -i ./src/global.css -o ./dist/tailwind.css --watch"
+    "dev": "tailwindcss -i ./src/global.css -o ./dist/tailwind.css --watch",
+    "type-check": "tsc --noEmit"
   },
   "exports": {
     "./components/*": "./src/components/*.tsx",

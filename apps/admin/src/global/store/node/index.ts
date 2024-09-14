@@ -1,16 +1,11 @@
 import { applyNodeChanges, NodeChange } from "@xyflow/react";
 import { type StateCreator } from "zustand";
-import {
-  FlowNodeActions,
-  FlowNodeState,
-  NodeType,
-  TerminalNode,
-} from "@/global/store/types";
+import { FlowNodeActions, FlowNodeState, NodeType } from "@/global/store/types";
 
 type FlowNodeStore = FlowNodeState & FlowNodeActions;
 
 type NodeStore = {
-  initialNodes: TerminalNode[];
+  initialNodes: NodeType[];
   handlers: Parameters<StateCreator<FlowNodeStore>>;
 };
 

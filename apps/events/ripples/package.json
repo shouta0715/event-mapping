@@ -7,7 +7,8 @@
     "dev": "vite --port 3001",
     "build": "vite build",
     "lint": "eslint src",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",
