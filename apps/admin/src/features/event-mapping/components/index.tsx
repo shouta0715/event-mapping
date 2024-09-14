@@ -13,7 +13,15 @@ const nodeTypes = {
 };
 
 export function EventMapping() {
-  const { nodes, edges, onEdgesChange, onNodesChange } = useEventMapping();
+  const {
+    nodes,
+    edges,
+    onEdgesChange,
+    onNodesChange,
+    onNodeClick,
+    onNodeDoubleClick,
+    onPanClick,
+  } = useEventMapping();
 
   return (
     <div className="h-screen">
@@ -24,7 +32,10 @@ export function EventMapping() {
         nodes={nodes}
         nodeTypes={nodeTypes}
         onEdgesChange={onEdgesChange}
+        onNodeClick={onNodeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
         onNodesChange={onNodesChange}
+        onPaneClick={onPanClick}
       >
         <Background />
         <Controls />

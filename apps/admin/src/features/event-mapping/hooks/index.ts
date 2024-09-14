@@ -1,4 +1,5 @@
 import { useTerminalState } from "@/global/store/provider";
+import { useNodeHandler } from "@/hooks/node";
 
 export const useEventMapping = () => {
   const { nodes, edges, onEdgesChange, onNodesChange } = useTerminalState(
@@ -10,10 +11,15 @@ export const useEventMapping = () => {
     })
   );
 
+  const { onNodeClick, onNodeDoubleClick, onPanClick } = useNodeHandler();
+
   return {
     nodes,
     edges,
     onEdgesChange,
     onNodesChange,
+    onNodeClick,
+    onNodeDoubleClick,
+    onPanClick,
   };
 };
