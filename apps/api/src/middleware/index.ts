@@ -19,6 +19,8 @@ export const sessionMiddleware = createMiddleware<SyncEnv>(async (c, next) => {
 
   const appName = c.req.param("app-name");
 
+  if (!appName) return c.notFound();
+
   const stub = getSessionStub(c, appName);
 
   c.set("session", stub);
