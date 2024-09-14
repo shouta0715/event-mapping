@@ -4,17 +4,16 @@ import { Background, Controls, ReactFlow } from "@xyflow/react";
 import React from "react";
 
 import "@xyflow/react/dist/style.css";
-import { useTerminalState } from "@/global/store/provider";
+import { IFRAME_NODE_TYPE } from "@/constant/node";
+import { useEventMapping } from "@/features/event-mapping/hooks";
+import { IframeNode } from "@/features/iframe/components";
+
+const nodeTypes = {
+  [IFRAME_NODE_TYPE]: IframeNode,
+};
 
 export function EventMapping() {
-  const { nodes, edges, onEdgesChange, onNodesChange } = useTerminalState(
-    (state) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-      onEdgesChange: state.onEdgesChange,
-      onNodesChange: state.onNodesChange,
-    })
-  );
+  const { nodes, edges, onEdgesChange, onNodesChange } = useEventMapping();
 
   return (
     <div className="h-screen">
@@ -23,6 +22,7 @@ export function EventMapping() {
         fitView
         minZoom={0.1}
         nodes={nodes}
+        nodeTypes={nodeTypes}
         onEdgesChange={onEdgesChange}
         onNodesChange={onNodesChange}
       >
