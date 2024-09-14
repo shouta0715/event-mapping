@@ -6,6 +6,9 @@ import {
   Node,
 } from "@xyflow/react";
 
+import { TERMINAL_NODE_TYPE } from "@/constant/node";
+import { IframeNode } from "@/features/iframe/types";
+
 /**
  * @description: 端末のノードのデータ
  */
@@ -26,26 +29,28 @@ export type TerminalEdgeData = {
 /**
  * @description: 端末のノード
  */
-export type TerminalNode = Node<TerminalNodeData>;
+export type TerminalNode = Node<TerminalNodeData, typeof TERMINAL_NODE_TYPE>;
 
 /**
  * @description: 端末のエッジ
  */
 export type TerminalEdge = Edge<TerminalEdgeData>;
 
+export type NodeType = TerminalNode | IframeNode;
+
 /**
  * @description: フローのノードの状態
  */
 export type FlowNodeState = {
-  nodes: TerminalNode[];
+  nodes: NodeType[];
 };
 
 /**
  * @description: フローのノードのアクション
  */
 export type FlowNodeActions = {
-  onNodesChange: OnNodesChange<TerminalNode>;
-  setNodes: (nodes: TerminalNode[]) => void;
+  onNodesChange: OnNodesChange<NodeType>;
+  setNodes: (nodes: NodeType[]) => void;
 };
 
 /**
