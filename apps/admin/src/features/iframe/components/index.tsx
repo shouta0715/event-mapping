@@ -1,12 +1,17 @@
 "use client";
 
+import { cn } from "@event-mapping/ui/lib/utils";
 import { NodeProps, NodeResizer } from "@xyflow/react";
 import React, { memo, useId } from "react";
 import { IframeNode as TIframeNode } from "@/features/iframe/types";
+import { useNodeHandler } from "@/hooks/node";
 
 export const IframeNode = memo(
-  ({ data, width, height }: NodeProps<TIframeNode>) => {
+  ({ data, width, height, id }: NodeProps<TIframeNode>) => {
     const title = useId();
+    const { getIsNodeSelected } = useNodeHandler();
+
+    const isSelected = getIsNodeSelected(id);
 
     return (
       <div className="group relative size-full">
@@ -27,16 +32,29 @@ export const IframeNode = memo(
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 z-10 size-full bg-white/70 opacity-0 transition-opacity group-hover:opacity-100"
+          className={cn(
+            "absolute inset-0 z-10 size-full bg-white/70 opacity-0 transition-opacity group-hover:opacity-100",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
         />
 
-        <div className="absolute left-1/2 z-20 h-full w-0.5 -translate-x-1/2 bg-destructive opacity-0 transition-opacity group-hover:opacity-100">
+        <div
+          className={cn(
+            "absolute left-1/2 z-20 h-full w-0.5 -translate-x-1/2 bg-destructive opacity-0 transition-opacity group-hover:opacity-100",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+        >
           <div className="relative top-1/3 ml-10 w-fit rounded-md bg-indigo-600 px-4 py-2 text-4xl text-white">
             {height}px
           </div>
         </div>
 
-        <div className="absolute left-1/2 top-1/2 z-20 h-0.5 w-full -translate-x-1/2 -translate-y-1/2 bg-destructive opacity-0 transition-opacity group-hover:opacity-100">
+        <div
+          className={cn(
+            "absolute left-1/2 top-1/2 z-20 h-0.5 w-full -translate-x-1/2 -translate-y-1/2 bg-destructive opacity-0 transition-opacity group-hover:opacity-100",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+        >
           <div className="relative left-1/3 mt-10 w-fit rounded-md bg-indigo-600 px-4 py-2 text-4xl text-white">
             {width}px
           </div>
@@ -48,7 +66,12 @@ export const IframeNode = memo(
           src={data.url}
           title={title}
         />
-        <div className="absolute -bottom-32 left-1/2 z-10 flex -translate-x-1/2 flex-col gap-2 rounded-md border-indigo-600 bg-indigo-600 px-4 py-2 text-4xl text-white opacity-0 transition-opacity group-hover:opacity-100">
+        <div
+          className={cn(
+            "absolute -bottom-32 left-1/2 z-10 flex -translate-x-1/2 flex-col gap-2 rounded-md border-indigo-600 bg-indigo-600 px-4 py-2 text-4xl text-white opacity-0 transition-opacity group-hover:opacity-100",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+        >
           <p>
             <span className="inline-block w-32 font-semibold">Width</span>
             {width?.toFixed(0)}
