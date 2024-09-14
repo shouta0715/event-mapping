@@ -12,7 +12,7 @@ const nodeTypes = {
   [IFRAME_NODE_TYPE]: IframeNode,
 };
 
-export function EventMapping() {
+function EventMapping() {
   const {
     nodes,
     edges,
@@ -43,3 +43,5 @@ export function EventMapping() {
     </div>
   );
 }
+
+export default EventMapping;
