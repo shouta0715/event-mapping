@@ -22,12 +22,16 @@ export const IframeNode = memo(
             zIndex: 9999,
             backgroundColor: "hsl(var(--background))",
             borderWidth: 2,
-            borderColor: "hsl(var(--primary))",
+            borderColor: isSelected
+              ? "hsl(var(--primary))"
+              : "hsl(var(--border))",
             borderRadius: "var(--radius)",
           }}
           lineStyle={{
-            borderWidth: 4,
-            borderColor: "hsl(var(--border))",
+            borderWidth: isSelected ? 6 : 4,
+            borderColor: isSelected
+              ? "hsl(var(--primary))"
+              : "hsl(var(--border))",
           }}
         />
         <div
@@ -44,7 +48,7 @@ export const IframeNode = memo(
             isSelected ? "opacity-100" : "opacity-0"
           )}
         >
-          <div className="relative top-1/3 ml-10 w-fit rounded-md bg-indigo-600 px-4 py-2 text-4xl text-white">
+          <div className="relative top-1/3 ml-10 w-fit rounded-md bg-primary px-4 py-2 text-4xl text-white">
             {height}px
           </div>
         </div>
@@ -55,7 +59,7 @@ export const IframeNode = memo(
             isSelected ? "opacity-100" : "opacity-0"
           )}
         >
-          <div className="relative left-1/3 mt-10 w-fit rounded-md bg-indigo-600 px-4 py-2 text-4xl text-white">
+          <div className="relative left-1/3 mt-10 w-fit rounded-md bg-primary px-4 py-2 text-4xl text-white">
             {width}px
           </div>
         </div>
@@ -68,7 +72,7 @@ export const IframeNode = memo(
         />
         <div
           className={cn(
-            "absolute -bottom-32 left-1/2 z-10 flex -translate-x-1/2 flex-col gap-2 rounded-md border-indigo-600 bg-indigo-600 px-4 py-2 text-4xl text-white opacity-0 transition-opacity group-hover:opacity-100",
+            "absolute -bottom-32 left-1/2 z-10 flex -translate-x-1/2 flex-col gap-2 rounded-md border-primary bg-primary px-4 py-2 text-4xl text-white opacity-0 transition-opacity group-hover:opacity-100",
             isSelected ? "opacity-100" : "opacity-0"
           )}
         >
