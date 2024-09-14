@@ -3,6 +3,7 @@ import { type StateCreator } from "zustand";
 import {
   FlowNodeActions,
   FlowNodeState,
+  NodeType,
   TerminalNode,
 } from "@/global/store/types";
 
@@ -26,12 +27,12 @@ export const createNodeStore = ({
 
   return {
     nodes: initialNodes,
-    setNodes: (nodes: TerminalNode[]) => {
+    setNodes: (nodes: NodeType[]) => {
       set({ nodes });
     },
-    onNodesChange: (changes: NodeChange<TerminalNode>[]) => {
+    onNodesChange: (changes: NodeChange<NodeType>[]) => {
       set((state) => ({
-        nodes: applyNodeChanges<TerminalNode>(changes, state.nodes),
+        nodes: applyNodeChanges<NodeType>(changes, state.nodes),
       }));
     },
   };
