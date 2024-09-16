@@ -19,7 +19,7 @@ export const getEvent = async (
 
   if (!res.ok) return null;
 
-  const event = await res.json<Event>();
+  const event = await res.json<EventWithSources>();
 
   return event;
 };
