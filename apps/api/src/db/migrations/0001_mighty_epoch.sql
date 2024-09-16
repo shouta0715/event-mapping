@@ -1,1 +1,0 @@
-ALTER TABLE `sources` ADD `name` text NOT NULL;
