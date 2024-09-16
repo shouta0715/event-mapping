@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "tsup src/index.ts --dts",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "dev": "tsup src/index.ts --watch --dts"
