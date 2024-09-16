@@ -1,4 +1,5 @@
-import { Event, EventWithSources } from "@event-mapping/db";
+import { Event, EventInsert, EventWithSources } from "@event-mapping/db";
+import { throwHttpErrorFromStatus } from "@/app/errors";
 import { env } from "@/env";
 
 export const getEvents = async (): Promise<Event[]> => {
@@ -20,6 +21,22 @@ export const getEvent = async (
   if (!res.ok) return null;
 
   const event = await res.json<EventWithSources>();
+
+  return event;
+};
+
+export const createEvent = async (data: EventInsert): Promise<Event> => {
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/events`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) throwHttpErrorFromStatus(res.status);
+
+  const event = await res.json<Event>();
 
   return event;
 };
