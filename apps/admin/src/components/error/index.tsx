@@ -1,5 +1,5 @@
 import React from "react";
-import { handleApiError } from "@/app/errors";
+import { handleApiError } from "@/errors";
 
 type ToastErrorProps = {
   error: unknown;
