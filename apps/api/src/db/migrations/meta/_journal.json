@@ -8,6 +8,13 @@
       "when": 1726448261897,
       "tag": "0000_gorgeous_triathlon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1726452440444,
+      "tag": "0001_mighty_epoch",
+      "breakpoints": true
     }
   ]
 }

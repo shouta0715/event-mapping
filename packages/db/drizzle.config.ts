@@ -1,9 +1,7 @@
 import { defineConfig, Config } from "drizzle-kit";
 import path from "path";
 
-const root = process.cwd();
-const apiRoot = path.join(root, "..", "..", "apps", "api");
-console.log(apiRoot);
+const apiRoot = path.join("..", "..", "apps", "api");
 
 const migrationsDir = path.join(apiRoot, "src/db/migrations");
 
