@@ -1,0 +1,19 @@
+{
+  "name": "@event-mapping/db",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@event-mapping/eslint-config": "workspace:*",
+    "@event-mapping/typescript-config": "workspace:*",
+    "drizzle-kit": "^0.24.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "drizzle-orm": "^0.33.0"
+  }
+}
