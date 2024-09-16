@@ -23,6 +23,9 @@ importers:
 
   apps/admin:
     dependencies:
+      '@event-mapping/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@event-mapping/ui':
         specifier: workspace:*
         version: link:../../packages/ui
