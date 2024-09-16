@@ -1,9 +1,12 @@
 import { Event, EventInsert, EventWithSources } from "@event-mapping/db";
-import { throwHttpErrorFromStatus } from "@/app/errors";
 import { env } from "@/env";
+import { throwHttpErrorFromStatus } from "@/errors";
 
-export const getEvents = async (): Promise<Event[]> => {
-  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/events`, {
+export const getEvents = async (name?: string): Promise<Event[]> => {
+  const url = new URL(`${env.NEXT_PUBLIC_API_URL}/events`);
+  if (name) url.searchParams.set("q", name);
+
+  const res = await fetch(url, {
     cache: "no-store",
   });
   const events = await res.json<Event[]>();
