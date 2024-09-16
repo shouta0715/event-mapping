@@ -3,7 +3,10 @@
   "scripts": {
     "dev": "wrangler dev src/index.ts --port 8787",
     "deploy": "wrangler deploy --minify src/index.ts",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "apply": "wrangler d1 migrations apply event-mapping --local",
+    "generate": "drizzle-kit generate",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
