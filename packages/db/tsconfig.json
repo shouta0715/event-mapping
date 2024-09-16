@@ -8,6 +8,6 @@
     "lib": ["ESNext"],
     "baseUrl": "./"
   },
-  "include": ["src/**/*.ts", "drizzle.config.ts", "schema.ts"],
+  "include": ["src/**/*.ts", "drizzle.config.ts", "src/schema.ts"],
   "exclude": ["node_modules", "dist"]
 }

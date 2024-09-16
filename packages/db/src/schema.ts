@@ -5,10 +5,10 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const events = sqliteTable("events", {
   id: text("id").primaryKey().$defaultFn(createId),
   name: text("name").notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  created_at: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updated_at: text("updated_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`)
     .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
@@ -17,11 +17,11 @@ export const events = sqliteTable("events", {
 export const sources = sqliteTable("sources", {
   id: text("id").primaryKey().$defaultFn(createId),
   name: text("name").notNull(),
-  eventId: text("event_id")
+  event_id: text("event_id")
     .references(() => events.id)
     .notNull(),
   url: text("url").notNull(),
-  devUrl: text("dev_url").notNull(),
+  dev_url: text("dev_url").notNull(),
   width: integer("width").notNull().default(1920),
   height: integer("height").notNull().default(1080),
 });
@@ -32,7 +32,7 @@ export const eventsToSources = relations(events, ({ many }) => ({
 
 export const sourcesToEvents = relations(sources, ({ one }) => ({
   event: one(events, {
-    fields: [sources.eventId],
+    fields: [sources.event_id],
     references: [events.id],
   }),
 }));

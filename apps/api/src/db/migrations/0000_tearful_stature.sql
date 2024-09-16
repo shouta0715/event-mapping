@@ -1,12 +1,13 @@
 CREATE TABLE `events` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updated_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `sources` (
 	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
 	`event_id` text NOT NULL,
 	`url` text NOT NULL,
 	`dev_url` text NOT NULL,

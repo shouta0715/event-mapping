@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@event-mapping/db": "workspace:*",
     "@event-mapping/ui": "workspace:*",
     "@t3-oss/env-nextjs": "^0.11.1",
     "@xyflow/react": "^12.3.0",
