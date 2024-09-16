@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d4fe5ff2-3eff-4d0e-9803-a6ae9bd4e26c",
+  "id": "6f0727e6-ee2b-4d03-9420-721e7f2aa893",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "events": {
@@ -70,6 +70,13 @@
         },
         "url": {
           "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dev_url": {
+          "name": "dev_url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
