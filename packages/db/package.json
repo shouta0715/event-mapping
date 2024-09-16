@@ -4,16 +4,24 @@
   "private": true,
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev": "tsup src/**/*.ts --watch --dts"
+  },
+  "exports": {
+    "./events": "./dist/events/index.js",
+    "./sources": "./dist/sources/index.js"
   },
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
     "drizzle-kit": "^0.24.2",
+    "tsup": "^8.2.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
-    "drizzle-orm": "^0.33.0"
+    "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
+    "zod": "^3.23.8"
   }
 }
