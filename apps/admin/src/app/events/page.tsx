@@ -1,5 +1,41 @@
+import { Button } from "@event-mapping/ui/components";
+import { PlusIcon } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
-export default function Page() {
-  return <div>page</div>;
+import { Container } from "@/components/container";
+import { getEvents } from "@/features/events/api";
+
+export default async function Page() {
+  const events = await getEvents();
+
+  return (
+    <div>
+      <header className="bg-primary py-2.5 sm:px-3.5 sm:before:flex-1">
+        <Container className="flex items-center gap-x-6 px-6">
+          <p className="font-bold leading-6 text-white">イベント一覧</p>
+          <div className="flex flex-1 justify-end">
+            <Button className="flex items-center gap-x-2" variant="outline">
+              <PlusIcon className="size-4" />
+              イベントを追加
+            </Button>
+          </div>
+        </Container>
+      </header>
+      <Container className="max-w-4xl">
+        <ul className="mt-12">
+          {events.map((event) => (
+            <li key={event.id}>
+              <Link
+                className="block w-full border-b py-4 font-bold transition-colors hover:border-b-primary hover:text-primary"
+                href={`/events/${event.id}`}
+              >
+                {event.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </div>
+  );
 }

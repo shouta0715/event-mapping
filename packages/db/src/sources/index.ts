@@ -1,7 +1,6 @@
 import { createInsertSchema } from "drizzle-zod";
-import { sources } from "src/schema";
-
 import * as z from "zod";
+import { sources } from "src/schema";
 
 const sourceInsertSchema = createInsertSchema(sources, {
   url: z.string().min(1).url({ message: "URLの形式が正しくありません。" }),
@@ -11,5 +10,7 @@ const sourceInsertSchema = createInsertSchema(sources, {
 }).pick({ url: true, dev_url: true, width: true, height: true });
 
 type SourceInsert = z.infer<typeof sourceInsertSchema>;
+type Source = typeof sources.$inferSelect;
 
-export { sourceInsertSchema, type SourceInsert };
+export { sourceInsertSchema };
+export { type SourceInsert, type Source };

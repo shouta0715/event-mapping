@@ -9,7 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "exports": {
-    "./components/*": "./src/components/*.tsx",
+    "./components": "./src/components/index.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./global.css": "./dist/tailwind.css"
   },

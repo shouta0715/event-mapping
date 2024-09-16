@@ -3,17 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "tsup src/index.ts --dts",
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev": "tsup src/index.ts --watch --dts"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
     "better-sqlite3": "^11.3.0",
     "drizzle-kit": "^0.24.2",
+    "tsup": "^8.2.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
