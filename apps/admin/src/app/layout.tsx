@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "@event-mapping/ui/global.css";
 import "./globals.css";
+import { Providers } from "@/components/providers";
 
 const robot = Roboto({
   display: "swap",
@@ -29,7 +30,7 @@ export default function RootLayout({
           robot.variable
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
