@@ -1,7 +1,6 @@
 import { createInsertSchema } from "drizzle-zod";
-import { events } from "src/schema";
-
 import * as z from "zod";
+import { events, sources } from "src/schema";
 
 const eventInsertSchema = createInsertSchema(events, {
   name: z
@@ -11,5 +10,11 @@ const eventInsertSchema = createInsertSchema(events, {
 }).pick({ name: true });
 
 type EventInsert = z.infer<typeof eventInsertSchema>;
+type Event = typeof events.$inferSelect;
 
-export { eventInsertSchema, type EventInsert };
+type EventWithSources = typeof events.$inferSelect & {
+  sources: (typeof sources.$inferSelect)[];
+};
+
+export { eventInsertSchema };
+export { type EventInsert, type Event, type EventWithSources };
