@@ -11,7 +11,7 @@ const sqlPath = path.join(
 );
 
 export default defineConfig({
-  schema: "./schema.ts",
+  schema: "./src/schema.ts",
   out: migrationsDir,
   dialect: "sqlite",
   dbCredentials: {

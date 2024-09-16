@@ -4,19 +4,16 @@
   "private": true,
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio",
-    "dev": "tsup src/**/*.ts --watch --dts"
+    "db:studio": "drizzle-kit studio"
   },
   "exports": {
-    "./events": "./dist/events/index.js",
-    "./sources": "./dist/sources/index.js"
+    ".": "./src/index.ts"
   },
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
     "better-sqlite3": "^11.3.0",
     "drizzle-kit": "^0.24.2",
-    "tsup": "^8.2.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
