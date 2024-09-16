@@ -30,3 +30,14 @@ export const pagination = (c: Context<Env>) => {
 
   return paginationSchema.parse({ limit, offset });
 };
+
+/**
+ * 検索パラメータを取得する
+ * @param c hono context
+ * @returns q
+ */
+export const withQ = (c: Context<Env>) => {
+  const q = c.req.query("q");
+
+  return q;
+};

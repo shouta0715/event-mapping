@@ -1,9 +1,9 @@
-import { desc, eq, eventInsertSchema, events } from "@event-mapping/db";
+import { desc, eq, eventInsertSchema, events, like } from "@event-mapping/db";
 
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
 import { handleApiError, InternalServerError } from "@/errors";
-import { createHono, pagination } from "@/helper";
+import { createHono, pagination, withQ } from "@/helper";
 
 const app = createHono.createApp();
 
@@ -18,10 +18,12 @@ app.use(
 
 app.get("/", async (c) => {
   const { limit, offset } = pagination(c);
+  const q = withQ(c);
 
   const e = await c.var.db
     .select()
     .from(events)
+    .where(q ? like(events.name, `%${q}%`) : undefined)
     .limit(limit)
     .offset(offset)
     .orderBy(desc(events.created_at));
