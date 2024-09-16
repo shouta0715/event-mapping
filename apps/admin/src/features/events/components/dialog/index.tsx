@@ -4,6 +4,7 @@ import { Button } from "@event-mapping/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -26,6 +27,7 @@ export function EventFormDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>イベントの作成</DialogTitle>
+          <DialogDescription>新しいイベントを作成します。</DialogDescription>
         </DialogHeader>
         <EventForm onClose={() => setOpen(false)} />
       </DialogContent>
