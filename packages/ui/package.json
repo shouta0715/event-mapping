@@ -9,7 +9,11 @@
     "type-check": "tsc --noEmit"
   },
   "exports": {
-    "./components": "./src/components/index.tsx",
+    "./components/form": "./src/components/ui/form.tsx",
+    "./components/input": "./src/components/ui/input.tsx",
+    "./components/label": "./src/components/ui/label.tsx",
+    "./components/button": "./src/components/ui/button.tsx",
+    "./components/dialog": "./src/components/ui/dialog.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./global.css": "./dist/tailwind.css"
   },
