@@ -1,10 +1,9 @@
-import { Button } from "@event-mapping/ui/components";
-import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 import { Container } from "@/components/container";
 import { getEvents } from "@/features/events/api";
+import { EventFormDialog } from "@/features/events/components/dialog";
 
 export default async function Page() {
   const events = await getEvents();
@@ -15,10 +14,7 @@ export default async function Page() {
         <Container className="flex items-center gap-x-6 px-6">
           <p className="font-bold leading-6 text-white">イベント一覧</p>
           <div className="flex flex-1 justify-end">
-            <Button className="flex items-center gap-x-2" variant="outline">
-              <PlusIcon className="size-4" />
-              イベントを追加
-            </Button>
+            <EventFormDialog />
           </div>
         </Container>
       </header>
