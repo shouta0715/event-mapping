@@ -9,6 +9,7 @@ CREATE TABLE `sources` (
 	`id` text PRIMARY KEY NOT NULL,
 	`event_id` text NOT NULL,
 	`url` text NOT NULL,
+	`dev_url` text NOT NULL,
 	`width` integer DEFAULT 1920 NOT NULL,
 	`height` integer DEFAULT 1080 NOT NULL,
 	FOREIGN KEY (`event_id`) REFERENCES `events`(`id`) ON UPDATE no action ON DELETE no action

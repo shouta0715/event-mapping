@@ -20,12 +20,13 @@ export const sources = sqliteTable("sources", {
     .references(() => events.id)
     .notNull(),
   url: text("url").notNull(),
+  devUrl: text("dev_url").notNull(),
   width: integer("width").notNull().default(1920),
   height: integer("height").notNull().default(1080),
 });
 
-export const eventsToSources = relations(events, ({ one }) => ({
-  sources: one(sources),
+export const eventsToSources = relations(events, ({ many }) => ({
+  sources: many(sources),
 }));
 
 export const sourcesToEvents = relations(sources, ({ one }) => ({
