@@ -9,7 +9,11 @@
     "type-check": "tsc --noEmit"
   },
   "exports": {
-    "./components": "./src/components/index.tsx",
+    "./components/form": "./src/components/ui/form.tsx",
+    "./components/input": "./src/components/ui/input.tsx",
+    "./components/label": "./src/components/ui/label.tsx",
+    "./components/button": "./src/components/ui/button.tsx",
+    "./components/dialog": "./src/components/ui/dialog.tsx",
     "./lib/*": "./src/lib/*.ts",
     "./global.css": "./dist/tailwind.css"
   },
@@ -29,12 +33,17 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.439.0",
     "react": "^18.2.0",
+    "react-hook-form": "^7.53.0",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   }
 }

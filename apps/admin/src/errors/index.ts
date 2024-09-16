@@ -1,6 +1,4 @@
 // eslint-disable-next-line max-classes-per-file
-import { StatusCode } from "hono/utils/http-status";
-
 export const errors = {
   400: { message: "Bad Request" },
   401: { message: "Unauthorized" },
@@ -117,14 +115,7 @@ export const throwHttpErrorFromStatus = (
   }
 };
 
-export const handleApiError = ({
-  error,
-}: {
-  error: unknown;
-}): {
-  message: string;
-  status: StatusCode;
-} => {
+export const handleApiError = ({ error }: { error: unknown }) => {
   if (error instanceof BadRequestError) {
     const status = 400;
     const { message } = error;
