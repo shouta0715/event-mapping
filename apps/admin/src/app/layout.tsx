@@ -1,7 +1,6 @@
 import { cn } from "@event-mapping/ui/lib/utils";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "@event-mapping/tailwind-config/tailwind.css";
 import "./globals.css";
 
 const robot = Roboto({
