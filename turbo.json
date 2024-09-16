@@ -17,6 +17,18 @@
       "cache": false,
       "persistent": true
     },
+    "db:apply": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
     "admin#build": {
       "env": ["NEXT_PUBLIC_API_URL"]
     }

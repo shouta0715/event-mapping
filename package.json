@@ -8,7 +8,10 @@
     "dev:ripples": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/ripples'...",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:apply": "turbo db:apply",
+    "db:generate": "turbo db:generate",
+    "db:studio": "turbo db:studio"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
