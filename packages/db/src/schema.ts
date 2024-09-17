@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations, sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
 export const events = sqliteTable("events", {
   id: text("id").primaryKey().$defaultFn(createId),
@@ -15,18 +15,24 @@ export const events = sqliteTable("events", {
     .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
 });
 
-export const sources = sqliteTable("sources", {
-  id: text("id").primaryKey().$defaultFn(createId),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  event_id: text("event_id")
-    .references(() => events.id)
-    .notNull(),
-  url: text("url").notNull(),
-  dev_url: text("dev_url").notNull(),
-  width: integer("width").notNull().default(1920),
-  height: integer("height").notNull().default(1080),
-});
+export const sources = sqliteTable(
+  "sources",
+  {
+    id: text("id").primaryKey().$defaultFn(createId),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    event_id: text("event_id")
+      .references(() => events.id)
+      .notNull(),
+    url: text("url").notNull(),
+    dev_url: text("dev_url").notNull(),
+    width: integer("width").notNull().default(1920),
+    height: integer("height").notNull().default(1080),
+  },
+  (table) => ({
+    slugEventIndex: unique().on(table.slug, table.event_id),
+  })
+);
 
 export const eventsToSources = relations(events, ({ many }) => ({
   sources: many(sources),

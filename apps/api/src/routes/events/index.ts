@@ -1,4 +1,12 @@
-import { desc, eq, eventInsertSchema, events, like } from "@event-mapping/db";
+import {
+  and,
+  desc,
+  eq,
+  eventInsertSchema,
+  events,
+  like,
+  sources,
+} from "@event-mapping/db";
 
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
@@ -33,16 +41,27 @@ app.get("/", async (c) => {
 
 app.get("/:slug", async (c) => {
   const { slug } = c.req.param();
+  const { limit, offset } = pagination(c);
+  const q = withQ(c);
   const e = await c.var.db.query.events.findFirst({
     where: eq(events.slug, slug),
-    with: {
-      sources: true,
-    },
   });
 
   if (!e) return c.notFound();
 
-  return c.json(e);
+  const ss = await c.var.db
+    .select()
+    .from(sources)
+    .where(
+      and(
+        eq(sources.event_id, e.id),
+        q ? like(sources.name, `%${q}%`) : undefined
+      )
+    )
+    .limit(limit)
+    .offset(offset);
+
+  return c.json({ ...e, sources: ss });
 });
 
 app.post("/", zValidator("json", eventInsertSchema), async (c) => {

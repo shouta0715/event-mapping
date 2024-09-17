@@ -5,13 +5,7 @@ import { Container } from "@/components/container";
 import { getEvents } from "@/features/events/api";
 import { EventFormDialog } from "@/features/events/components/dialog";
 import { SearchEvents } from "@/features/events/components/search";
-
-const getQ = (searchParams: { name: string | undefined | string[] }) => {
-  const q =
-    typeof searchParams.name === "string" ? searchParams.name : undefined;
-
-  return q;
-};
+import { getQ } from "@/utils";
 
 export default async function Page({
   searchParams,
