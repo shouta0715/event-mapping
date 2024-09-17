@@ -1,5 +1,5 @@
-import { defineConfig, Config } from "drizzle-kit";
 import path from "path";
+import { defineConfig, Config } from "drizzle-kit";
 
 const apiRoot = path.join("..", "..", "apps", "api");
 
