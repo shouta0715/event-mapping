@@ -31,10 +31,10 @@ app.get("/", async (c) => {
   return c.json(e);
 });
 
-app.get("/:id", async (c) => {
-  const { id } = c.req.param();
+app.get("/:slug", async (c) => {
+  const { slug } = c.req.param();
   const e = await c.var.db.query.events.findFirst({
-    where: eq(events.id, id),
+    where: eq(events.slug, slug),
     with: {
       sources: true,
     },
@@ -46,10 +46,10 @@ app.get("/:id", async (c) => {
 });
 
 app.post("/", zValidator("json", eventInsertSchema), async (c) => {
-  const { name } = c.req.valid("json");
+  const { name, slug } = c.req.valid("json");
 
   try {
-    const e = await c.var.db.insert(events).values({ name }).returning();
+    const e = await c.var.db.insert(events).values({ name, slug }).returning();
 
     const event = e[0];
 
