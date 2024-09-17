@@ -18,6 +18,7 @@ export const events = sqliteTable("events", {
 export const sources = sqliteTable("sources", {
   id: text("id").primaryKey().$defaultFn(createId),
   name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
   event_id: text("event_id")
     .references(() => events.id)
     .notNull(),
