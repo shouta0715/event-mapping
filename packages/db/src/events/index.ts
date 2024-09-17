@@ -4,10 +4,16 @@ import { events, sources } from "src/schema";
 
 const eventInsertSchema = createInsertSchema(events, {
   name: z
-    .string({ message: "名前は1文字以上255文字以下で入力してください" })
-    .min(1, { message: "名前は1文字以上255文字以下で入力してください" })
-    .max(255, { message: "名前は1文字以上255文字以下で入力してください" }),
-}).pick({ name: true });
+    .string()
+    .min(1, { message: "必須入力です。" })
+    .max(255, { message: "255文字以内で入力してください。" }),
+  slug: z
+    .string()
+    .min(1, { message: "必須入力です。" })
+    .regex(/^[a-zA-Z0-9_-]+$/, {
+      message: "英数字とハイフン、アンダースコアのみ使用できます。",
+    }),
+}).pick({ name: true, slug: true });
 
 type EventInsert = z.infer<typeof eventInsertSchema>;
 type Event = typeof events.$inferSelect;
