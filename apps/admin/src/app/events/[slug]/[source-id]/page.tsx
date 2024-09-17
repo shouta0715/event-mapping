@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
 import { createIframeNode } from "@/features/iframe/utils";
+import { getSource } from "@/features/sources/api";
 import { TerminalStateProvider } from "@/global/store/provider";
 
 const Loading = () => {
@@ -36,10 +38,15 @@ const DynamicEventMapping = dynamic(
   }
 );
 
-const eventUrl = "http://localhost:3001";
+export default async function Page({
+  params,
+}: {
+  params: { "source-id": string };
+}) {
+  const source = await getSource(params["source-id"]);
+  if (!source) notFound();
 
-export default function Page() {
-  const iframeNode = createIframeNode({ url: eventUrl });
+  const iframeNode = createIframeNode({ url: source.url });
 
   return (
     <TerminalStateProvider
