@@ -44,9 +44,12 @@ export default async function Page({
               <li key={event.id}>
                 <Link
                   className="block w-full border-b py-4 font-bold transition-colors hover:border-b-primary hover:text-primary"
-                  href={`/events/${event.id}`}
+                  href={`/events/${event.slug}`}
                 >
-                  {event.name}
+                  <p className="mb-2">{event.name}</p>
+                  <p className="text-sm tracking-widest text-muted-foreground">
+                    {event.slug}
+                  </p>
                 </Link>
               </li>
             ))

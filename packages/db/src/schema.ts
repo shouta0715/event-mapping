@@ -4,7 +4,8 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const events = sqliteTable("events", {
   id: text("id").primaryKey().$defaultFn(createId),
-  name: text("name").notNull().unique(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull().default("Untitled Event"),
   created_at: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
