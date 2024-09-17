@@ -5,6 +5,7 @@ import { Button } from "@event-mapping/ui/components/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,6 +32,7 @@ export function EventForm({ onClose }: EventFormProps) {
     resolver: zodResolver(eventInsertSchema),
     defaultValues: {
       name: "",
+      slug: "",
     },
   });
 
@@ -60,19 +62,39 @@ export function EventForm({ onClose }: EventFormProps) {
   return (
     <Form {...form}>
       <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>イベント名</FormLabel>
-              <FormControl>
-                <Input placeholder="イベント名" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>イベント名</FormLabel>
+                <FormControl>
+                  <Input placeholder="イベント名" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>識別子</FormLabel>
+                <FormControl>
+                  <Input placeholder="識別子" {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription className="text-xs">
+                  識別子はURLに使用されます。
+                  <br />
+                  英数字とハイフン、アンダースコアのみ使用できます。
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="flex justify-between">
           <Button onClick={onClose} type="button" variant="outline">
             キャンセル
