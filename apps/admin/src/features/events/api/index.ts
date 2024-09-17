@@ -15,9 +15,13 @@ export const getEvents = async (name?: string): Promise<Event[]> => {
 };
 
 export const getEvent = async (
-  slug: string
+  slug: string,
+  q?: string
 ): Promise<EventWithSources | null> => {
-  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/events/${slug}`, {
+  const url = new URL(`${env.NEXT_PUBLIC_API_URL}/events/${slug}`);
+  if (q) url.searchParams.set("q", q);
+
+  const res = await fetch(url, {
     cache: "no-store",
   });
 
