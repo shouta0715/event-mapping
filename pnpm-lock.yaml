@@ -139,6 +139,9 @@ importers:
 
   apps/events/ripples:
     dependencies:
+      '@event-mapping/event-sdk':
+        specifier: workspace:*
+        version: link:../../../packages/event-sdk
       comlink:
         specifier: ^4.4.1
         version: 4.4.1
@@ -264,6 +267,25 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.6.2
+
+  packages/event-sdk:
+    dependencies:
+      p5:
+        specifier: ^1.10.0
+        version: 1.10.0
+    devDependencies:
+      '@event-mapping/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@event-mapping/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/p5':
+        specifier: ^1.7.6
+        version: 1.7.6
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(typescript@5.6.2)
 
   packages/tailwind-config:
     devDependencies:
