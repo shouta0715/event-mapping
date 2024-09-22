@@ -20,7 +20,9 @@ const getWebSocketPair = () => {
 
 export function registerHandler(this: Subscription) {
   this.app.get("/", sessionMiddleware, async () => {
-    const { client } = getWebSocketPair();
+    const { client, server } = getWebSocketPair();
+
+    this.state.acceptWebSocket(server, ["user"]);
 
     return new Response(null, {
       status: 101,
@@ -29,7 +31,9 @@ export function registerHandler(this: Subscription) {
   });
 
   this.app.get("/admin", sessionMiddleware, async () => {
-    const { client } = getWebSocketPair();
+    const { client, server } = getWebSocketPair();
+
+    this.state.acceptWebSocket(server, ["admin"]);
 
     return new Response(null, {
       status: 101,
