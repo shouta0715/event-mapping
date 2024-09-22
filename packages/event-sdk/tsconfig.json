@@ -1,0 +1,11 @@
+{
+  "extends": "@event-mapping/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@event-mapping/event-sdk/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

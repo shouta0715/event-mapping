@@ -5,3 +5,4 @@ pnpm-lock.yaml
 public
 *.config.js
 fabbrica
+dist
