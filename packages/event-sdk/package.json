@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "tsup src/index.ts --watch --dts",
-    "build": "tsup src/index.ts --dts"
+    "build": "tsup src/index.ts --dts",
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
   },
   "exports": {
     ".": "./dist/index.js"
