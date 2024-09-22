@@ -15,12 +15,7 @@ export const env = createEnv({
     /**
      * NODE_ENV
      */
-    NEXT_PUBLIC_NODE_ENV: z.preprocess(
-      (value) => {
-        return value === "development" ? "development" : "production";
-      },
-      z.enum(["development", "production", "test"])
-    ),
+    NEXT_PUBLIC_NODE_ENV: z.enum(["development", "production", "test"]),
   },
   runtimeEnv: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
