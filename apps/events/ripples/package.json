@@ -23,7 +23,9 @@
   },
   "dependencies": {
     "@event-mapping/event-sdk": "workspace:*",
+    "@t3-oss/env-core": "^0.11.1",
     "comlink": "^4.4.1",
-    "p5": "^1.10.0"
+    "p5": "^1.10.0",
+    "zod": "^3.23.8"
   }
 }
