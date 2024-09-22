@@ -1,0 +1,12 @@
+{
+  "name": "@event-mapping/event-sdk",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsup src/index.ts --watch --dts"
+  },
+  "devDependencies": {
+    "@event-mapping/typescript-config": "workspace:*",
+    "@event-mapping/eslint-config": "workspace:*",
+    "tsup": "^8.2.4"
+  }
+}
