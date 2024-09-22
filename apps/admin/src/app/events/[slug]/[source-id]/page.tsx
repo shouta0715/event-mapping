@@ -33,7 +33,7 @@ export default async function Page({
       }}
     >
       <WSStatusProvider>
-        <DynamicEventMapping />
+        <DynamicEventMapping event={source.event} source={source} />
       </WSStatusProvider>
     </TerminalStateProvider>
   );
