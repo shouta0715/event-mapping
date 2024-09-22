@@ -4,12 +4,19 @@ import React, { useMemo } from "react";
 import { Loader } from "@/components/animation";
 import { useWs } from "@/features/websocket/hooks";
 
+export type Status =
+  | "connecting"
+  | "open"
+  | "closing"
+  | "closed"
+  | "uninstantiated";
+
 type WebSocketStatus = {
   isOpen: boolean;
   isClosing: boolean;
   isClosed: boolean;
   isUninstantiated: boolean;
-  status: "connecting" | "open" | "closing" | "closed" | "uninstantiated";
+  status: Status;
 };
 
 const INITIAL_STATE: WebSocketStatus = {

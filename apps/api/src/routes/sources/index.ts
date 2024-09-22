@@ -20,6 +20,9 @@ app.get("/:slug", async (c) => {
   const { slug } = c.req.param();
   const e = await c.var.db.query.sources.findFirst({
     where: eq(sources.slug, slug),
+    with: {
+      event: true,
+    },
   });
 
   if (!e) return c.notFound();

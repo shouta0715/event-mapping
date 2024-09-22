@@ -1,13 +1,15 @@
-import { Source, SourceInsert } from "@event-mapping/db";
+import { Event, Source, SourceInsert } from "@event-mapping/db";
 import { env } from "@/env";
 import { throwHttpErrorFromStatus } from "@/errors";
 
 export const getSource = async (sourceId: string) => {
-  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/sources/${sourceId}`);
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/sources/${sourceId}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) throwHttpErrorFromStatus(res.status);
 
-  const json = await res.json<Source>();
+  const json = await res.json<Source & { event: Event }>();
 
   return json;
 };
