@@ -2,11 +2,19 @@
   "name": "@event-mapping/event-sdk",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsup src/index.ts --watch --dts"
+    "dev": "tsup src/index.ts --watch --dts",
+    "build": "tsup src/index.ts --dts"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   },
   "devDependencies": {
-    "@event-mapping/typescript-config": "workspace:*",
     "@event-mapping/eslint-config": "workspace:*",
+    "@event-mapping/typescript-config": "workspace:*",
+    "@types/p5": "^1.7.6",
     "tsup": "^8.2.4"
+  },
+  "dependencies": {
+    "p5": "^1.10.0"
   }
 }

@@ -1,12 +1,10 @@
 {
   "extends": "@event-mapping/typescript-config/base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "lib": ["ESNext"],
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "@event-mapping/event-sdk/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
