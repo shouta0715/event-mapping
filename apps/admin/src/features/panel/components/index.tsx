@@ -13,26 +13,60 @@ type Props = {
   source: Source;
 };
 
-export function Panel({ event, source }: Props) {
-  const isOnline = useOnline();
+const IdPanel = ({ id, label }: { id: string; label: string }) => {
   const [copied, setCopied] = useState(false);
-
   const timer = useRef<NodeJS.Timeout | null>(null);
 
   const handleCopy = () => {
-    copy(source.id);
+    copy(id);
     setCopied(true);
-    timer.current = setTimeout(() => {
-      setCopied(false);
-    }, 1000);
   };
 
   useEffect(() => {
+    const t = timer.current;
+
     return () => {
-      if (!timer.current) return;
-      clearTimeout(timer.current);
+      if (!t) return;
+      clearTimeout(t);
     };
   }, []);
+
+  return (
+    <div className="items-center text-sm text-muted-foreground ">
+      <span className="font-semibold text-black">{label}</span>
+      <p className="flex items-center">
+        <span className="line-clamp-1 font-mono">{id}</span>
+        <Button
+          className="relative ml-2 shrink-0 text-xs text-muted-foreground"
+          onClick={handleCopy}
+          size="icon"
+          type="button"
+          variant="ghost"
+        >
+          {copied && (
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs text-green-600">
+              Copied!
+            </span>
+          )}
+          {copied ? (
+            <>
+              <ClipboardCheck className="rotate-12 text-green-600" />
+              <span className="sr-only">{id}をコピーしました</span>
+            </>
+          ) : (
+            <>
+              <Clipboard />
+              <span className="sr-only">{id}をコピーする</span>
+            </>
+          )}
+        </Button>
+      </p>
+    </div>
+  );
+};
+
+export function Panel({ event, source }: Props) {
+  const isOnline = useOnline();
 
   return (
     <div>
@@ -50,35 +84,9 @@ export function Panel({ event, source }: Props) {
 
       <hr className="my-4" />
 
-      <div className="items-center text-sm text-muted-foreground ">
-        <span className="font-semibold text-black">識別子</span>
-        <p className="flex items-center">
-          <span className="font-mono">{source.id}</span>
-          <Button
-            className="relative ml-2 shrink-0 text-xs text-muted-foreground"
-            onClick={handleCopy}
-            size="icon"
-            type="button"
-            variant="ghost"
-          >
-            {copied && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs text-green-600">
-                Copied!
-              </span>
-            )}
-            {copied ? (
-              <>
-                <ClipboardCheck className="rotate-12 text-green-600" />
-                <span className="sr-only">{source.id}をコピーしました</span>
-              </>
-            ) : (
-              <>
-                <Clipboard />
-                <span className="sr-only">{source.id}をコピーする</span>
-              </>
-            )}
-          </Button>
-        </p>
+      <div className="space-y-2">
+        <IdPanel id={source.event_id} label="イベントID" />
+        <IdPanel id={source.id} label="コンテンツID" />
       </div>
 
       {/* TODO: 端末一覧を表示する */}
