@@ -1,7 +1,10 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
+
+import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
+import { env } from "@/env.js";
 
 const positions = [
   { x: 100, y: 200, size: 80, color: "#FF5733" },
@@ -106,7 +109,13 @@ function start() {
   const parent = document.querySelector<HTMLDivElement>("#app");
   if (!parent) throw new Error("No parent element found");
 
-  new p5(sketch, parent);
+  const p = new p5(sketch, parent);
+
+  createEventClient(p, {
+    apiUrl: env.VITE_API_URL,
+    wsUrl: env.VITE_WS_URL,
+    sourceId: env.VITE_SOURCE_ID,
+  });
 }
 
 start();
