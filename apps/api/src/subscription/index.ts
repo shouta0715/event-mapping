@@ -1,18 +1,22 @@
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
-import { Env } from "@/env";
+import { handleMessage } from "@/subscription/handlers/message";
 import { registerHandler } from "@/subscription/handlers/register";
 
-type TEnv = Omit<Env["Bindings"], "DB">;
+type TEnv = {
+  SUBSCRIPTION: DurableObjectNamespace;
+};
 
 const basePath = "/events/:event_id/sources/:source_id/subscribe";
 
 export class Subscription extends DurableObject {
-  protected app: Hono<Env> = new Hono<Env>().basePath(basePath);
+  protected app = new Hono().basePath(basePath);
 
   protected readonly storage: DurableObjectStorage;
 
   private readonly registerHandler = registerHandler.bind(this);
+
+  private readonly handleMessage = handleMessage.bind(this);
 
   constructor(
     protected readonly state: DurableObjectState,
@@ -24,14 +28,7 @@ export class Subscription extends DurableObject {
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
-    if (message === "ping") {
-      ws.send("pong");
-
-      return;
-    }
-
-    // TODO: handle message
-    console.log(this);
+    this.handleMessage(ws, message);
   }
 
   fetch(req: Request) {
