@@ -137,7 +137,7 @@ importers:
         specifier: ^3.57.2
         version: 3.78.2(@cloudflare/workers-types@4.20240909.0)
 
-  apps/events/ripples:
+  apps/events/canal-night:
     dependencies:
       '@event-mapping/event-sdk':
         specifier: workspace:*
