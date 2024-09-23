@@ -15,7 +15,7 @@ preview_bucket_name = "images"
 
 [[migrations]]
 tag = "v1" # Should be unique for each entry
-new_classes = ["Subscription"]
+new_sqlite_classes = ["Subscription"]
 
 [[ d1_databases ]]
 binding = "DB"
