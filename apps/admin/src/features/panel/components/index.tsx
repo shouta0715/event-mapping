@@ -20,7 +20,7 @@ export function Panel({ event, source }: Props) {
   const timer = useRef<NodeJS.Timeout | null>(null);
 
   const handleCopy = () => {
-    copy(source.slug);
+    copy(source.id);
     setCopied(true);
     timer.current = setTimeout(() => {
       setCopied(false);
@@ -53,7 +53,7 @@ export function Panel({ event, source }: Props) {
       <div className="items-center text-sm text-muted-foreground ">
         <span className="font-semibold text-black">識別子</span>
         <p className="flex items-center">
-          <span className="font-mono">{source.slug}</span>
+          <span className="font-mono">{source.id}</span>
           <Button
             className="relative ml-2 shrink-0 text-xs text-muted-foreground"
             onClick={handleCopy}
@@ -69,12 +69,12 @@ export function Panel({ event, source }: Props) {
             {copied ? (
               <>
                 <ClipboardCheck className="rotate-12 text-green-600" />
-                <span className="sr-only">{source.slug}をコピーしました</span>
+                <span className="sr-only">{source.id}をコピーしました</span>
               </>
             ) : (
               <>
                 <Clipboard />
-                <span className="sr-only">{source.slug}をコピーする</span>
+                <span className="sr-only">{source.id}をコピーする</span>
               </>
             )}
           </Button>
