@@ -38,7 +38,7 @@
       ]
     },
     "canal-night#build": {
-      "env": ["VITE_API_URL", "VITE_WS_URL"]
+      "env": ["VITE_API_URL", "VITE_WS_URL", "VITE_SOURCE_ID", "VITE_EVENT_ID"]
     }
   }
 }
