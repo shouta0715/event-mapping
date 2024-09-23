@@ -37,7 +37,7 @@
         "NEXT_PUBLIC_NODE_ENV"
       ]
     },
-    "ripples#build": {
+    "canal-night#build": {
       "env": ["VITE_API_URL", "VITE_WS_URL"]
     }
   }

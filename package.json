@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "dev:admin": "turbo dev --filter='./apps/admin'... --filter='./apps/api'...",
-    "dev:ripples": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/ripples'...",
+    "dev:canal-night": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/canal-night'...",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
