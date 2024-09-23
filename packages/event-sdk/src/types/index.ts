@@ -1,3 +1,6 @@
 export type EventClientOptions = {
-  url: string;
+  apiUrl: string;
+  wsUrl: string;
+  sourceId: string;
+  eventId: string;
 };

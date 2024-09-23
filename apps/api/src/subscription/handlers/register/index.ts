@@ -19,10 +19,18 @@ const getWebSocketPair = () => {
 };
 
 export function registerHandler(this: Subscription) {
-  this.app.get("/", sessionMiddleware, async () => {
+  this.app.get("/", sessionMiddleware, async (c) => {
     const { client, server } = getWebSocketPair();
+    const session_id = c.req.query("session_id");
 
-    this.state.acceptWebSocket(server, ["user"]);
+    if (!session_id) {
+      return c.json({ message: "session_id is required" }, 400);
+    }
+
+    this.state.acceptWebSocket(server, ["session", session_id]);
+    this.state.setWebSocketAutoResponse(
+      new WebSocketRequestResponsePair("ping", "pong")
+    );
 
     return new Response(null, {
       status: 101,
@@ -34,6 +42,9 @@ export function registerHandler(this: Subscription) {
     const { client, server } = getWebSocketPair();
 
     this.state.acceptWebSocket(server, ["admin"]);
+    this.state.setWebSocketAutoResponse(
+      new WebSocketRequestResponsePair("ping", "pong")
+    );
 
     return new Response(null, {
       status: 101,

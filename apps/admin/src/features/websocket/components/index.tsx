@@ -29,10 +29,14 @@ const INITIAL_STATE: WebSocketStatus = {
 
 const WSStatusContext = React.createContext<WebSocketStatus>(INITIAL_STATE);
 
-export function WSStatusProvider({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const { status } = useWs();
+type Props = Readonly<{
+  eventId: string;
+  sourceId: string;
+  children: React.ReactNode;
+}>;
+
+export function WSStatusProvider({ eventId, sourceId, children }: Props) {
+  const { status } = useWs(eventId, sourceId);
 
   const statusValue: WebSocketStatus = useMemo(
     () => ({

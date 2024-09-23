@@ -1,9 +1,12 @@
 import p5 from "p5";
+import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { EventClientOptions } from "@event-mapping/event-sdk/types";
 
-export class AdminHandler {
-  constructor(
-    private readonly p: p5,
-    private readonly options: EventClientOptions
-  ) {}
+export class AdminHandler extends BaseHandler {
+  constructor(p: p5, options: EventClientOptions) {
+    super(p, options);
+
+    // TODO: Implement admin handler
+    throw new Error("Admin handler is not implemented");
+  }
 }
