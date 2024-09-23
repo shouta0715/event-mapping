@@ -285,9 +285,6 @@ importers:
       p5:
         specifier: ^1.10.0
         version: 1.10.0
-      ws:
-        specifier: ^8.18.0
-        version: 8.18.0
     devDependencies:
       '@event-mapping/eslint-config':
         specifier: workspace:*
@@ -298,9 +295,6 @@ importers:
       '@types/p5':
         specifier: ^1.7.6
         version: 1.7.6
-      '@types/ws':
-        specifier: ^8.5.12
-        version: 8.5.12
       tsup:
         specifier: ^8.2.4
         version: 8.2.4(typescript@5.6.2)
@@ -2841,12 +2835,6 @@ packages:
 
   /@types/tinycolor2@1.4.6:
     resolution: {integrity: sha512-iEN8J0BoMnsWBqjVbWH/c0G0Hh7O21lpR2/+PrvAVgWdzL7eexIFm4JN/Wn10PTcmNdtS6U67r499mlWMXOxNw==}
-    dev: true
-
-  /@types/ws@8.5.12:
-    resolution: {integrity: sha512-3tPRkv1EtkDpzlgyKyI8pGsGZAGPEaXeu0DOj5DI25Ja91bdAYddYHbADRYVrZMRbfW+1l5YwXVDKohDJNQxkQ==}
-    dependencies:
-      '@types/node': 20.16.5
     dev: true
 
   /@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.6.2):
@@ -8939,6 +8927,7 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: true
 
   /xxhash-wasm@1.0.2:
     resolution: {integrity: sha512-ibF0Or+FivM9lNrg+HGJfVX8WJqgo+kCLDc4vx6xMeTce7Aj+DLttKbxxRR/gNLSAelRc1omAPlJ77N/Jem07A==}
