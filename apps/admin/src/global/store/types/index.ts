@@ -1,3 +1,4 @@
+import { TerminalData } from "@event-mapping/schema";
 import {
   OnNodesChange,
   OnEdgesChange,
@@ -12,11 +13,6 @@ import { IframeNode } from "@/features/iframe/types";
 /**
  * @description: 端末のノードのデータ
  */
-export type TerminalNodeData = {
-  id: string;
-  width: number;
-  height: number;
-};
 
 /**
  * @description: 端末のエッジのデータ
@@ -29,7 +25,7 @@ export type TerminalEdgeData = {
 /**
  * @description: 端末のノード
  */
-export type TerminalNode = Node<TerminalNodeData, typeof TERMINAL_NODE_TYPE>;
+export type TerminalNode = Node<TerminalData, typeof TERMINAL_NODE_TYPE>;
 
 /**
  * @description: 端末のエッジ

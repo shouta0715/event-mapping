@@ -17,6 +17,7 @@
     "tsup": "^8.2.4"
   },
   "dependencies": {
+    "@event-mapping/schema": "workspace:*",
     "@paralleldrive/cuid2": "^2.2.2",
     "p5": "^1.10.0"
   }
