@@ -1,15 +1,12 @@
-import { useParams } from "next/navigation";
-
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { env } from "@/env";
 
-const getWsUrl = (sourceId: string) => {
-  return `${env.NEXT_PUBLIC_WS_URL}/sources/${sourceId}/subscribe/admin`;
+const getWsUrl = (eventId: string, sourceId: string) => {
+  return `${env.NEXT_PUBLIC_WS_URL}/events/${eventId}/sources/${sourceId}/subscribe/admin`;
 };
 
-export function useWs<T = unknown>() {
-  const params = useParams<{ "source-id": string }>();
-  const url = getWsUrl(params["source-id"]);
+export function useWs<T = unknown>(eventId: string, sourceId: string) {
+  const url = getWsUrl(eventId, sourceId);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket<T>(url, {
     reconnectInterval: (attemptNumber) =>

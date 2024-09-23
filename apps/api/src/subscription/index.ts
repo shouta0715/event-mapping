@@ -5,7 +5,7 @@ import { registerHandler } from "@/subscription/handlers/register";
 
 type TEnv = Omit<Env["Bindings"], "DB">;
 
-const basePath = "/sources/:slug/subscribe";
+const basePath = "/events/:event_id/sources/:source_id/subscribe";
 
 export class Subscription extends DurableObject {
   protected app: Hono<Env> = new Hono<Env>().basePath(basePath);

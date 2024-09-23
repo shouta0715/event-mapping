@@ -30,26 +30,6 @@ app.get("/:slug", async (c) => {
   return c.json(e);
 });
 
-app.get("/:slug/subscribe/*", async (c) => {
-  const slug = c.req.param("slug");
-
-  // TODO:本番環境になったら修正する
-  // const s = await c.var.db.query.sources.findFirst({
-  //   where: eq(sources.slug, slug),
-  // });
-
-  // if (!s) return c.notFound();
-
-  const subscription = c.env.SUBSCRIPTION.idFromName(slug);
-  const stub = c.env.SUBSCRIPTION.get(subscription);
-
-  const res = await stub.fetch(c.req.raw, {
-    headers: c.req.header(),
-  });
-
-  return res;
-});
-
 app.post("/:eventId", zValidator("json", sourceInsertSchema), async (c) => {
   const data = c.req.valid("json");
   const { eventId } = c.req.param();

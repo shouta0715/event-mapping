@@ -64,6 +64,27 @@ app.get("/:slug", async (c) => {
   return c.json({ ...e, sources: ss });
 });
 
+app.get("/:event_id/sources/:source_id/subscribe/*", async (c) => {
+  const { event_id, source_id } = c.req.param();
+
+  const s = await c.var.db.query.sources.findFirst({
+    where: and(eq(sources.id, source_id), eq(sources.event_id, event_id)),
+  });
+
+  if (!s) return c.notFound();
+
+  const id = `${event_id}:${source_id}`;
+
+  const subscription = c.env.SUBSCRIPTION.idFromName(id);
+  const stub = c.env.SUBSCRIPTION.get(subscription);
+
+  const res = await stub.fetch(c.req.raw, {
+    headers: c.req.header(),
+  });
+
+  return res;
+});
+
 app.post("/", zValidator("json", eventInsertSchema), async (c) => {
   const { name, slug } = c.req.valid("json");
 
