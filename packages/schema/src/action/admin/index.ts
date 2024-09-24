@@ -23,7 +23,7 @@ export type InitializeAction = z.infer<typeof initializeActionSchema>;
  */
 export const joinActionSchema = z.object({
   action: z.literal("join"),
-  sessionId: z.string(),
+  data: terminalDataSchema,
 });
 
 export type JoinAction = z.infer<typeof joinActionSchema>;
