@@ -10,6 +10,9 @@ import {
   eventWarningSchema,
 } from "@event-mapping/schema/action/event";
 
+export * from "@event-mapping/schema/action/admin";
+export * from "@event-mapping/schema/action/event";
+
 export const adminActionSchema = z.union([
   initializeActionSchema,
   joinActionSchema,
