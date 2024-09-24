@@ -18,17 +18,26 @@ export const createNodeStore = ({
   initialNodes,
   handlers,
 }: NodeStore): FlowNodeStore => {
-  const [set] = handlers;
+  const [set, get] = handlers;
 
   return {
     nodes: initialNodes,
     setNodes: (nodes: NodeType[]) => {
-      set({ nodes });
+      const prevNodes = get().nodes;
+      set({ nodes: [...prevNodes, ...nodes] });
     },
     onNodesChange: (changes: NodeChange<NodeType>[]) => {
       set((state) => ({
         nodes: applyNodeChanges<NodeType>(changes, state.nodes),
       }));
+    },
+    addNode: (node: NodeType) => {
+      const prevNodes = get().nodes;
+      set({ nodes: [...prevNodes, node] });
+    },
+    removeNode: (id: string) => {
+      const prevNodes = get().nodes;
+      set({ nodes: prevNodes.filter((node) => node.id !== id) });
     },
   };
 };

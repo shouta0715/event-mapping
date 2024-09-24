@@ -39,8 +39,8 @@ const useTerminalStateContext = () => {
   return context;
 };
 
-export const useTerminalState = (
-  selector: (state: FlowGlobalState) => Partial<FlowGlobalState>
+export const useTerminalState = <T extends Partial<FlowGlobalState>>(
+  selector: (state: FlowGlobalState) => T
 ) => {
   const store = useTerminalStateContext();
 
