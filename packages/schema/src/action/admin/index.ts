@@ -1,5 +1,5 @@
-import { terminalDataSchema } from "@event-mapping/schema/terminal";
 import z from "zod";
+import { terminalDataSchema } from "@event-mapping/schema/terminal";
 
 export const adminWarningSchema = z.object({
   action: z.literal("warning"),
