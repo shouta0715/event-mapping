@@ -12,8 +12,6 @@ export const terminalDataSchema = z.object({
   height: coerceNumber,
   windowWidth: coerceNumber,
   windowHeight: coerceNumber,
-  eventWidth: coerceNumber,
-  eventHeight: coerceNumber,
   displayname: z.string().min(1).max(50),
   startX: coerceNumber.default(0),
   startY: coerceNumber.default(0),
