@@ -1,7 +1,8 @@
+import { useWebSocketMessage } from "@/features/message/hooks";
 import { useTerminalState } from "@/global/store/provider";
 import { useNodeHandler } from "@/hooks/node";
 
-export const useEventMapping = () => {
+export const useEventMapping = ({ sourceId }: { sourceId: string }) => {
   const { nodes, edges, onEdgesChange, onNodesChange } = useTerminalState(
     (state) => ({
       nodes: state.nodes,
@@ -12,6 +13,7 @@ export const useEventMapping = () => {
   );
 
   const { onNodeClick, onNodeDoubleClick, onPanClick } = useNodeHandler();
+  useWebSocketMessage({ sourceId });
 
   return {
     nodes,
