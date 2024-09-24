@@ -6,11 +6,16 @@ export function getWebsocketClient(this: EventHandler): WebSocket {
 
   const { wsUrl, eventId, sourceId } = this.options;
 
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
   const path = `/events/${eventId}/sources/${sourceId}/subscribe`;
 
   const url = new URL(path, wsUrl);
 
   url.searchParams.set("session_id", session_id);
+  url.searchParams.set("width", width.toString());
+  url.searchParams.set("height", height.toString());
 
   const ws = new WebSocket(url.toString());
 
