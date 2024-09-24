@@ -1,5 +1,5 @@
 {
-  "name": "@event-mapping/event-sdk",
+  "name": "@event-mapping/schema",
   "version": "1.0.0",
   "scripts": {
     "dev": "tsup src/index.ts --watch --dts --format esm",
@@ -13,12 +13,9 @@
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
-    "@types/p5": "^1.7.6",
     "tsup": "^8.2.4"
   },
   "dependencies": {
-    "@event-mapping/schema": "workspace:*",
-    "@paralleldrive/cuid2": "^2.2.2",
-    "p5": "^1.10.0"
+    "zod": "^3.23.8"
   }
 }

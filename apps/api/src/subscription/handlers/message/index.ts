@@ -1,9 +1,10 @@
+import { AdminAction } from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
 
-export function handleMessage(
+export function adminSendMessageHandler<T extends AdminAction>(
   this: Subscription,
-  _: WebSocket,
-  __: string | ArrayBuffer
+  ws: WebSocket,
+  message: T
 ) {
-  // TODO: handle message
+  ws.send(JSON.stringify(message));
 }
