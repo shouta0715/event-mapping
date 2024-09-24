@@ -85,7 +85,6 @@ export function Panel({ event, source }: Props) {
       <hr className="my-4" />
 
       <div className="space-y-2">
-        <IdPanel id={source.event_id} label="イベントID" />
         <IdPanel id={source.id} label="コンテンツID" />
       </div>
 

@@ -17,15 +17,10 @@ export const env = createEnv({
      * コンテンツのID（管理画面から取得）
      */
     VITE_SOURCE_ID: z.string().cuid2(),
-    /**
-     * イベントのID（管理画面から取得）
-     */
-    VITE_EVENT_ID: z.string().cuid2(),
   },
   runtimeEnv: {
     VITE_API_URL: import.meta.env.VITE_API_URL,
     VITE_WS_URL: import.meta.env.VITE_WS_URL,
     VITE_SOURCE_ID: import.meta.env.VITE_SOURCE_ID,
-    VITE_EVENT_ID: import.meta.env.VITE_EVENT_ID,
   },
 });

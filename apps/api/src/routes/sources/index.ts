@@ -30,6 +30,25 @@ app.get("/:slug", async (c) => {
   return c.json(e);
 });
 
+app.get("/:id/subscribe/*", async (c) => {
+  const { id } = c.req.param();
+
+  const s = await c.var.db.query.sources.findFirst({
+    where: eq(sources.id, id),
+  });
+
+  if (!s) return c.notFound();
+
+  const subscription = c.env.SUBSCRIPTION.idFromName(id);
+  const stub = c.env.SUBSCRIPTION.get(subscription);
+
+  const res = await stub.fetch(c.req.raw, {
+    headers: c.req.header(),
+  });
+
+  return res;
+});
+
 app.post("/:eventId", zValidator("json", sourceInsertSchema), async (c) => {
   const data = c.req.valid("json");
   const { eventId } = c.req.param();

@@ -32,7 +32,7 @@ export default async function Page({
         edges: [],
       }}
     >
-      <WSStatusProvider eventId={source.event.id} sourceId={source.id}>
+      <WSStatusProvider sourceId={source.id}>
         <DynamicEventMapping event={source.event} source={source} />
       </WSStatusProvider>
     </TerminalStateProvider>
