@@ -1,8 +1,7 @@
-import { TerminalData } from "@event-mapping/schema";
 import { createMiddleware } from "hono/factory";
 import { sizeSchema } from "@/libs/schema";
 import { Subscription } from "@/subscription";
-import { createDefaultTerminalData, sendMessage } from "@/utils";
+import { sendMessage } from "@/utils";
 
 const sessionMiddleware = createMiddleware(async (c, next) => {
   const upgrade = c.req.header("Upgrade");
@@ -56,20 +55,10 @@ export function registerHandler(this: Subscription) {
       new WebSocketRequestResponsePair("ping", "pong")
     );
 
-    const defaultTerminalData = createDefaultTerminalData({
-      ...parsed.data,
+    this.adminMessageHandlers.joinSessionHandler({
       sessionId: session_id,
-    });
-
-    const prevTerminalData = await this.storage.get<TerminalData>(session_id);
-
-    if (!prevTerminalData) {
-      await this.storage.put<TerminalData>(session_id, defaultTerminalData);
-    }
-
-    this.sessions.set(client, {
-      ...defaultTerminalData,
-      ...prevTerminalData,
+      ws: server,
+      ...parsed.data,
     });
 
     return new Response(null, {
@@ -94,6 +83,8 @@ export function registerHandler(this: Subscription) {
     }
 
     this.admin = server;
+
+    this.adminMessageHandlers.initializeSessionHandler();
 
     return new Response(null, {
       status: 101,

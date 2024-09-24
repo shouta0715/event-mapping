@@ -47,6 +47,8 @@ export type FlowNodeState = {
 export type FlowNodeActions = {
   onNodesChange: OnNodesChange<NodeType>;
   setNodes: (nodes: NodeType[]) => void;
+  addNode: (node: NodeType) => void;
+  removeNode: (id: string) => void;
 };
 
 /**

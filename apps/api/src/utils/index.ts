@@ -1,4 +1,4 @@
-import { AdminAction, TerminalData } from "@event-mapping/schema";
+import { AdminAction, EventAction, TerminalData } from "@event-mapping/schema";
 
 type CreateDefaultTerminalDataProps = {
   width: number;
@@ -33,7 +33,7 @@ export const createDefaultTerminalData = ({
   };
 };
 
-export const sendMessage = <T extends AdminAction>(
+export const sendMessage = <T extends AdminAction | EventAction>(
   ws: WebSocket,
   message: T
 ) => {
