@@ -1,6 +1,7 @@
 import { TerminalData } from "@event-mapping/schema";
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
+import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
 import { registerHandler } from "@/subscription/handlers/register";
 
 type TEnv = {
@@ -23,13 +24,27 @@ export class Subscription extends DurableObject {
 
   private readonly registerHandler = registerHandler.bind(this);
 
+  protected readonly adminMessageHandlers: ReturnType<
+    typeof generateAdminMessageHandlers
+  >;
+
   constructor(
     protected readonly state: DurableObjectState,
     protected readonly env: TEnv
   ) {
     super(state, env);
     this.storage = state.storage;
+    this.adminMessageHandlers = generateAdminMessageHandlers.bind(this)();
+
     this.registerHandler();
+  }
+
+  async webSocketClose(ws: WebSocket) {
+    this.adminMessageHandlers.leaveSessionHandler(ws);
+  }
+
+  async webSocketError(ws: WebSocket) {
+    this.adminMessageHandlers.leaveSessionHandler(ws);
   }
 
   fetch(req: Request) {
