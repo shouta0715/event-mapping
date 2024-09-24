@@ -1,5 +1,8 @@
+import { TerminalData } from "@event-mapping/schema";
 import { createMiddleware } from "hono/factory";
+import { sizeSchema } from "@/libs/schema";
 import { Subscription } from "@/subscription";
+import { createDefaultTerminalData, sendMessage } from "@/utils";
 
 const sessionMiddleware = createMiddleware(async (c, next) => {
   const upgrade = c.req.header("Upgrade");
@@ -20,17 +23,54 @@ const getWebSocketPair = () => {
 
 export function registerHandler(this: Subscription) {
   this.app.get("/", sessionMiddleware, async (c) => {
+    if (!this.admin) {
+      return c.json({ message: "Admin websocket is not connected" }, 500);
+    }
+
     const { client, server } = getWebSocketPair();
     const session_id = c.req.query("session_id");
+    const width = c.req.query("width");
+    const height = c.req.query("height");
 
-    if (!session_id) {
-      return c.json({ message: "session_id is required" }, 400);
+    if (!session_id || !width || !height) {
+      let msg = "";
+
+      if (!session_id) msg += "session_id ";
+      if (!width) msg += "width ";
+      if (!height) msg += "height ";
+
+      return c.json({ message: `${msg.trim()} is required` }, 400);
+    }
+
+    const parsed = sizeSchema.safeParse({
+      width,
+      height,
+    });
+
+    if (!parsed.success) {
+      return c.json({ message: "Invalid size" }, 400);
     }
 
     this.state.acceptWebSocket(server, ["session", session_id]);
     this.state.setWebSocketAutoResponse(
       new WebSocketRequestResponsePair("ping", "pong")
     );
+
+    const defaultTerminalData = createDefaultTerminalData({
+      ...parsed.data,
+      sessionId: session_id,
+    });
+
+    const prevTerminalData = await this.storage.get<TerminalData>(session_id);
+
+    if (!prevTerminalData) {
+      await this.storage.put<TerminalData>(session_id, defaultTerminalData);
+    }
+
+    this.sessions.set(client, {
+      ...defaultTerminalData,
+      ...prevTerminalData,
+    });
 
     return new Response(null, {
       status: 101,
@@ -45,6 +85,15 @@ export function registerHandler(this: Subscription) {
     this.state.setWebSocketAutoResponse(
       new WebSocketRequestResponsePair("ping", "pong")
     );
+
+    if (this.admin !== null) {
+      sendMessage(this.admin, {
+        action: "warning",
+        message: "新しい管理者が参加しました。",
+      });
+    }
+
+    this.admin = server;
 
     return new Response(null, {
       status: 101,
