@@ -7,7 +7,7 @@ type TEnv = {
   SUBSCRIPTION: DurableObjectNamespace;
 };
 
-const basePath = "/events/:event_id/sources/:source_id/subscribe";
+const basePath = "/sources/:id/subscribe";
 
 export class Subscription extends DurableObject {
   protected app = new Hono().basePath(basePath);

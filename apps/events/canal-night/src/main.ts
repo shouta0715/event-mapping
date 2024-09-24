@@ -115,7 +115,6 @@ function start() {
     apiUrl: env.VITE_API_URL,
     wsUrl: env.VITE_WS_URL,
     sourceId: env.VITE_SOURCE_ID,
-    eventId: env.VITE_EVENT_ID,
   });
 }
 

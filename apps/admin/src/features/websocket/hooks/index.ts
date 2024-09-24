@@ -3,12 +3,15 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { toast } from "sonner";
 import { env } from "@/env";
 
-const getWsUrl = (eventId: string, sourceId: string) => {
-  return `${env.NEXT_PUBLIC_WS_URL}/events/${eventId}/sources/${sourceId}/subscribe/admin`;
+const getWsUrl = (id: string) => {
+  return `${env.NEXT_PUBLIC_WS_URL}/sources/${id}/subscribe/admin`;
 };
 
-export function useWs(eventId: string, sourceId: string) {
-  const url = getWsUrl(eventId, sourceId);
+/**
+ * @param id - sourceのid
+ */
+export function useWs(id: string) {
+  const url = getWsUrl(id);
 
   const { sendMessage, readyState, lastJsonMessage } =
     useWebSocket<AdminAction>(url, {
