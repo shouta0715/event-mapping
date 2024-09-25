@@ -11,13 +11,15 @@ import {
 } from "@xyflow/react";
 import React from "react";
 import { Rnd } from "react-rnd";
-import { IFRAME_NODE_TYPE } from "@/constant/node";
+import { IFRAME_NODE_TYPE, TERMINAL_NODE_TYPE } from "@/constant/node";
 import { useEventMapping } from "@/features/event-mapping/hooks";
 import { IframeNode } from "@/features/iframe/components";
 import { Panel } from "@/features/panel/components";
+import { TerminalNode } from "@/features/terminal/components";
 
 const nodeTypes = {
   [IFRAME_NODE_TYPE]: IframeNode,
+  [TERMINAL_NODE_TYPE]: TerminalNode,
 };
 
 type Props = {
