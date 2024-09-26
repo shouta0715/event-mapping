@@ -28,6 +28,7 @@ async function joinSessionHandler(
   };
 
   this.sessions.set(ws, terminalData);
+  ws.serializeAttachment(terminalData);
 
   sendMessage(this.admin, {
     action: "join",
