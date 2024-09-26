@@ -25,6 +25,8 @@ export const useWebSocketMessage = ({ sourceId }: { sourceId: string }) => {
           x: session.startX,
           y: session.startY,
         },
+        width: session.width,
+        height: session.height,
         data: session,
       }));
       setNodes(nodes);
@@ -35,7 +37,6 @@ export const useWebSocketMessage = ({ sourceId }: { sourceId: string }) => {
   const joinHandler = useCallback(
     (data: JoinAction["data"]) => {
       const { width, height, id, startX, startY } = data;
-      console.log("join", data);
       const node: TerminalNode = {
         id,
         type: "terminal",
