@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-const coerceNumber = z.coerce.number({ message: "数値を入力してください" });
+// 整数に変換
+const coerceNumber = z.coerce
+  .number({ message: "数値を入力してください" })
+  .transform(Math.floor);
 
 /**
  * @description: 端末のデータ
@@ -13,16 +16,16 @@ export const terminalDataSchema = z.object({
   windowWidth: coerceNumber,
   windowHeight: coerceNumber,
   displayname: z.string().min(1).max(50),
-  startX: coerceNumber.default(0),
-  startY: coerceNumber.default(0),
-  endX: coerceNumber.default(0),
-  endY: coerceNumber.default(0),
-  scale: coerceNumber.default(1),
+  startX: coerceNumber,
+  startY: coerceNumber,
+  endX: coerceNumber,
+  endY: coerceNumber,
+  scale: coerceNumber,
   margin: z.object({
-    top: coerceNumber.default(0),
-    right: coerceNumber.default(0),
-    bottom: coerceNumber.default(0),
-    left: coerceNumber.default(0),
+    top: coerceNumber,
+    right: coerceNumber,
+    bottom: coerceNumber,
+    left: coerceNumber,
   }),
 });
 

@@ -17,3 +17,10 @@ export const eventInitializeSchema = z.object({
 });
 
 export type EventInitialize = z.infer<typeof eventInitializeSchema>;
+
+export const eventUpdateSchema = z.object({
+  action: z.literal("update"),
+  data: terminalDataSchema,
+});
+
+export type EventUpdate = z.infer<typeof eventUpdateSchema>;
