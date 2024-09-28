@@ -2,11 +2,15 @@
 
 import { Event, Source } from "@event-mapping/db";
 import { Button } from "@event-mapping/ui/components/button";
+import { useNodes } from "@xyflow/react";
 import copy from "copy-to-clipboard";
 import { Clipboard, ClipboardCheck } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { NodePanel } from "@/features/node-panel/components";
 import { IconPanel } from "@/features/panel/components/icon";
+import { NodeType } from "@/global/store/types";
 import { useOnline } from "@/hooks/online";
+import { assertTerminalNode } from "@/utils";
 
 type Props = {
   event: Event;
@@ -68,6 +72,8 @@ const IdPanel = ({ id, label }: { id: string; label: string }) => {
 export function Panel({ event, source }: Props) {
   const isOnline = useOnline();
 
+  const nodes = useNodes<NodeType>();
+
   return (
     <div>
       <IconPanel event={event} isOnline={isOnline} source={source} />
@@ -89,6 +95,27 @@ export function Panel({ event, source }: Props) {
       </div>
 
       {/* TODO: 端末一覧を表示する */}
+
+      {nodes.map((node) => {
+        if (!assertTerminalNode(node)) return null;
+
+        const data = {
+          ...node.data,
+          width: node.width ?? 1920,
+          height: node.height ?? 1080,
+          startX: Math.floor(node.position.x ?? 0),
+          startY: Math.floor(node.position.y ?? 0),
+        };
+
+        return (
+          <NodePanel
+            key={node.id}
+            data={data}
+            nodeId={node.id}
+            sourceId={source.id}
+          />
+        );
+      })}
     </div>
   );
 }
