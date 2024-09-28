@@ -1,3 +1,4 @@
+import { cors } from "hono/cors";
 import { createMiddleware } from "hono/factory";
 import { sizeSchema } from "@/libs/schema";
 import { Subscription } from "@/subscription";
@@ -21,6 +22,14 @@ const getWebSocketPair = () => {
 };
 
 export function registerHandler(this: Subscription) {
+  this.app.use(
+    "/:node-id",
+    cors({
+      origin: "*",
+      allowMethods: ["GET", "POST", "PATCH"],
+      allowHeaders: ["Content-Type"],
+    })
+  );
   this.app.get("/", sessionMiddleware, async (c) => {
     if (!this.admin) {
       return c.json({ message: "Admin websocket is not connected" }, 500);
