@@ -26,3 +26,10 @@ export {
 export { Label } from "./ui/label";
 
 export { Input } from "./ui/input";
+
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./ui/accordion";

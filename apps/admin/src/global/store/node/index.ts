@@ -30,7 +30,10 @@ export const createNodeStore = ({
     nodes: initialNodes,
     setNodes: (nodes: NodeType[]) => {
       const prevNodes = get().nodes;
-      set({ nodes: [...prevNodes, ...nodes] });
+      const iframeNode = prevNodes.find((node) => node.type === "iframe");
+      if (!iframeNode) return;
+
+      set({ nodes: [iframeNode, ...nodes] });
     },
     onNodesChange: (changes: NodeChange<NodeType>[]) => {
       set((state) => ({
