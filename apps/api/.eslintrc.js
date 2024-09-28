@@ -6,8 +6,4 @@ module.exports = {
   parserOptions: {
     project: true,
   },
-  rules: {
-    "@typescript-eslint/lines-between-class-members": "off",
-    "lines-between-class-members": "off",
-  },
 };

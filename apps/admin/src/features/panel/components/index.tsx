@@ -1,12 +1,21 @@
 "use client";
 
 import { Event, Source } from "@event-mapping/db";
+import {
+  Accordion,
+  AccordionItem,
+} from "@event-mapping/ui/components/accordion";
 import { Button } from "@event-mapping/ui/components/button";
+import { useNodes } from "@xyflow/react";
 import copy from "copy-to-clipboard";
 import { Clipboard, ClipboardCheck } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { NodePanel } from "@/features/node-panel/components";
 import { IconPanel } from "@/features/panel/components/icon";
+import { NodeType } from "@/global/store/types";
+import { useNodeHandler } from "@/hooks/node";
 import { useOnline } from "@/hooks/online";
+import { assertTerminalNode } from "@/utils";
 
 type Props = {
   event: Event;
@@ -68,6 +77,9 @@ const IdPanel = ({ id, label }: { id: string; label: string }) => {
 export function Panel({ event, source }: Props) {
   const isOnline = useOnline();
 
+  const nodes = useNodes<NodeType>();
+  const { node: selectedNodeId } = useNodeHandler();
+
   return (
     <div>
       <IconPanel event={event} isOnline={isOnline} source={source} />
@@ -89,6 +101,30 @@ export function Panel({ event, source }: Props) {
       </div>
 
       {/* TODO: 端末一覧を表示する */}
+      <Accordion defaultValue={[selectedNodeId ?? ""]} type="multiple">
+        {nodes.map((node) => {
+          if (!assertTerminalNode(node)) return null;
+
+          const data = {
+            ...node.data,
+            width: node.width ?? 1920,
+            height: node.height ?? 1080,
+            startX: Math.floor(node.position.x ?? 0),
+            startY: Math.floor(node.position.y ?? 0),
+          };
+
+          return (
+            <AccordionItem key={node.id} value={node.id}>
+              <NodePanel
+                data={data}
+                isSelected={node.id === selectedNodeId}
+                nodeId={node.id}
+                sourceId={source.id}
+              />
+            </AccordionItem>
+          );
+        })}
+      </Accordion>
     </div>
   );
 }

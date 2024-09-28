@@ -49,6 +49,7 @@ export type FlowNodeActions = {
   setNodes: (nodes: NodeType[]) => void;
   addNode: (node: NodeType) => void;
   removeNode: (id: string) => void;
+  updateNodeData: (id: string, data: TerminalData) => void;
 };
 
 /**

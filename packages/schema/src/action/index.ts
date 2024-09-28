@@ -7,6 +7,7 @@ import {
 } from "@event-mapping/schema/action/admin";
 import {
   eventInitializeSchema,
+  eventUpdateSchema,
   eventWarningSchema,
 } from "@event-mapping/schema/action/event";
 
@@ -25,6 +26,7 @@ export type AdminAction = z.infer<typeof adminActionSchema>;
 export const eventActionSchema = z.union([
   eventWarningSchema,
   eventInitializeSchema,
+  eventUpdateSchema,
 ]);
 
 export type EventAction = z.infer<typeof eventActionSchema>;
