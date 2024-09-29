@@ -12,16 +12,10 @@ import { useNodeHandler } from "@/hooks/node";
 type NodePanelProps = {
   data: TerminalData;
   nodeId: string;
-  sourceId: string;
   isSelected: boolean;
 };
 
-export function NodePanel({
-  data,
-  nodeId,
-  sourceId,
-  isSelected,
-}: NodePanelProps) {
+export function NodePanel({ data, nodeId, isSelected }: NodePanelProps) {
   const { setNode } = useNodeHandler();
 
   return (
@@ -38,7 +32,6 @@ export function NodePanel({
             key={JSON.stringify(data)}
             defaultValues={data}
             nodeId={nodeId}
-            sourceId={sourceId}
           />
         </AccordionContent>
       </AccordionItem>

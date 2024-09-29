@@ -36,6 +36,7 @@ function EventMapping({ event, source }: Props) {
     onNodeClick,
     onNodeDoubleClick,
     onPanClick,
+    onNodeDragStop,
   } = useEventMapping({ sourceId: source.id });
 
   return (
@@ -49,6 +50,7 @@ function EventMapping({ event, source }: Props) {
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
+        onNodeDragStop={onNodeDragStop}
         onNodesChange={onNodesChange}
         onPaneClick={onPanClick}
       >
