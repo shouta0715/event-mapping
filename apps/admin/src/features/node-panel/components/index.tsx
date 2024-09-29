@@ -7,6 +7,7 @@ import {
 import { cn } from "@event-mapping/ui/lib/utils";
 import React from "react";
 import { NodeForm } from "@/features/node-form/components";
+import { useNodeHandler } from "@/hooks/node";
 
 type NodePanelProps = {
   data: TerminalData;
@@ -21,10 +22,15 @@ export function NodePanel({
   sourceId,
   isSelected,
 }: NodePanelProps) {
+  const { setNode } = useNodeHandler();
+
   return (
     <div>
       <AccordionItem value={data.id}>
-        <AccordionTrigger className={cn("px-2", isSelected && "text-primary")}>
+        <AccordionTrigger
+          className={cn("px-2", isSelected && "text-primary")}
+          onClick={() => setNode(data.id)}
+        >
           {data.displayname}
         </AccordionTrigger>
         <AccordionContent className="px-2">

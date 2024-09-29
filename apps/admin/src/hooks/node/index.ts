@@ -33,5 +33,6 @@ export const useNodeHandler = () => {
     getIsNodeSelected,
     onPanClick,
     node,
+    setNode,
   };
 };
