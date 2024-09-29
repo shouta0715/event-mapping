@@ -18,7 +18,7 @@ export const createDefaultTerminalData = ({
     height,
     windowWidth: width,
     windowHeight: height,
-    displayname: "test",
+    displayname: sessionId,
     startX: 0,
     startY: 0,
     endX: 0,

@@ -24,10 +24,10 @@ export function NodePanel({
   return (
     <div>
       <AccordionItem value={data.id}>
-        <AccordionTrigger className={cn(isSelected && "text-primary")}>
+        <AccordionTrigger className={cn("px-2", isSelected && "text-primary")}>
           {data.displayname}
         </AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className="px-2">
           <NodeForm
             key={JSON.stringify(data)}
             defaultValues={data}
