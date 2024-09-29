@@ -2,7 +2,7 @@ import { TerminalData } from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
 import { sendMessage } from "@/utils";
 
-export function eventUpdateHandler(
+export async function eventUpdateHandler(
   this: Subscription,
   ws: WebSocket,
   data: TerminalData
@@ -14,6 +14,7 @@ export function eventUpdateHandler(
 
   this.sessions.set(ws, data);
   ws.serializeAttachment(data);
+  await this.storage.put<TerminalData>(data.sessionId, data);
 }
 
 export function generateEventMessageHandler(this: Subscription) {
