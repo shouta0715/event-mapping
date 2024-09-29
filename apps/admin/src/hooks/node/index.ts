@@ -2,6 +2,7 @@ import { TerminalData } from "@event-mapping/schema";
 import { useMutation } from "@tanstack/react-query";
 import { NodeMouseHandler } from "@xyflow/react";
 import { useQueryState, parseAsString } from "nuqs";
+import { toast } from "sonner";
 import { useSourceId, useTerminalState } from "@/global/store/provider";
 import { NodeType } from "@/global/store/types";
 import { updateTerminalData } from "@/hooks/node/api";
@@ -55,6 +56,11 @@ export const useUpdateNodeData = (onSuccess?: (data: TerminalData) => void) => {
       onSuccess?.(data);
 
       updateNodeData(data.id, data);
+    },
+    onError: (error) => {
+      toast.error("データを更新できませんでした。", {
+        description: error.message,
+      });
     },
   });
 };
