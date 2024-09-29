@@ -119,7 +119,6 @@ export function Panel({ event, source }: Props) {
                 data={data}
                 isSelected={node.id === selectedNodeId}
                 nodeId={node.id}
-                sourceId={source.id}
               />
             </AccordionItem>
           );

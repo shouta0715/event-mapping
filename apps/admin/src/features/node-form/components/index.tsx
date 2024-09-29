@@ -12,38 +12,28 @@ import {
 } from "@event-mapping/ui/components/form";
 import { Input } from "@event-mapping/ui/components/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { updateTerminalData } from "@/features/node-form/api";
-import { useTerminalState } from "@/global/store/provider";
+import { useUpdateNodeData } from "@/hooks/node";
 
 type NodeFormProps = {
   defaultValues: Partial<TerminalData>;
   nodeId: string;
-  sourceId: string;
 };
 
-export function NodeForm({ defaultValues, nodeId, sourceId }: NodeFormProps) {
-  const { updateNodeData } = useTerminalState((state) => ({
-    updateNodeData: state.updateNodeData,
-  }));
+export function NodeForm({ defaultValues, nodeId }: NodeFormProps) {
   const form = useForm<TerminalData>({
     resolver: zodResolver(terminalDataSchema),
     defaultValues,
   });
 
-  const { mutateAsync } = useMutation({
-    mutationFn: updateTerminalData,
-    onSuccess: ({ data }) => {
-      form.reset(data);
-      updateNodeData(nodeId, data);
-    },
+  const { mutateAsync } = useUpdateNodeData((data) => {
+    form.reset(data);
   });
 
   const onSubmit = async (data: TerminalData) => {
-    toast.promise(mutateAsync({ sourceId, nodeId, data }), {
+    toast.promise(mutateAsync({ nodeId, data }), {
       loading: "更新中...",
       success: "更新しました。",
       error: "更新できませんでした。",

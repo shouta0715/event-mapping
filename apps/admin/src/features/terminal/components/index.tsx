@@ -1,14 +1,29 @@
 import { cn } from "@event-mapping/ui/lib/utils";
-import { NodeProps, NodeResizer } from "@xyflow/react";
+import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
 import React, { memo } from "react";
 import { TerminalNode as TTerminalNode } from "@/global/store/types";
-import { useNodeHandler } from "@/hooks/node";
+import { useNodeHandler, useUpdateNodeData } from "@/hooks/node";
 
 export const TerminalNode = memo(
   ({ data, id, width, height }: NodeProps<TTerminalNode>) => {
     const { getIsNodeSelected } = useNodeHandler();
+    const { mutate } = useUpdateNodeData();
 
     const isSelected = getIsNodeSelected(id);
+
+    const handleResizeEnd: OnResizeEnd = (_, params) => {
+      const newData = {
+        ...data,
+        startX: params.x,
+        startY: params.y,
+        width: params.width,
+        height: params.height,
+      };
+      mutate({
+        nodeId: id,
+        data: newData,
+      });
+    };
 
     return (
       <div
@@ -34,6 +49,7 @@ export const TerminalNode = memo(
               ? "hsl(var(--primary))"
               : "hsl(var(--border))",
           }}
+          onResizeEnd={handleResizeEnd}
         />
 
         <div className="flex size-full items-center justify-center">

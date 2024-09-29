@@ -5,7 +5,7 @@ import { createIframeNode } from "@/features/iframe/utils";
 import { getSource } from "@/features/sources/api";
 import { WSStatusProvider } from "@/features/websocket/components";
 
-import { TerminalStateProvider } from "@/global/store/provider";
+import { SourceProvider, TerminalStateProvider } from "@/global/store/provider";
 
 const DynamicEventMapping = dynamic(
   () => import("@/features/event-mapping/components"),
@@ -32,9 +32,11 @@ export default async function Page({
         edges: [],
       }}
     >
-      <WSStatusProvider sourceId={source.id}>
-        <DynamicEventMapping event={source.event} source={source} />
-      </WSStatusProvider>
+      <SourceProvider sourceId={source.id}>
+        <WSStatusProvider sourceId={source.id}>
+          <DynamicEventMapping event={source.event} source={source} />
+        </WSStatusProvider>
+      </SourceProvider>
     </TerminalStateProvider>
   );
 }

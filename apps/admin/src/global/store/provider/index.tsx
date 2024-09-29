@@ -46,3 +46,25 @@ export const useTerminalState = <T extends Partial<FlowGlobalState>>(
 
   return useStore(store, useShallow(selector));
 };
+
+const SourceContext = React.createContext<string | null>(null);
+
+export const SourceProvider = ({
+  children,
+  sourceId,
+}: {
+  children: React.ReactNode;
+  sourceId: string;
+}) => {
+  return (
+    <SourceContext.Provider value={sourceId}>{children}</SourceContext.Provider>
+  );
+};
+
+export const useSourceId = () => {
+  const context = React.useContext(SourceContext);
+
+  if (!context) throw new Error("Provider is not found");
+
+  return context;
+};
