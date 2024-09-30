@@ -1,3 +1,4 @@
+import { SourceInsert } from "@event-mapping/db";
 import { TerminalData } from "@event-mapping/schema";
 import {
   OnNodesChange,
@@ -50,6 +51,7 @@ export type FlowNodeActions = {
   addNode: (node: NodeType) => void;
   removeNode: (id: string) => void;
   updateNodeData: (id: string, data: TerminalData) => void;
+  updateIframeData: (data: SourceInsert) => void;
 };
 
 /**

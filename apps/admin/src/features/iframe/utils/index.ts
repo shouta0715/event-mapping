@@ -3,21 +3,11 @@ import { IFRAME_NODE_ID, IFRAME_NODE_TYPE } from "@/constant/node";
 import { IframeNodeData } from "@/features/iframe/types";
 
 type CreateIframeNodeProps = {
-  url: string;
-  size?: {
-    width: number;
-    height: number;
-  };
-};
-
-const defaultSize = {
-  width: 1980,
-  height: 1080,
+  data: IframeNodeData;
 };
 
 export const createIframeNode = ({
-  url,
-  size = defaultSize,
+  data,
 }: CreateIframeNodeProps): Node<IframeNodeData, typeof IFRAME_NODE_TYPE> => {
   return {
     id: IFRAME_NODE_ID,
@@ -26,12 +16,10 @@ export const createIframeNode = ({
       x: 0,
       y: 0,
     },
-    data: {
-      url,
-    },
+    data,
     zIndex: -10,
-    width: size.width,
-    height: size.height,
+    width: data.width,
+    height: data.height,
     dragging: false,
     draggable: false,
     connectable: false,

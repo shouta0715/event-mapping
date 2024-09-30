@@ -56,10 +56,11 @@ function leaveSessionHandler(this: Subscription, ws: WebSocket) {
 }
 
 function initializeSessionHandler(this: Subscription) {
-  if (!this.admin) return;
+  if (!this.admin || !this.source) return;
 
   const sessions = Array.from(this.sessions.values());
 
+  this.admin.serializeAttachment(this.source);
   sendMessage(this.admin, {
     action: "initialize",
     sessions,

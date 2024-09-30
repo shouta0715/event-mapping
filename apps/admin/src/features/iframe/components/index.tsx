@@ -1,9 +1,11 @@
 "use client";
 
 import { cn } from "@event-mapping/ui/lib/utils";
-import { NodeProps, NodeResizer } from "@xyflow/react";
+import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
 import React, { memo, useId } from "react";
+import { IS_DEVELOPMENT } from "@/env";
 import { IframeNode as TIframeNode } from "@/features/iframe/types";
+import { useUpdateIframeData } from "@/hooks/iframe";
 import { useNodeHandler } from "@/hooks/node";
 
 export const IframeNode = memo(
@@ -12,6 +14,12 @@ export const IframeNode = memo(
     const { getIsNodeSelected } = useNodeHandler();
 
     const isSelected = getIsNodeSelected(id);
+
+    const { mutate } = useUpdateIframeData();
+
+    const handleResizeEnd: OnResizeEnd = (_, params) => {
+      mutate({ data: { ...data, width: params.width, height: params.height } });
+    };
 
     return (
       <div className="group relative size-full">
@@ -33,6 +41,7 @@ export const IframeNode = memo(
               ? "hsl(var(--primary))"
               : "hsl(var(--border))",
           }}
+          onResizeEnd={handleResizeEnd}
         />
         <div
           aria-hidden="true"
@@ -67,7 +76,7 @@ export const IframeNode = memo(
         <iframe
           className="pointer-events-none absolute inset-0 -z-50 size-full cursor-not-allowed"
           sandbox="allow-scripts allow-same-origin"
-          src={data.url}
+          src={IS_DEVELOPMENT ? data.dev_url : data.url}
           title={title}
         />
         <div

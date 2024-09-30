@@ -1,15 +1,14 @@
 "use client";
 
 import { Event, Source } from "@event-mapping/db";
-import {
-  Accordion,
-  AccordionItem,
-} from "@event-mapping/ui/components/accordion";
+import { Accordion } from "@event-mapping/ui/components/accordion";
 import { Button } from "@event-mapping/ui/components/button";
 import { useNodes } from "@xyflow/react";
 import copy from "copy-to-clipboard";
 import { Clipboard, ClipboardCheck } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { IFRAME_NODE_ID } from "@/constant/node";
+import { IframePanel } from "@/features/iframe-panel";
 import { NodePanel } from "@/features/node-panel/components";
 import { IconPanel } from "@/features/panel/components/icon";
 import { NodeType } from "@/global/store/types";
@@ -100,11 +99,24 @@ export function Panel({ event, source }: Props) {
         <IdPanel id={source.id} label="コンテンツID" />
       </div>
 
-      {/* TODO: 端末一覧を表示する */}
       <Accordion defaultValue={[selectedNodeId ?? ""]} type="multiple">
         {nodes.map((node) => {
-          if (!assertTerminalNode(node)) return null;
+          if (!assertTerminalNode(node)) {
+            const data: Source = {
+              ...node.data,
+              width: node.width ?? 1920,
+              height: node.height ?? 1080,
+            };
 
+            return (
+              <IframePanel
+                key={IFRAME_NODE_ID}
+                data={data}
+                isSelected={node.id === selectedNodeId}
+                nodeId={IFRAME_NODE_ID}
+              />
+            );
+          }
           const data = {
             ...node.data,
             width: node.width ?? 1920,
@@ -114,13 +126,12 @@ export function Panel({ event, source }: Props) {
           };
 
           return (
-            <AccordionItem key={node.id} value={node.id}>
-              <NodePanel
-                data={data}
-                isSelected={node.id === selectedNodeId}
-                nodeId={node.id}
-              />
-            </AccordionItem>
+            <NodePanel
+              key={node.id}
+              data={data}
+              isSelected={node.id === selectedNodeId}
+              nodeId={node.id}
+            />
           );
         })}
       </Accordion>

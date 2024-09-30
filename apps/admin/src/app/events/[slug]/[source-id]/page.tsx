@@ -23,7 +23,7 @@ export default async function Page({
   const source = await getSource(params["source-id"]);
   if (!source) notFound();
 
-  const iframeNode = createIframeNode({ url: source.url });
+  const iframeNode = createIframeNode({ data: source });
 
   return (
     <TerminalStateProvider

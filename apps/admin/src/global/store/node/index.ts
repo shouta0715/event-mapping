@@ -1,3 +1,4 @@
+import { SourceInsert } from "@event-mapping/db";
 import { applyNodeChanges, NodeChange } from "@xyflow/react";
 import { type StateCreator } from "zustand";
 import {
@@ -69,6 +70,25 @@ export const createNodeStore = ({
         };
 
         return newNode;
+      });
+
+      set({ nodes: updatedNodes });
+    },
+    updateIframeData: (data: SourceInsert) => {
+      const prevNodes = get().nodes;
+
+      const updatedNodes: NodeType[] = prevNodes.map((node) => {
+        if (assertTerminalNode(node)) return node;
+
+        return {
+          ...node,
+          width: data.width,
+          height: data.height,
+          data: {
+            ...node.data,
+            ...data,
+          },
+        };
       });
 
       set({ nodes: updatedNodes });
