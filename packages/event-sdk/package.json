@@ -19,6 +19,7 @@
   "dependencies": {
     "@event-mapping/schema": "workspace:*",
     "@paralleldrive/cuid2": "^2.2.2",
+    "comlink": "^4.4.1",
     "p5": "^1.10.0"
   }
 }
