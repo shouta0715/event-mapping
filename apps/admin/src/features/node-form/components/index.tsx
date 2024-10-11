@@ -30,7 +30,7 @@ export function NodeForm({ defaultValues, nodeId }: NodeFormProps) {
 
   const { mutateAsync } = useUpdateNodeData((data) => {
     form.reset(data);
-  });
+  }, false);
 
   const onSubmit = async (data: TerminalData) => {
     toast.promise(mutateAsync({ nodeId, data }), {

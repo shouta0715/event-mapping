@@ -42,7 +42,10 @@ export const useNodeHandler = () => {
   };
 };
 
-export const useUpdateNodeData = (onSuccess?: (data: TerminalData) => void) => {
+export const useUpdateNodeData = (
+  onSuccess?: (data: TerminalData) => void,
+  showToast = true
+) => {
   const { updateNodeData } = useTerminalState((state) => ({
     updateNodeData: state.updateNodeData,
   }));
@@ -58,6 +61,7 @@ export const useUpdateNodeData = (onSuccess?: (data: TerminalData) => void) => {
       updateNodeData(data.id, data);
     },
     onError: (error) => {
+      if (!showToast) return;
       toast.error("データを更新できませんでした。", {
         description: error.message,
       });

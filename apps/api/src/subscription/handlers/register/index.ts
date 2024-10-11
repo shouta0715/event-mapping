@@ -1,4 +1,6 @@
+import { Source } from "@event-mapping/db";
 import { createMiddleware } from "hono/factory";
+import { z } from "zod";
 import { sizeSchema } from "@/libs/schema";
 import { Subscription } from "@/subscription";
 import { sendMessage } from "@/utils";
@@ -67,7 +69,14 @@ export function registerHandler(this: Subscription) {
     });
   });
 
-  this.app.get("/admin", sessionMiddleware, async () => {
+  this.app.get("/admin", sessionMiddleware, async (c) => {
+    const sourceId = c.req.param("id");
+    const parsed = z.string().cuid2().safeParse(sourceId);
+
+    if (!parsed.success) {
+      return c.json({ message: "Invalid source_id" }, 400);
+    }
+
     const { client, server } = getWebSocketPair();
 
     this.state.acceptWebSocket(server, ["admin"]);
@@ -80,6 +89,20 @@ export function registerHandler(this: Subscription) {
         action: "warning",
         message: "新しい管理者が参加しました。",
       });
+    }
+
+    let source: Source | null = null;
+
+    if (this.source === null) {
+      source = await this.env.DB.prepare("SELECT * FROM sources WHERE id = ?")
+        .bind(sourceId)
+        .first<Source>();
+
+      if (!source) {
+        return c.json({ message: "Source not found" }, 404);
+      }
+
+      this.source = source;
     }
 
     this.admin = server;

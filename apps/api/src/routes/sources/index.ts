@@ -11,7 +11,7 @@ app.use(
   "/:eventId",
   cors({
     origin: "*",
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type"],
   })
 );
@@ -47,6 +47,32 @@ app.get("/:id/subscribe/*", async (c) => {
   });
 
   return res;
+});
+
+app.patch("/:id", zValidator("json", sourceInsertSchema), async (c) => {
+  const data = c.req.valid("json");
+  const { id } = c.req.param();
+
+  const source = await c.var.db.query.sources.findFirst({
+    where: eq(sources.id, id),
+  });
+
+  if (!source) return c.notFound();
+
+  const subscription = c.env.SUBSCRIPTION.idFromName(id);
+  const stub = c.env.SUBSCRIPTION.get(subscription);
+
+  try {
+    // TODO: transactionで行いたいがdrizzleのtransactionができないので保留
+    await stub.patchSource({ ...source, ...data });
+    await c.var.db.update(sources).set(data).where(eq(sources.id, id));
+  } catch (error) {
+    const { message, status } = handleApiError({ error });
+
+    return c.json({ message }, status);
+  }
+
+  return c.json({ data });
 });
 
 app.post("/:eventId", zValidator("json", sourceInsertSchema), async (c) => {

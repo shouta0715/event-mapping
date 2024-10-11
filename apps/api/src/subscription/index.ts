@@ -1,15 +1,16 @@
+import { Source } from "@event-mapping/db";
 import { TerminalData } from "@event-mapping/schema";
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
-import { patchNodeHandler } from "@/subscription/handlers/api/patch";
+import { Env } from "@/env";
+import {
+  patchNodeHandler,
+  patchSourceHandler,
+} from "@/subscription/handlers/api/patch";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
 import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
 import { generateEventMessageHandler } from "@/subscription/handlers/message/event";
 import { registerHandler } from "@/subscription/handlers/register";
-
-type TEnv = {
-  SUBSCRIPTION: DurableObjectNamespace;
-};
 
 const basePath = "/sources/:id/subscribe";
 
@@ -17,6 +18,8 @@ export class Subscription extends DurableObject {
   protected app = new Hono().basePath(basePath);
 
   protected admin: WebSocket | null = null;
+
+  protected source: Source | null = null;
 
   protected sessions: Map<WebSocket, TerminalData> = new Map<
     WebSocket,
@@ -42,9 +45,11 @@ export class Subscription extends DurableObject {
    */
   private readonly patchNodeHandler = patchNodeHandler.bind(this);
 
+  private readonly patchSourceHandler = patchSourceHandler.bind(this);
+
   constructor(
     protected readonly state: DurableObjectState,
-    protected readonly env: TEnv
+    protected readonly env: Env["Bindings"]
   ) {
     super(state, env);
     this.storage = state.storage;
@@ -80,5 +85,9 @@ export class Subscription extends DurableObject {
 
   async patchNode(id: string, data: TerminalData) {
     return this.patchNodeHandler(id, data);
+  }
+
+  async patchSource(data: Source) {
+    return this.patchSourceHandler(data);
   }
 }

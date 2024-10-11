@@ -3,3 +3,7 @@ export type EventClientOptions = {
   wsUrl: string;
   sourceId: string;
 };
+
+export type ComlinkHandlers = {
+  resize: (width: number, height: number) => void;
+};
