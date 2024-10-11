@@ -1,14 +1,24 @@
+import { ComlinkHandlers } from "@event-mapping/event-sdk";
 import {
   InitializeAction,
   JoinAction,
   LeaveAction,
 } from "@event-mapping/schema";
+import Comlink from "comlink";
 import { useCallback, useEffect } from "react";
 import { useWs } from "@/features/websocket/hooks";
 import { useTerminalState } from "@/global/store/provider";
 import { TerminalNode } from "@/global/store/types";
 
-export const useWebSocketMessage = ({ sourceId }: { sourceId: string }) => {
+type UseWebSocketMessageProps = {
+  sourceId: string;
+  comlink: Comlink.Remote<ComlinkHandlers> | null;
+};
+
+export const useWebSocketMessage = ({
+  sourceId,
+  comlink,
+}: UseWebSocketMessageProps) => {
   const { lastJsonMessage } = useWs(sourceId);
   const { addNode, setNodes, removeNode } = useTerminalState((state) => ({
     addNode: state.addNode,
@@ -50,15 +60,17 @@ export const useWebSocketMessage = ({ sourceId }: { sourceId: string }) => {
       };
 
       addNode(node);
+      comlink?.join(data);
     },
-    [addNode]
+    [addNode, comlink]
   );
 
   const leaveHandler = useCallback(
     (sessionId: LeaveAction["sessionId"]) => {
       removeNode(sessionId);
+      comlink?.leave(sessionId);
     },
-    [removeNode]
+    [removeNode, comlink]
   );
 
   useEffect(() => {

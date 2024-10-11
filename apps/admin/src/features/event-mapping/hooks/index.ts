@@ -1,12 +1,11 @@
 import { TerminalData } from "@event-mapping/schema";
 import { OnNodeDrag } from "@xyflow/react";
-import { useWebSocketMessage } from "@/features/message/hooks";
 import { useTerminalState } from "@/global/store/provider";
 import { NodeType } from "@/global/store/types";
 import { useNodeHandler, useUpdateNodeData } from "@/hooks/node";
 import { assertTerminalNode } from "@/utils";
 
-export const useEventMapping = ({ sourceId }: { sourceId: string }) => {
+export const useEventMapping = () => {
   const { nodes, edges, onEdgesChange, onNodesChange } = useTerminalState(
     (state) => ({
       nodes: state.nodes,
@@ -20,7 +19,6 @@ export const useEventMapping = ({ sourceId }: { sourceId: string }) => {
   const { mutate } = useUpdateNodeData();
 
   const { onNodeClick, onNodeDoubleClick, onPanClick } = useNodeHandler();
-  useWebSocketMessage({ sourceId });
 
   const onNodeDragStop: OnNodeDrag<NodeType> = (_, node) => {
     if (!assertTerminalNode(node)) return;

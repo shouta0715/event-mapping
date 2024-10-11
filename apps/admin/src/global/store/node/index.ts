@@ -43,6 +43,7 @@ export const createNodeStore = ({
     },
     addNode: (node: NodeType) => {
       const prevNodes = get().nodes;
+      if (prevNodes.find((n) => n.id === node.id)) return;
       set({ nodes: [...prevNodes, node] });
     },
     removeNode: (id: string) => {

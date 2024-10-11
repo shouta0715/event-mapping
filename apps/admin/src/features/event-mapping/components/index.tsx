@@ -37,7 +37,7 @@ function EventMapping({ event, source }: Props) {
     onNodeDoubleClick,
     onPanClick,
     onNodeDragStop,
-  } = useEventMapping({ sourceId: source.id });
+  } = useEventMapping();
 
   return (
     <div className="h-screen">
