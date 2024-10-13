@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { terminalDataSchema } from "@event-mapping/schema/terminal";
 import { globalDataSchema } from "@event-mapping/schema/global";
+import { terminalDataSchema } from "@event-mapping/schema/terminal";
 
 /**
  * 警告用のアクション
