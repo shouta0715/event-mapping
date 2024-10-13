@@ -1,4 +1,5 @@
 import { Source } from "@event-mapping/db";
+import { GlobalData } from "@event-mapping/schema";
 import { createMiddleware } from "hono/factory";
 import { z } from "zod";
 import { sizeSchema } from "@/libs/schema";
@@ -57,11 +58,23 @@ export function registerHandler(this: Subscription) {
       new WebSocketRequestResponsePair("ping", "pong")
     );
 
-    this.adminMessageHandlers.joinSessionHandler({
-      sessionId: session_id,
-      ws: server,
-      ...parsed.data,
-    });
+    if (!this.global) {
+      return c.json({ message: "Global not found" }, 404);
+    }
+
+    const global: GlobalData = {
+      width: this.global.width,
+      height: this.global.height,
+    };
+
+    this.adminMessageHandlers.joinSessionHandler(
+      {
+        sessionId: session_id,
+        ws: server,
+        ...parsed.data,
+      },
+      global
+    );
 
     return new Response(null, {
       status: 101,
@@ -106,6 +119,10 @@ export function registerHandler(this: Subscription) {
     }
 
     this.admin = server;
+    this.global = {
+      width: this.source.width,
+      height: this.source.height,
+    };
 
     this.adminMessageHandlers.initializeSessionHandler();
 

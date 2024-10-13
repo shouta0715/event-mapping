@@ -37,7 +37,7 @@ function EventMapping({ event, source }: Props) {
     onNodeDoubleClick,
     onPanClick,
     onNodeDragStop,
-  } = useEventMapping({ sourceId: source.id });
+  } = useEventMapping();
 
   return (
     <div className="h-screen">
@@ -60,7 +60,7 @@ function EventMapping({ event, source }: Props) {
           style={{ margin: "0" }}
         >
           <Rnd
-            className="rounded-2xl border-2 bg-background/80 p-4"
+            className="overflow-y-auto overflow-x-hidden rounded-2xl border-2 bg-background/80 p-4"
             default={{
               height: "96%",
               width: 320,

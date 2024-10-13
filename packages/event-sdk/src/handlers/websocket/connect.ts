@@ -1,3 +1,4 @@
+import { parseActionMessage } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 import { getSessionId } from "@event-mapping/event-sdk/utils";
 
@@ -8,10 +9,12 @@ export function connectWebsocket(this: EventHandler) {
   };
 
   this.ws.onmessage = (event) => {
-    console.log(event.data);
+    const action = parseActionMessage("event", event.data);
+
+    if (!action) return;
+
+    this.handleEventAction(action);
   };
 
-  this.ws.onclose = () => {
-    console.log("WebSocket connection closed");
-  };
+  this.ws.onclose = () => {};
 }

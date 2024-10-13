@@ -1,5 +1,5 @@
 import { Source } from "@event-mapping/db";
-import { TerminalData } from "@event-mapping/schema";
+import { GlobalData, TerminalData } from "@event-mapping/schema";
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
 import { Env } from "@/env";
@@ -20,6 +20,8 @@ export class Subscription extends DurableObject {
   protected admin: WebSocket | null = null;
 
   protected source: Source | null = null;
+
+  protected global: GlobalData | null = null;
 
   protected sessions: Map<WebSocket, TerminalData> = new Map<
     WebSocket,
@@ -54,8 +56,8 @@ export class Subscription extends DurableObject {
     super(state, env);
     this.storage = state.storage;
     this.hibernationHandler();
-    this.adminMessageHandlers = generateAdminMessageHandlers.bind(this)();
-    this.eventMessageHandlers = generateEventMessageHandler.bind(this)();
+    this.adminMessageHandlers = generateAdminMessageHandlers.call(this);
+    this.eventMessageHandlers = generateEventMessageHandler.call(this);
     this.registerHandler();
   }
 

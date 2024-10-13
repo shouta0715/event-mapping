@@ -1,6 +1,7 @@
 {
   "name": "@event-mapping/schema",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "tsup src/index.ts --watch --dts --format esm",
     "build": "tsup src/index.ts --dts --format esm",
@@ -8,7 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "exports": {
-    ".": "./dist/index.mjs"
+    ".": "./dist/index.js"
   },
   "devDependencies": {
     "@event-mapping/eslint-config": "workspace:*",

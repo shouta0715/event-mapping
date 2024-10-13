@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { globalDataSchema } from "@event-mapping/schema/global";
 import { terminalDataSchema } from "@event-mapping/schema/terminal";
 
 /**
@@ -13,7 +14,10 @@ export type EventWarning = z.infer<typeof eventWarningSchema>;
 
 export const eventInitializeSchema = z.object({
   action: z.literal("initialize"),
-  data: terminalDataSchema,
+  data: z.object({
+    terminal: terminalDataSchema,
+    global: globalDataSchema,
+  }),
 });
 
 export type EventInitialize = z.infer<typeof eventInitializeSchema>;
@@ -24,3 +28,10 @@ export const eventUpdateSchema = z.object({
 });
 
 export type EventUpdate = z.infer<typeof eventUpdateSchema>;
+
+export const eventUpdateGlobalSchema = z.object({
+  action: z.literal("updateGlobal"),
+  data: globalDataSchema,
+});
+
+export type EventUpdateGlobal = z.infer<typeof eventUpdateGlobalSchema>;

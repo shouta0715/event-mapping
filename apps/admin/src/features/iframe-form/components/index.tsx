@@ -83,7 +83,7 @@ export function IframeForm({ defaultValues }: IframeFormProps) {
                     <FormControl className="relative">
                       <div>
                         <span className="absolute left-2 top-1/2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
-                          H
+                          W
                         </span>
                         <Input placeholder="1920" {...field} className="pl-6" />
                       </div>
@@ -99,7 +99,7 @@ export function IframeForm({ defaultValues }: IframeFormProps) {
                     <FormControl className="relative">
                       <div>
                         <span className="absolute left-2 top-1/2 z-10 -translate-y-1/2 text-xs text-muted-foreground">
-                          W
+                          H
                         </span>
                         <Input placeholder="1080" {...field} className="pl-6" />
                       </div>

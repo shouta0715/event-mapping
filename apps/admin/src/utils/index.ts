@@ -10,3 +10,14 @@ export const getQ = (searchParams: { name: string | undefined | string[] }) => {
 export const assertTerminalNode = (node: NodeType): node is TerminalNode => {
   return node.type === "terminal";
 };
+
+type Size = {
+  width: number;
+  height: number;
+};
+export const calcScale = (original: Size, target: Size): number => {
+  return Math.min(
+    target.width / original.width,
+    target.height / original.height
+  );
+};

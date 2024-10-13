@@ -8,17 +8,26 @@ import { IframeNode as TIframeNode } from "@/features/iframe/types";
 import { useUpdateIframeData } from "@/hooks/iframe";
 import { useNodeHandler } from "@/hooks/node";
 
+type IframeProps = React.ComponentPropsWithoutRef<"iframe">;
+export const Iframe = memo(
+  React.forwardRef<HTMLIFrameElement, IframeProps>((props, ref) => {
+    const title = useId();
+
+    return <iframe ref={ref} title={title} {...props} />;
+  })
+);
+
 export const IframeNode = memo(
   ({ data, width, height, id }: NodeProps<TIframeNode>) => {
-    const title = useId();
     const { getIsNodeSelected } = useNodeHandler();
 
     const isSelected = getIsNodeSelected(id);
 
     const { mutate } = useUpdateIframeData();
-    const { iframeRef, handleResize } = useComlink({
+    const { iframeRef, handleResize, handleOnload } = useComlink({
       url: data.url,
       dev_url: data.dev_url,
+      global: { width: width ?? 0, height: height ?? 0 },
     });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
@@ -78,11 +87,10 @@ export const IframeNode = memo(
           </div>
         </div>
 
-        <iframe
+        <Iframe
           ref={iframeRef}
           className="pointer-events-none absolute inset-0 -z-50 size-full cursor-not-allowed"
-          sandbox="allow-scripts allow-same-origin"
-          title={title}
+          onLoad={handleOnload}
         />
         <div
           className={cn(

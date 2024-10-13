@@ -1,3 +1,4 @@
+import { TerminalData } from "@event-mapping/schema";
 import { createId } from "@paralleldrive/cuid2";
 
 export const getSessionId = () => {
@@ -16,4 +17,8 @@ export const getSessionId = () => {
   localStorage.setItem("session_id", newId);
 
   return newId;
+};
+
+export const assertTerminal = (t: TerminalData | null): t is TerminalData => {
+  return !!t;
 };
