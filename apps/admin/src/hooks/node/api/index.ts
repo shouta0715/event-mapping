@@ -15,9 +15,15 @@ export const updateTerminalData = async ({
   nodeId: string;
   data: TerminalData;
 }) => {
+  const parseData: TerminalData = {
+    ...data,
+    endX: data.startX + data.width,
+    endY: data.startY + data.height,
+  };
+
   const res = await fetch(getUrl(sourceId, nodeId), {
     method: "PATCH",
-    body: JSON.stringify(data),
+    body: JSON.stringify(parseData),
     headers: {
       "Content-Type": "application/json",
     },

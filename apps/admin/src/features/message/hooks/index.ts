@@ -39,6 +39,7 @@ export const useWebSocketMessage = ({
         height: session.height,
         data: session,
       }));
+
       setNodes(nodes);
     },
     [setNodes]
