@@ -3,6 +3,7 @@ import { TerminalData } from "@event-mapping/schema";
 import * as Comlink from "comlink";
 import { useCallback, useEffect, useRef } from "react";
 import { IS_DEVELOPMENT } from "@/env";
+import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
 import { useSourceId, useTerminalState } from "@/global/store/provider";
 import { assertTerminalNode } from "@/utils";
@@ -21,6 +22,25 @@ export function useComlink({ url, dev_url, global }: UseComlinkProps) {
   const { nodes } = useTerminalState((state) => ({
     nodes: state.nodes,
   }));
+
+  const { mutateAsync, refreshKey, setRefreshKey } = useRestart(sourceId);
+
+  const handleRestart = async () => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    if (!iframe.contentWindow) return;
+
+    const { time } = await mutateAsync(2000);
+
+    const delay = time - Date.now();
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        setRefreshKey(time);
+        resolve(null);
+      }, delay);
+    });
+  };
 
   useWebSocketMessage({ sourceId, comlink: comlinkRef.current });
 
@@ -52,7 +72,7 @@ export function useComlink({ url, dev_url, global }: UseComlinkProps) {
     return () => {
       iframe.src = "";
     };
-  }, [dev_url, url]);
+  }, [dev_url, url, refreshKey]);
 
   const handleResize = async (width: number, height: number) => {
     if (!comlinkRef.current) return;
@@ -64,5 +84,7 @@ export function useComlink({ url, dev_url, global }: UseComlinkProps) {
     iframeRef,
     handleResize,
     handleOnload,
+    handleRestart,
+    refreshKey,
   };
 }

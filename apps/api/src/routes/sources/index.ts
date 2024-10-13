@@ -1,7 +1,7 @@
 import { eq, sourceInsertSchema, sources } from "@event-mapping/db";
-
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
+import { z } from "zod";
 import { handleApiError, InternalServerError } from "@/errors";
 import { createHono } from "@/helper";
 
@@ -9,6 +9,15 @@ const app = createHono.createApp();
 
 app.use(
   "/:eventId",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type"],
+  })
+);
+
+app.use(
+  "/:id/restart",
   cors({
     origin: "*",
     allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
@@ -74,6 +83,22 @@ app.patch("/:id", zValidator("json", sourceInsertSchema), async (c) => {
 
   return c.json({ data });
 });
+
+app.post(
+  "/:id/restart",
+  zValidator("json", z.object({ ms: z.number().optional() })),
+  async (c) => {
+    const { id } = c.req.param();
+
+    const subscription = c.env.SUBSCRIPTION.idFromName(id);
+    const stub = c.env.SUBSCRIPTION.get(subscription);
+
+    const { ms } = c.req.valid("json");
+    const time = await stub.restart(ms);
+
+    return c.json({ time });
+  }
+);
 
 app.post("/:eventId", zValidator("json", sourceInsertSchema), async (c) => {
   const data = c.req.valid("json");

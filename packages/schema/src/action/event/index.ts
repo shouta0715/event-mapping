@@ -35,3 +35,10 @@ export const eventUpdateGlobalSchema = z.object({
 });
 
 export type EventUpdateGlobal = z.infer<typeof eventUpdateGlobalSchema>;
+
+export const eventRestartSchema = z.object({
+  action: z.literal("restart"),
+  time: z.number(),
+});
+
+export type EventRestart = z.infer<typeof eventRestartSchema>;

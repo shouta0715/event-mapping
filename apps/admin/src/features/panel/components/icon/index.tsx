@@ -40,32 +40,29 @@ export function IconPanel({ event, source, isOnline }: Props) {
 
   return (
     <div className="-mx-2 flex items-center justify-between">
-      <Link
-        className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
-        href={`/events/${event.slug}`}
-      >
-        <IconTooltip
-          icon={<ArrowLeft className="size-6" />}
-          text="イベント一覧"
-        />
-      </Link>
+      <IconTooltip asChild text="イベント一覧">
+        <Link
+          className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
+          href={`/events/${event.slug}`}
+        >
+          <ArrowLeft className="size-6" />
+        </Link>
+      </IconTooltip>
 
       <div className="flex items-center gap-4">
-        <IconTooltip
-          icon={statusIcon[isOnline ? status : "closed"]}
-          text={statusText[isOnline ? status : "closed"]}
-        />
-        <a
-          className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
-          href={IS_DEVELOPMENT ? source.dev_url : source.url}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <IconTooltip
-            icon={<Clapperboard className="size-6" />}
-            text="コンテンツを開く"
-          />
-        </a>
+        <IconTooltip text={statusText[isOnline ? status : "closed"]}>
+          {statusIcon[isOnline ? status : "closed"]}
+        </IconTooltip>
+
+        <IconTooltip asChild text="コンテンツを開く">
+          <a
+            href={IS_DEVELOPMENT ? source.dev_url : source.url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Clapperboard className="size-6" />
+          </a>
+        </IconTooltip>
       </div>
     </div>
   );

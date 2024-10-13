@@ -7,6 +7,7 @@ import {
   patchNodeHandler,
   patchSourceHandler,
 } from "@/subscription/handlers/api/patch";
+import { restartHandler } from "@/subscription/handlers/api/post";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
 import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
 import { generateEventMessageHandler } from "@/subscription/handlers/message/event";
@@ -48,6 +49,8 @@ export class Subscription extends DurableObject {
   private readonly patchNodeHandler = patchNodeHandler.bind(this);
 
   private readonly patchSourceHandler = patchSourceHandler.bind(this);
+
+  private readonly restartHandler = restartHandler.bind(this);
 
   constructor(
     protected readonly state: DurableObjectState,
@@ -91,5 +94,9 @@ export class Subscription extends DurableObject {
 
   async patchSource(data: Source) {
     return this.patchSourceHandler(data);
+  }
+
+  async restart(ms = 100) {
+    return this.restartHandler(ms);
   }
 }

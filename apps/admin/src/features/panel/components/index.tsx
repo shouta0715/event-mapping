@@ -28,6 +28,10 @@ const IdPanel = ({ id, label }: { id: string; label: string }) => {
   const handleCopy = () => {
     copy(id);
     setCopied(true);
+
+    timer.current = setTimeout(() => {
+      setCopied(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -80,9 +84,9 @@ export function Panel({ event, source }: Props) {
   const { node: selectedNodeId } = useNodeHandler();
 
   return (
-    <div>
+    <div className="flex size-full flex-col">
       <IconPanel event={event} isOnline={isOnline} source={source} />
-      <div className="mt-4">
+      <div className="mt-4 shrink-0">
         <div>
           <h1 className="line-clamp-1 flex-1 text-xl font-bold">
             {source.name}
@@ -95,11 +99,15 @@ export function Panel({ event, source }: Props) {
 
       <hr className="my-4" />
 
-      <div className="space-y-2">
+      <div className="shrink-0 space-y-2">
         <IdPanel id={source.id} label="コンテンツID" />
       </div>
 
-      <Accordion defaultValue={[selectedNodeId ?? ""]} type="multiple">
+      <Accordion
+        className="flex-1 overflow-y-auto"
+        defaultValue={[selectedNodeId ?? ""]}
+        type="multiple"
+      >
         {nodes.map((node) => {
           if (!assertTerminalNode(node)) {
             const data: Source = {

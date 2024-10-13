@@ -60,7 +60,7 @@ function EventMapping({ event, source }: Props) {
           style={{ margin: "0" }}
         >
           <Rnd
-            className="overflow-y-auto overflow-x-hidden rounded-2xl border-2 bg-background/80 p-4"
+            className="rounded-2xl border-2 bg-background/80 p-4"
             default={{
               height: "96%",
               width: 320,
@@ -82,7 +82,7 @@ function EventMapping({ event, source }: Props) {
             minWidth={320}
             position={{ x: 20, y: 20 }}
           >
-            <div>
+            <div className="size-full">
               <Panel event={event} source={source} />
             </div>
           </Rnd>
