@@ -1,10 +1,11 @@
-import { TerminalData } from "@event-mapping/schema";
+import { EventAction, GlobalData, TerminalData } from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
 import { createDefaultTerminalData, sendMessage } from "@/utils";
 
 async function joinSessionHandler(
   this: Subscription,
-  data: { sessionId: string; width: number; height: number; ws: WebSocket }
+  data: { sessionId: string; width: number; height: number; ws: WebSocket },
+  global: GlobalData
 ) {
   if (!this.admin) return;
   const { sessionId, width, height, ws } = data;
@@ -28,11 +29,20 @@ async function joinSessionHandler(
   };
 
   this.sessions.set(ws, terminalData);
+
   ws.serializeAttachment(terminalData);
 
   sendMessage(this.admin, {
     action: "join",
     data: terminalData,
+  });
+
+  sendMessage<EventAction>(ws, {
+    action: "initialize",
+    data: {
+      terminal: terminalData,
+      global,
+    },
   });
 }
 
@@ -59,8 +69,11 @@ function initializeSessionHandler(this: Subscription) {
   if (!this.admin || !this.source) return;
 
   const sessions = Array.from(this.sessions.values());
-
-  this.admin.serializeAttachment(this.source);
+  const serializeData = {
+    source: this.source,
+    global: this.global,
+  };
+  this.admin.serializeAttachment(serializeData);
   sendMessage(this.admin, {
     action: "initialize",
     sessions,

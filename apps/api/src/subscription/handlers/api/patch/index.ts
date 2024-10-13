@@ -1,6 +1,7 @@
 import { Source } from "@event-mapping/db";
-import { TerminalData } from "@event-mapping/schema";
+import { EventUpdateGlobal, TerminalData } from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
+import { sendMessage } from "@/utils";
 
 export async function patchNodeHandler(
   this: Subscription,
@@ -21,4 +22,11 @@ export async function patchSourceHandler(this: Subscription, data: Source) {
   if (!source || !admin) return;
 
   this.source = data;
+
+  for (const ws of this.sessions.keys()) {
+    sendMessage<EventUpdateGlobal>(ws, {
+      action: "updateGlobal",
+      data,
+    });
+  }
 }

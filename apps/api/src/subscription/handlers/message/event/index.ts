@@ -7,6 +7,8 @@ export async function eventUpdateHandler(
   ws: WebSocket,
   data: TerminalData
 ) {
+  if (!this.global) return;
+
   sendMessage(ws, {
     action: "update",
     data,

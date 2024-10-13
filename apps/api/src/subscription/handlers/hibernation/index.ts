@@ -13,6 +13,7 @@ export function hibernationHandler(this: Subscription) {
   for (const ws of admins) {
     const meta = ws.deserializeAttachment();
     this.admin = ws;
-    this.source = meta;
+    this.source = meta.source;
+    this.global = meta.global;
   }
 }
