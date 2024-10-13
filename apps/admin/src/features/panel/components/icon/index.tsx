@@ -1,7 +1,13 @@
 "use client";
 
 import { Event, Source } from "@event-mapping/db";
-import { ArrowLeft, Clapperboard, Wifi, WifiOff } from "lucide-react";
+import {
+  ArrowLeft,
+  Clapperboard,
+  RefreshCcw,
+  Wifi,
+  WifiOff,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { LoadingIcon } from "@/components/animation";
@@ -40,32 +46,35 @@ export function IconPanel({ event, source, isOnline }: Props) {
 
   return (
     <div className="-mx-2 flex items-center justify-between">
-      <Link
-        className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
-        href={`/events/${event.slug}`}
-      >
-        <IconTooltip
-          icon={<ArrowLeft className="size-6" />}
-          text="イベント一覧"
-        />
-      </Link>
+      <IconTooltip asChild text="イベント一覧">
+        <Link
+          className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
+          href={`/events/${event.slug}`}
+        >
+          <ArrowLeft className="size-6" />
+        </Link>
+      </IconTooltip>
 
       <div className="flex items-center gap-4">
-        <IconTooltip
-          icon={statusIcon[isOnline ? status : "closed"]}
-          text={statusText[isOnline ? status : "closed"]}
-        />
-        <a
-          className="flex items-center rounded-md p-2 transition-colors hover:bg-muted"
-          href={IS_DEVELOPMENT ? source.dev_url : source.url}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <IconTooltip
-            icon={<Clapperboard className="size-6" />}
-            text="コンテンツを開く"
-          />
-        </a>
+        <IconTooltip asChild text="コンテンツを再読み込み">
+          <button type="button">
+            <RefreshCcw className="size-6 text-muted-foreground" />
+          </button>
+        </IconTooltip>
+
+        <IconTooltip text={statusText[isOnline ? status : "closed"]}>
+          {statusIcon[isOnline ? status : "closed"]}
+        </IconTooltip>
+
+        <IconTooltip asChild text="コンテンツを開く">
+          <a
+            href={IS_DEVELOPMENT ? source.dev_url : source.url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Clapperboard className="size-6" />
+          </a>
+        </IconTooltip>
       </div>
     </div>
   );
