@@ -1,21 +1,19 @@
 import { TerminalData } from "@event-mapping/schema";
 import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
+import { GlobalData } from "@event-mapping/event-sdk/types/global";
 
 export function joinHandler(this: AdminHandler, terminal: TerminalData) {
-  if (this.terminals.find((t) => t.id === terminal.id)) return;
-
-  this.terminals.push(terminal);
+  this.join(terminal);
 }
 
 export function leaveHandler(this: AdminHandler, id: string) {
-  const newTerminals = this.terminals.filter((t) => t.id !== id);
-
-  this.terminals = newTerminals;
+  this.leave(id);
 }
 
 export function initializeHandler(
   this: AdminHandler,
-  terminals: TerminalData[]
+  terminals: TerminalData[],
+  global: GlobalData
 ) {
-  this.terminals = terminals;
+  this.initialize(terminals, global);
 }

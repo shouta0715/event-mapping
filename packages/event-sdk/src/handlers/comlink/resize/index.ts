@@ -6,5 +6,5 @@ export function resizeHandler(
   height: number
 ) {
   this.p.resizeCanvas(width, height);
-  this.p.redraw();
+  this.global = { width, height };
 }
