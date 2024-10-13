@@ -16,6 +16,8 @@ export class EventHandler<
 
   protected terminal: TerminalData | null = null;
 
+  protected restartTime: number = 0;
+
   private readonly getWebSocketClient = getWebsocketClient.bind(this);
 
   private readonly connectWebsocket = connectWebsocket.bind(this);

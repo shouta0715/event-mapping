@@ -1,13 +1,7 @@
 "use client";
 
 import { Event, Source } from "@event-mapping/db";
-import {
-  ArrowLeft,
-  Clapperboard,
-  RefreshCcw,
-  Wifi,
-  WifiOff,
-} from "lucide-react";
+import { ArrowLeft, Clapperboard, Wifi, WifiOff } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { LoadingIcon } from "@/components/animation";
@@ -56,12 +50,6 @@ export function IconPanel({ event, source, isOnline }: Props) {
       </IconTooltip>
 
       <div className="flex items-center gap-4">
-        <IconTooltip asChild text="コンテンツを再読み込み">
-          <button type="button">
-            <RefreshCcw className="size-6 text-muted-foreground" />
-          </button>
-        </IconTooltip>
-
         <IconTooltip text={statusText[isOnline ? status : "closed"]}>
           {statusIcon[isOnline ? status : "closed"]}
         </IconTooltip>

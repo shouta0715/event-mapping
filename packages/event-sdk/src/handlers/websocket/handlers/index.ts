@@ -1,6 +1,7 @@
 import {
   EventAction,
   EventInitialize,
+  EventRestart,
   EventUpdate,
   EventUpdateGlobal,
 } from "@event-mapping/schema";
@@ -27,6 +28,15 @@ function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
   this.terminal = data;
 }
 
+function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
+  this.restartTime = time;
+
+  setTimeout(() => {
+    this.initialized = true;
+    window.location.reload();
+  }, time - Date.now());
+}
+
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
     case "initialize":
@@ -37,6 +47,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "update":
       handleUpdateAction.call(this, action.data);
+      break;
+    case "restart":
+      handleRestartAction.call(this, action.time);
       break;
     default:
       break;

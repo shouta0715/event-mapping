@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@event-mapping/ui/components/button";
 import { cn } from "@event-mapping/ui/lib/utils";
 import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
 import React, { memo, useId } from "react";
+import { toast } from "sonner";
 import { useComlink } from "@/features/iframe/hooks";
 import { IframeNode as TIframeNode } from "@/features/iframe/types";
 import { useUpdateIframeData } from "@/hooks/iframe";
@@ -13,7 +15,14 @@ export const Iframe = memo(
   React.forwardRef<HTMLIFrameElement, IframeProps>((props, ref) => {
     const title = useId();
 
-    return <iframe ref={ref} title={title} {...props} />;
+    return (
+      <iframe
+        ref={ref}
+        sandbox="allow-scripts allow-same-origin"
+        title={title}
+        {...props}
+      />
+    );
   })
 );
 
@@ -24,11 +33,12 @@ export const IframeNode = memo(
     const isSelected = getIsNodeSelected(id);
 
     const { mutate } = useUpdateIframeData();
-    const { iframeRef, handleResize, handleOnload } = useComlink({
-      url: data.url,
-      dev_url: data.dev_url,
-      global: { width: width ?? 0, height: height ?? 0 },
-    });
+    const { iframeRef, handleResize, handleOnload, handleRestart, refreshKey } =
+      useComlink({
+        url: data.url,
+        dev_url: data.dev_url,
+        global: { width: width ?? 0, height: height ?? 0 },
+      });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
       mutate({ data: { ...data, width: params.width, height: params.height } });
@@ -87,7 +97,25 @@ export const IframeNode = memo(
           </div>
         </div>
 
+        <Button
+          className={cn(
+            "absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+          onClick={() =>
+            toast.promise(handleRestart(), {
+              loading: "再同期中...",
+              success: "同期しました。",
+              error: "同期を行えませんでした。",
+            })
+          }
+          size="lg"
+        >
+          再同期
+        </Button>
+
         <Iframe
+          key={refreshKey}
           ref={iframeRef}
           className="pointer-events-none absolute inset-0 -z-50 size-full cursor-not-allowed"
           onLoad={handleOnload}
