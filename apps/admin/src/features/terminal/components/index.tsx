@@ -3,6 +3,7 @@ import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
 import React, { memo } from "react";
 import { TerminalNode as TTerminalNode } from "@/global/store/types";
 import { useNodeHandler, useUpdateNodeData } from "@/hooks/node";
+import { calcScale } from "@/utils";
 
 export const TerminalNode = memo(
   ({ data, id, width, height }: NodeProps<TTerminalNode>) => {
@@ -12,12 +13,20 @@ export const TerminalNode = memo(
     const isSelected = getIsNodeSelected(id);
 
     const handleResizeEnd: OnResizeEnd = (_, params) => {
+      const newSize = { width: params.width, height: params.height };
+      const originalSize = {
+        width: data.windowWidth,
+        height: data.windowHeight,
+      };
+      // TODO: スケール変更する。
+      const scale = calcScale(originalSize, newSize);
       const newData = {
         ...data,
         startX: params.x,
         startY: params.y,
         width: params.width,
         height: params.height,
+        scale,
       };
       mutate({
         nodeId: id,
