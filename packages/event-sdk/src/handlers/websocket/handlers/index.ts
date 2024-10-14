@@ -26,14 +26,21 @@ function handleUpdateGlobalAction(
 
 function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
   this.terminal = data;
+
+  if (!this.canvas) return;
+
+  const { left, top, right, bottom } = this.terminal.margin;
+
+  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
 }
 
 function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
   this.restartTime = time;
 
   setTimeout(() => {
-    this.initialized = true;
     window.location.reload();
+
+    this.initialized = true;
   }, time - Date.now());
 }
 

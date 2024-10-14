@@ -24,6 +24,8 @@ export class EventHandler<
 
   protected readonly handleEventAction = handleEventAction.bind(this);
 
+  protected canvas: HTMLCanvasElement | null = null;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.ws = this.getWebSocketClient();
@@ -34,9 +36,22 @@ export class EventHandler<
     this.connectWebsocket();
   }
 
+  private setCanvasClipPath() {
+    if (this.canvas) return;
+    if (!this.canvas) this.canvas = document.querySelector("canvas");
+    if (!this.terminal) return;
+    if (!this.canvas) return;
+
+    const { left, top, right, bottom } = this.terminal.margin;
+
+    this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+  }
+
   draw(): void {
     if (!this.initialized) return;
     if (!this.terminal) return;
+
+    this.setCanvasClipPath();
 
     this.p.translate(-this.terminal.startX, -this.terminal.startY);
     this.p.scale(1);
