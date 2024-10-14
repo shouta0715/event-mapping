@@ -50,13 +50,13 @@ function sketch(pi: p5) {
       shape.position.add(shape.velocity);
 
       if (
-        shape.position.x < shape.d / 2 ||
+        shape.position.x < shape.d / 2 + rectSize ||
         shape.position.x > e.global.width - rectSize - shape.d / 2
       ) {
         shape.velocity.x *= -1;
       }
       if (
-        shape.position.y < shape.d / 2 ||
+        shape.position.y < shape.d / 2 + rectSize ||
         shape.position.y > e.global.height - rectSize - shape.d / 2
       ) {
         shape.velocity.y *= -1;
