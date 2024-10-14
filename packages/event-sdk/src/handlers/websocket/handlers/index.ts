@@ -14,6 +14,13 @@ function handleInitializeAction(
   this.terminal = data.terminal;
   this.global = data.global;
 
+  this.canvas = document.querySelector("canvas");
+  if (!this.canvas) throw new Error("canvas not found");
+
+  const { left, top, right, bottom } = this.terminal.margin;
+
+  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+
   this.initialized = true;
 }
 
@@ -26,6 +33,12 @@ function handleUpdateGlobalAction(
 
 function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
   this.terminal = data;
+
+  if (!this.canvas) return;
+
+  const { left, top, right, bottom } = this.terminal.margin;
+
+  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
 }
 
 function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {

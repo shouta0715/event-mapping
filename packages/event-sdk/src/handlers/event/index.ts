@@ -24,6 +24,8 @@ export class EventHandler<
 
   protected readonly handleEventAction = handleEventAction.bind(this);
 
+  protected canvas: HTMLCanvasElement | null = null;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.ws = this.getWebSocketClient();
