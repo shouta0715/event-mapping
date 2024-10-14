@@ -1,5 +1,6 @@
 "use client";
 
+import { SourceInsert } from "@event-mapping/db";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -98,15 +99,18 @@ export const IframeNode = memo(
 
     const { mutate } = useUpdateIframeData();
     const { iframeRef, handleResize, handleOnload, handleRestart, refreshKey } =
-      useComlink({
-        url: data.url,
-        dev_url: data.dev_url,
-        global: { width: width ?? 0, height: height ?? 0 },
-      });
+      useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
       mutate({ data: { ...data, width: params.width, height: params.height } });
       await handleResize(params.width, params.height);
+    };
+
+    const handleSubmitForm = async (d: SourceInsert) => {
+      const w = d.width ?? data.width;
+      const h = d.height ?? data.height;
+      mutate({ data: { ...d, width: w, height: h } });
+      await handleResize(w, h);
     };
 
     return (
@@ -146,7 +150,11 @@ export const IframeNode = memo(
               width={width ?? 0}
             />
           </div>
-          <IframeMenu data={data} onRestart={handleRestart} />
+          <IframeMenu
+            data={data}
+            onRestart={handleRestart}
+            onSubmitForm={handleSubmitForm}
+          />
         </ContextMenuTrigger>
       </ContextMenu>
     );
