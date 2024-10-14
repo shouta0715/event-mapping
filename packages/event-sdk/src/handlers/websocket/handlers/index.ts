@@ -14,13 +14,6 @@ function handleInitializeAction(
   this.terminal = data.terminal;
   this.global = data.global;
 
-  this.canvas = document.querySelector("canvas");
-  if (!this.canvas) throw new Error("canvas not found");
-
-  const { left, top, right, bottom } = this.terminal.margin;
-
-  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
-
   this.initialized = true;
 }
 
@@ -45,8 +38,9 @@ function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
   this.restartTime = time;
 
   setTimeout(() => {
-    this.initialized = true;
     window.location.reload();
+
+    this.initialized = true;
   }, time - Date.now());
 }
 
