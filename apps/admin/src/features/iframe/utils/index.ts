@@ -17,7 +17,7 @@ export const createIframeNode = ({
       y: 0,
     },
     data,
-    zIndex: -10,
+    zIndex: -1000,
     width: data.width,
     height: data.height,
     dragging: false,

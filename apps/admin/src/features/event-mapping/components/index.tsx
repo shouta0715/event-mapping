@@ -53,6 +53,7 @@ function EventMapping({ event, source }: Props) {
         onNodeDragStop={onNodeDragStop}
         onNodesChange={onNodesChange}
         onPaneClick={onPanClick}
+        zoomOnDoubleClick={false}
       >
         <RfPanel
           className="relative h-full"
