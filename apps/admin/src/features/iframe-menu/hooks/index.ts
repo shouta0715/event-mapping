@@ -1,5 +1,5 @@
 import { useReactFlow } from "@xyflow/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { IS_DEVELOPMENT } from "@/env";
 import { IframeNodeData } from "@/features/iframe/types";
@@ -11,6 +11,8 @@ type Props = {
 
 export function useIframeMenu({ onRestart, data }: Props) {
   const { setCenter } = useReactFlow();
+  const [openEditForm, setOpenEditForm] = useState(false);
+
   const handleRestart = useCallback(async () => {
     toast.promise(onRestart(), {
       loading: "同期中...",
@@ -47,6 +49,11 @@ export function useIframeMenu({ onRestart, data }: Props) {
         e.preventDefault();
         handleCenter();
       }
+
+      if (e.metaKey && e.key === "e") {
+        e.preventDefault();
+        setOpenEditForm((prev) => !prev);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -56,5 +63,11 @@ export function useIframeMenu({ onRestart, data }: Props) {
     };
   }, [handleOpenContent, handleRestart, handleCenter]);
 
-  return { handleCenter, handleOpenContent, handleRestart };
+  return {
+    handleCenter,
+    handleOpenContent,
+    handleRestart,
+    openEditForm,
+    setOpenEditForm,
+  };
 }

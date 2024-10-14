@@ -1,3 +1,4 @@
+import { Source } from "@event-mapping/db";
 import { ComlinkHandlers, GlobalData } from "@event-mapping/event-sdk";
 import { TerminalData } from "@event-mapping/schema";
 import * as Comlink from "comlink";
@@ -6,15 +7,14 @@ import { IS_DEVELOPMENT } from "@/env";
 import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
 import { useSourceId, useTerminalState } from "@/global/store/provider";
+import { useUpdateIframeData } from "@/hooks/iframe";
 import { assertTerminalNode } from "@/utils";
 
 type UseComlinkProps = {
-  url: string;
-  dev_url: string;
-  global: GlobalData;
+  data: Source;
 };
 
-export function useComlink({ url, dev_url, global }: UseComlinkProps) {
+export function useComlink({ data }: UseComlinkProps) {
   const sourceId = useSourceId();
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -24,6 +24,7 @@ export function useComlink({ url, dev_url, global }: UseComlinkProps) {
   }));
 
   const { mutateAsync, refreshKey, setRefreshKey } = useRestart(sourceId);
+  const { mutateAsync: mutateAsyncUpdateIframeData } = useUpdateIframeData();
 
   const handleRestart = async () => {
     const iframe = iframeRef.current;
@@ -61,23 +62,28 @@ export function useComlink({ url, dev_url, global }: UseComlinkProps) {
       terminals.push(node.data);
     }
 
+    const global: GlobalData = {
+      width: data.width ?? 0,
+      height: data.height ?? 0,
+    };
     await comlinkRef.current.initialize(terminals, global);
-  }, [nodes, global]);
+  }, [nodes, data]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return () => {};
-    iframe.src = IS_DEVELOPMENT ? dev_url : url;
+    iframe.src = IS_DEVELOPMENT ? data.dev_url : data.url;
 
     return () => {
       iframe.src = "";
     };
-  }, [dev_url, url, refreshKey]);
+  }, [data.dev_url, data.url, refreshKey]);
 
   const handleResize = async (width: number, height: number) => {
     if (!comlinkRef.current) return;
 
     await comlinkRef.current.resize(width, height);
+    await mutateAsyncUpdateIframeData({ data: { ...data, width, height } });
   };
 
   return {

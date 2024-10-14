@@ -14,31 +14,24 @@ import { Input } from "@event-mapping/ui/components/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { useUpdateIframeData } from "@/hooks/iframe";
 
 type IframeFormProps = {
   defaultValues: SourceInsert;
+  onSubmitForm: (data: SourceInsert) => void;
 };
 
-export function IframeForm({ defaultValues }: IframeFormProps) {
+export function IframeForm({ defaultValues, onSubmitForm }: IframeFormProps) {
   const form = useForm<SourceInsert>({
     resolver: zodResolver(sourceInsertSchema),
     defaultValues,
   });
 
-  const { mutateAsync } = useUpdateIframeData(false);
-
   const onSubmit = (data: SourceInsert) => {
-    toast.promise(mutateAsync({ data }), {
-      loading: "更新中...",
-      success: "更新しました。",
-      error: "更新できませんでした。",
-    });
+    onSubmitForm(data);
   };
 
   return (
-    <div>
+    <div className="p-4">
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="space-y-4">

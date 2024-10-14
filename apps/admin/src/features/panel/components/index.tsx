@@ -7,8 +7,6 @@ import { useNodes } from "@xyflow/react";
 import copy from "copy-to-clipboard";
 import { Clipboard, ClipboardCheck } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { IFRAME_NODE_ID } from "@/constant/node";
-import { IframePanel } from "@/features/iframe-panel";
 import { NodePanel } from "@/features/node-panel/components";
 import { IconPanel } from "@/features/panel/components/icon";
 import { NodeType } from "@/global/store/types";
@@ -109,22 +107,8 @@ export function Panel({ event, source }: Props) {
         type="multiple"
       >
         {nodes.map((node) => {
-          if (!assertTerminalNode(node)) {
-            const data: Source = {
-              ...node.data,
-              width: node.width ?? 1920,
-              height: node.height ?? 1080,
-            };
+          if (!assertTerminalNode(node)) return null;
 
-            return (
-              <IframePanel
-                key={IFRAME_NODE_ID}
-                data={data}
-                isSelected={node.id === selectedNodeId}
-                nodeId={IFRAME_NODE_ID}
-              />
-            );
-          }
           const data = {
             ...node.data,
             width: node.width ?? 1920,

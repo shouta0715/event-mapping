@@ -22,11 +22,15 @@ export async function patchSourceHandler(this: Subscription, data: Source) {
   if (!source || !admin) return;
 
   this.source = data;
+  this.global = {
+    width: data.width,
+    height: data.height,
+  };
 
   for (const ws of this.sessions.keys()) {
     sendMessage<EventUpdateGlobal>(ws, {
       action: "updateGlobal",
-      data,
+      data: this.global,
     });
   }
 }
