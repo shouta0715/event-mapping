@@ -25,6 +25,14 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
 
   initialized = false;
 
+  // 開発者がsetupを上書きできるように。
+  // eslint-disable-next-line class-methods-use-this
+  setup: (
+    global: GlobalData,
+    terminals: TerminalData[],
+    terminal?: TerminalData
+  ) => void = () => {};
+
   constructor(
     p: p5,
     protected readonly options: EventClientOptions

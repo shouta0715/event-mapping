@@ -21,14 +21,14 @@ function sketch(pi: p5) {
     sourceId: env.VITE_SOURCE_ID,
   });
 
-  p.setup = () => {
+  e.setup = (g) => {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
 
     Array.from({ length: 30 }).forEach(() => {
       const ball: Shape<Meta> = {
         type: "circle",
-        position: p.createVector(200 + rectSize, 200 + rectSize),
+        position: p.createVector(p.random(g.width), p.random(g.height)),
         velocity: p.createVector(p.random(-10, 10), p.random(-10, 10)),
         d: p.random(70, 150),
         color: p.color(p.random(255), p.random(255), p.random(255)),

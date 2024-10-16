@@ -15,6 +15,7 @@ function handleInitializeAction(
   this.global = data.global;
 
   this.initialized = true;
+  this.setup(this.global, this.terminals, this.terminal);
 }
 
 function handleUpdateGlobalAction(
