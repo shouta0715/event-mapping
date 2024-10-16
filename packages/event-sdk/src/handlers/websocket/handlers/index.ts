@@ -7,15 +7,25 @@ import {
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
-function handleInitializeAction(
+async function handleInitializeAction(
   this: EventHandler,
   data: EventInitialize["data"]
 ) {
+  if (this.initialized) return;
   this.terminal = data.terminal;
   this.global = data.global;
 
-  this.initialized = true;
-  this.setup(this.global, this.terminals, this.terminal);
+  if (this._p5_setup_called) {
+    this.setup(this.global, this.terminals, data.terminal);
+    this.initialized = true;
+
+    return;
+  }
+
+  this.p.setup = () => {
+    this.setup(this.global, this.terminals, data.terminal);
+    this.initialized = true;
+  };
 }
 
 function handleUpdateGlobalAction(
@@ -40,8 +50,22 @@ function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
 
   setTimeout(() => {
     window.location.reload();
+    if (!this.terminal) return;
 
-    this.initialized = true;
+    if (this._p5_setup_called) {
+      this.setup(this.global, this.terminals, this.terminal);
+
+      this.initialized = true;
+
+      return;
+    }
+
+    this.p.setup = () => {
+      if (!this.terminal) return;
+
+      this.setup(this.global, this.terminals, this.terminal);
+      this.initialized = true;
+    };
   }, time - Date.now());
 }
 
