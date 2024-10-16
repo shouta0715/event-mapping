@@ -15,17 +15,20 @@ async function handleInitializeAction(
   this.terminal = data.terminal;
   this.global = data.global;
 
-  if (this._p5_setup_called) {
+  const setupHandler = () => {
     this.setup(this.global, this.terminals, data.terminal);
+    if (!this.canvas) this.canvas = document.querySelector("canvas");
+    this.setCanvasClipPath();
     this.initialized = true;
+  };
+
+  if (this._p5_setup_called) {
+    setupHandler();
 
     return;
   }
 
-  this.p.setup = () => {
-    this.setup(this.global, this.terminals, data.terminal);
-    this.initialized = true;
-  };
+  this.p.setup = setupHandler;
 }
 
 function handleUpdateGlobalAction(
@@ -40,9 +43,7 @@ function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
 
   if (!this.canvas) return;
 
-  const { left, top, right, bottom } = this.terminal.margin;
-
-  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+  this.setCanvasClipPath();
 }
 
 function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {

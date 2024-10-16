@@ -20,9 +20,6 @@ export class AdminHandler<
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  draw(): void {}
-
   circle: EventClient["circle"] = (x, y, d) => {
     this.p.circle(x, y, d);
   };
