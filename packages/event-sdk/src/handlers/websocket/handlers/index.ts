@@ -7,15 +7,28 @@ import {
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
-function handleInitializeAction(
+async function handleInitializeAction(
   this: EventHandler,
   data: EventInitialize["data"]
 ) {
+  if (this.initialized) return;
   this.terminal = data.terminal;
   this.global = data.global;
 
-  this.initialized = true;
-  this.setup(this.global, this.terminals, this.terminal);
+  const setupHandler = () => {
+    this.setup(this.global, this.terminals, data.terminal);
+    if (!this.canvas) this.canvas = document.querySelector("canvas");
+    this.setCanvasClipPath();
+    this.initialized = true;
+  };
+
+  if (this._p5_setup_called) {
+    setupHandler();
+
+    return;
+  }
+
+  this.p.setup = setupHandler;
 }
 
 function handleUpdateGlobalAction(
@@ -30,9 +43,7 @@ function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
 
   if (!this.canvas) return;
 
-  const { left, top, right, bottom } = this.terminal.margin;
-
-  this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+  this.setCanvasClipPath();
 }
 
 function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
@@ -40,8 +51,22 @@ function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
 
   setTimeout(() => {
     window.location.reload();
+    if (!this.terminal) return;
 
-    this.initialized = true;
+    if (this._p5_setup_called) {
+      this.setup(this.global, this.terminals, this.terminal);
+
+      this.initialized = true;
+
+      return;
+    }
+
+    this.p.setup = () => {
+      if (!this.terminal) return;
+
+      this.setup(this.global, this.terminals, this.terminal);
+      this.initialized = true;
+    };
   }, time - Date.now());
 }
 

@@ -39,9 +39,6 @@ function sketch(pi: p5) {
   };
 
   p.draw = () => {
-    if (!e.initialized) return;
-    e.draw();
-
     p.background(255);
 
     for (const shape of e.shapes) {
@@ -63,20 +60,20 @@ function sketch(pi: p5) {
       }
 
       p.fill(shape.color);
-      p.ellipse(shape.position.x, shape.position.y, shape.d, shape.d);
+      e.ellipse(shape.position.x, shape.position.y, shape.d, shape.d);
     }
 
     p.fill(255, 87, 51);
-    p.rect(0, 0, rectSize, e.global.height);
+    e.rect(0, 0, rectSize, e.global.height);
 
     p.fill(51, 255, 87);
-    p.rect(0, 0, e.global.width, rectSize);
+    e.rect(0, 0, e.global.width, rectSize);
 
     p.fill(51, 87, 255);
-    p.rect(e.global.width - rectSize, 0, rectSize, e.global.height);
+    e.rect(e.global.width - rectSize, 0, rectSize, e.global.height);
 
     p.fill(255, 51, 166);
-    p.rect(0, e.global.height - rectSize, e.global.width, rectSize);
+    e.rect(0, e.global.height - rectSize, e.global.width, rectSize);
   };
 
   p.windowResized = () => {
