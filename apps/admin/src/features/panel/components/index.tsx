@@ -111,8 +111,8 @@ export function Panel({ event, source }: Props) {
 
           const data = {
             ...node.data,
-            width: node.width ?? 1920,
-            height: node.height ?? 1080,
+            width: Math.floor(node.width ?? 1920),
+            height: Math.floor(node.height ?? 1080),
             startX: Math.floor(node.position.x ?? 0),
             startY: Math.floor(node.position.y ?? 0),
           };
