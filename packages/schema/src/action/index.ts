@@ -4,12 +4,14 @@ import {
   initializeActionSchema,
   joinActionSchema,
   leaveActionSchema,
+  uploadImageActionSchema,
 } from "@event-mapping/schema/action/admin";
 import {
   eventInitializeSchema,
   eventRestartSchema,
   eventUpdateGlobalSchema,
   eventUpdateSchema,
+  eventUploadImageSchema,
   eventWarningSchema,
 } from "@event-mapping/schema/action/event";
 
@@ -20,6 +22,7 @@ export const adminActionSchema = z.union([
   initializeActionSchema,
   joinActionSchema,
   leaveActionSchema,
+  uploadImageActionSchema,
   adminWarningSchema,
 ]);
 
@@ -31,6 +34,7 @@ export const eventActionSchema = z.union([
   eventUpdateSchema,
   eventUpdateGlobalSchema,
   eventRestartSchema,
+  eventUploadImageSchema,
 ]);
 
 export type EventAction = z.infer<typeof eventActionSchema>;
