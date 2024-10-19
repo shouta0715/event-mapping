@@ -7,7 +7,7 @@ const config: Pick<Config, "presets" | "content" | "theme"> = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-roboto)", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-zen-kaku-gothic)", ...defaultTheme.fontFamily.sans],
       },
       minHeight: {
         screen: "100dvh",

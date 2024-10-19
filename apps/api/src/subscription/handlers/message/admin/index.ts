@@ -24,8 +24,6 @@ async function joinSessionHandler(
   const terminalData = {
     ...defaultTerminalData,
     ...prevTerminalData,
-    width,
-    height,
   };
 
   this.sessions.set(ws, terminalData);
