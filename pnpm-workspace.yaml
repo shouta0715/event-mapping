@@ -1,5 +1,6 @@
 packages:
-  - 'apps/admin'
-  - 'apps/api'
-  - 'apps/events/*'
-  - 'packages/*'
+  - "apps/admin"
+  - "apps/api"
+  - "apps/events/*"
+  - "apps/line/*"
+  - "packages/*"
