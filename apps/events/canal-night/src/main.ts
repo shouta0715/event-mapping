@@ -47,12 +47,14 @@ function sketch(pi: p5) {
         shape.velocity.y *= -1;
       }
 
-      p.image(
-        shape.image,
-        shape.position.x,
-        shape.position.y,
-        shape.d,
-        shape.d
+      e.transform(() =>
+        p.image(
+          shape.image,
+          shape.position.x,
+          shape.position.y,
+          shape.d,
+          shape.d
+        )
       );
     }
 
