@@ -66,6 +66,8 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
     if (this.isInIframe) this.initialized = true;
   }
 
+  abstract transform: (fn: () => void) => void;
+
   abstract circle: (x: number, y: number, d: number) => void;
 
   abstract ellipse: (x: number, y: number, w: number, h?: number) => void;
