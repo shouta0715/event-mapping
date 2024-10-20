@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const SOURCE_ID = import.meta.env.VITE_SOURCE_ID;
 
 type UseResultProps = {
   result: Blob;
@@ -13,7 +14,7 @@ const postBlob = async (blob: Blob) => {
   const formData = new FormData();
   formData.append("image", blob);
 
-  const response = await fetch(`${API_URL}/canal-night/images/upload`, {
+  const response = await fetch(`${API_URL}/sources/${SOURCE_ID}/images`, {
     method: "POST",
     body: formData,
   });
