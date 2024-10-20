@@ -14,6 +14,14 @@ app.use(
   })
 );
 
+app.use(
+  "/",
+  cors({
+    origin: "*",
+    allowMethods: ["POST"],
+  })
+);
+
 app.post("/", async (c) => {
   const obj = getDO(c);
 

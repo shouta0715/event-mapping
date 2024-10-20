@@ -14,6 +14,7 @@
     "@event-mapping/eslint-config": "workspace:*",
     "@event-mapping/tailwind-config": "workspace:*",
     "@event-mapping/typescript-config": "workspace:*",
+    "@types/matter-js": "^0.19.7",
     "@types/p5": "^1.7.6",
     "autoprefixer": "^10.4.20",
     "postcss": "^8",
@@ -25,6 +26,7 @@
     "@event-mapping/event-sdk": "workspace:*",
     "@t3-oss/env-core": "^0.11.1",
     "comlink": "^4.4.1",
+    "matter-js": "^0.20.0",
     "p5": "^1.10.0",
     "zod": "^3.23.8"
   }
