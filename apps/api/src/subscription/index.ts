@@ -9,13 +9,16 @@ import {
 } from "@/subscription/handlers/api/patch";
 import { restartHandler } from "@/subscription/handlers/api/post";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
+
+import { getImageHandler } from "@/subscription/handlers/images/get";
+import { uploadImageHandler } from "@/subscription/handlers/images/upload";
 import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
 import { generateEventMessageHandler } from "@/subscription/handlers/message/event";
 import { registerHandler } from "@/subscription/handlers/register";
 
 const basePath = "/sources/:id/subscribe";
 
-export class Subscription extends DurableObject {
+export class Subscription extends DurableObject<Env["Bindings"]> {
   protected app = new Hono().basePath(basePath);
 
   protected admin: WebSocket | null = null;
@@ -51,6 +54,13 @@ export class Subscription extends DurableObject {
   private readonly patchSourceHandler = patchSourceHandler.bind(this);
 
   private readonly restartHandler = restartHandler.bind(this);
+
+  /**
+   * 画像関連のHandlers
+   */
+  private readonly uploadImageHandler = uploadImageHandler.bind(this);
+
+  protected readonly getImageHandler = getImageHandler.bind(this);
 
   constructor(
     protected readonly state: DurableObjectState,
@@ -98,5 +108,13 @@ export class Subscription extends DurableObject {
 
   async restart(ms = 100) {
     return this.restartHandler(ms);
+  }
+
+  async uploadImage(req: Request) {
+    return this.uploadImageHandler(req);
+  }
+
+  async getImage(id: string) {
+    return this.getImageHandler(id);
   }
 }

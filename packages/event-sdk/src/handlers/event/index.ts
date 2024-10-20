@@ -27,7 +27,7 @@ export class EventHandler<
 
   protected canvas: HTMLCanvasElement | null = null;
 
-  private readonly transform = transform.bind(this);
+  readonly transform = transform.bind(this);
 
   protected _p5_setup_called = false;
 

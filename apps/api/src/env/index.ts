@@ -3,10 +3,11 @@ import { Subscription } from "@/subscription";
 
 export type Env = {
   Bindings: {
-    DB: D1Database;
-    SUBSCRIPTION: DurableObjectNamespace<Subscription>;
+    readonly DB: D1Database;
+    readonly SUBSCRIPTION: DurableObjectNamespace<Subscription>;
+    readonly IMAGES: R2Bucket;
   };
   Variables: {
-    db: ReturnType<typeof generateDB>;
+    readonly db: ReturnType<typeof generateDB>;
   };
 };

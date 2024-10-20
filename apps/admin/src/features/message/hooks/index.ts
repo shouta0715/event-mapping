@@ -3,6 +3,7 @@ import {
   InitializeAction,
   JoinAction,
   LeaveAction,
+  UploadImageAction,
 } from "@event-mapping/schema";
 import Comlink from "comlink";
 import { useCallback, useEffect } from "react";
@@ -74,6 +75,13 @@ export const useWebSocketMessage = ({
     [removeNode, comlink]
   );
 
+  const uploadImageHandler = useCallback(
+    (id: UploadImageAction["id"]) => {
+      comlink?.uploaded(id);
+    },
+    [comlink]
+  );
+
   useEffect(() => {
     if (!lastJsonMessage) return;
     const { action } = lastJsonMessage;
@@ -88,8 +96,17 @@ export const useWebSocketMessage = ({
       case "leave":
         leaveHandler(lastJsonMessage.sessionId);
         break;
+      case "uploadImage":
+        uploadImageHandler(lastJsonMessage.id);
+        break;
       default:
         throw new Error(action satisfies never);
     }
-  }, [initializeHandler, joinHandler, lastJsonMessage, leaveHandler]);
+  }, [
+    initializeHandler,
+    joinHandler,
+    lastJsonMessage,
+    leaveHandler,
+    uploadImageHandler,
+  ]);
 };

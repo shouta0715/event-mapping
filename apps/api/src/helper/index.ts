@@ -41,3 +41,17 @@ export const withQ = (c: Context<Env>) => {
 
   return q;
 };
+
+/**
+ * サブスクリプションのDurable Objectを取得する
+ * @param c hono context
+ * @returns Durable Object
+ */
+
+export const getDO = (c: Context<Env>) => {
+  const { sourceId } = c.req.param();
+  const subscription = c.env.SUBSCRIPTION.idFromName(sourceId);
+  const stub = c.env.SUBSCRIPTION.get(subscription);
+
+  return stub;
+};

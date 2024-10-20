@@ -20,6 +20,10 @@ export class AdminHandler<
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
   }
 
+  transform = (fn: () => void) => {
+    fn();
+  };
+
   circle: EventClient["circle"] = (x, y, d) => {
     this.p.circle(x, y, d);
   };

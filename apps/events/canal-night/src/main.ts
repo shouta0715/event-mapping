@@ -2,12 +2,12 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
 
-import { createEventClient, Shape } from "@event-mapping/event-sdk";
+import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
 type Meta = {
-  color: p5.Color;
+  image: p5.Image;
 };
 
 function sketch(pi: p5) {
@@ -21,25 +21,13 @@ function sketch(pi: p5) {
     sourceId: env.VITE_SOURCE_ID,
   });
 
-  e.setup = (g) => {
+  e.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
-
-    Array.from({ length: 30 }).forEach(() => {
-      const ball: Shape<Meta> = {
-        type: "circle",
-        position: p.createVector(p.random(g.width), p.random(g.height)),
-        velocity: p.createVector(p.random(-10, 10), p.random(-10, 10)),
-        d: p.random(70, 150),
-        color: p.color(p.random(255), p.random(255), p.random(255)),
-      };
-
-      e.shapes.add(ball);
-    });
   };
 
   p.draw = () => {
-    p.background(255);
+    p.background(0);
 
     for (const shape of e.shapes) {
       if (shape.type !== "circle") continue;
@@ -59,8 +47,15 @@ function sketch(pi: p5) {
         shape.velocity.y *= -1;
       }
 
-      p.fill(shape.color);
-      e.ellipse(shape.position.x, shape.position.y, shape.d, shape.d);
+      e.transform(() =>
+        p.image(
+          shape.image,
+          shape.position.x,
+          shape.position.y,
+          shape.d,
+          shape.d
+        )
+      );
     }
 
     p.fill(255, 87, 51);
@@ -78,6 +73,16 @@ function sketch(pi: p5) {
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
+
+  e.uploadedImage = (img) => {
+    e.shapes.add({
+      type: "circle",
+      position: p.createVector(200, 200),
+      velocity: p.createVector(p.random(-10, 10), p.random(-10, 10)),
+      d: 100,
+      image: img,
+    });
   };
 }
 
