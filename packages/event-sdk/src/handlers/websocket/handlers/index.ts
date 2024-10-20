@@ -4,6 +4,8 @@ import {
   EventRestart,
   EventUpdate,
   EventUpdateGlobal,
+  EventWarning,
+  UploadImageAction,
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
@@ -70,6 +72,22 @@ function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
   }, time - Date.now());
 }
 
+function handleUploadImageAction(
+  this: EventHandler,
+  id: UploadImageAction["id"]
+) {
+  const img = this.p.loadImage(`${this.baseImageUrl}/${id}`);
+  this.uploadedImage(img, { url: `${this.baseImageUrl}/${id}`, id });
+}
+
+function handleWarningAction(
+  this: EventHandler,
+  message: EventWarning["message"]
+) {
+  // eslint-disable-next-line no-console
+  console.warn(message);
+}
+
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
     case "initialize":
@@ -84,7 +102,13 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
     case "restart":
       handleRestartAction.call(this, action.time);
       break;
-    default:
+    case "uploadImage":
+      handleUploadImageAction.call(this, action.id);
       break;
+    case "warning":
+      handleWarningAction.call(this, action.message);
+      break;
+    default:
+      throw new Error(action satisfies never);
   }
 }

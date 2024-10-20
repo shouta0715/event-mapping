@@ -5,6 +5,7 @@ import { getSessionId } from "@event-mapping/event-sdk/utils";
 export function connectWebsocket(this: EventHandler) {
   this.ws.onopen = () => {
     const id = getSessionId();
+    // eslint-disable-next-line no-console
     console.log(`session_id: ${id} connected`);
   };
 

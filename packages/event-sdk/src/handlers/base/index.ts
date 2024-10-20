@@ -23,25 +23,32 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
 
   private readonly seed: number;
 
+  protected readonly baseImageUrl: string;
+
   initialized = false;
 
-  // 開発者がsetupを上書きできるように。
-  // eslint-disable-next-line class-methods-use-this
   setup: (
     global: GlobalData,
     terminals: TerminalData[],
     terminal?: TerminalData
   ) => void = () => {};
 
+  uploadedImage: (
+    img: p5.Image,
+    { url, id }: { url: string; id: string }
+  ) => void = () => {};
+
   constructor(
     p: p5,
     protected readonly options: EventClientOptions
   ) {
+    const { apiUrl, sourceId } = options;
     this.p = p;
     this.seed = Math.random();
     this.shapes = new Shapes<TMeta>();
     this.global = { width: 0, height: 0 };
     this.p.randomSeed(this.seed);
+    this.baseImageUrl = `${apiUrl}/sources/${sourceId}/images`;
   }
 
   join(terminal: TerminalData): void {

@@ -6,4 +6,5 @@ export type ComlinkHandlers = {
   join: (terminal: TerminalData) => void;
   leave: (id: string) => void;
   initialize: (terminals: TerminalData[], global: GlobalData) => void;
+  uploaded: (id: string) => void;
 };
