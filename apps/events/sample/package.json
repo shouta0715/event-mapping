@@ -1,0 +1,33 @@
+{
+  "name": "sample",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "vite build",
+    "lint": "eslint src",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@event-mapping/eslint-config": "workspace:*",
+    "@event-mapping/tailwind-config": "workspace:*",
+    "@event-mapping/typescript-config": "workspace:*",
+    "@types/matter-js": "^0.19.7",
+    "@types/p5": "^1.7.6",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "@event-mapping/event-sdk": "workspace:*",
+    "@t3-oss/env-core": "^0.11.1",
+    "comlink": "^4.4.1",
+    "matter-js": "^0.20.0",
+    "p5": "^1.10.0",
+    "zod": "^3.23.8"
+  }
+}
