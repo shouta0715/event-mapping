@@ -10,9 +10,10 @@ import { getQ } from "@/utils";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { name: string | undefined | string[] };
+  searchParams: Promise<{ name: string | undefined | string[] }>;
 }) {
-  const events = await getEvents(getQ(searchParams));
+  const s = await searchParams;
+  const events = await getEvents(getQ(s));
 
   return (
     <div>
