@@ -1,7 +1,9 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 import { Container } from "@/components/container";
+import { IconTooltip } from "@/components/icon-tooltip";
 import { getEvent } from "@/features/events/api";
 import { SourceFormDialog } from "@/features/sources/components/dialog";
 import { SearchSources } from "@/features/sources/components/search";
@@ -22,6 +24,14 @@ export default async function Page({
     <div>
       <header className="bg-primary py-2.5 sm:px-3.5 sm:before:flex-1">
         <Container className="flex items-center gap-x-6 px-6">
+          <IconTooltip asChild text="イベント一覧">
+            <Link
+              className="flex items-center rounded-md p-2 text-white transition-colors hover:bg-white/10"
+              href="/events"
+            >
+              <ArrowLeft className="size-6" />
+            </Link>
+          </IconTooltip>
           <p className="font-bold leading-6 text-white ">
             {event.name}のコンテンツ一覧
           </p>
