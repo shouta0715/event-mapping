@@ -10,7 +10,6 @@ import { SourceProvider, TerminalStateProvider } from "@/global/store/provider";
 const DynamicEventMapping = dynamic(
   () => import("@/features/event-mapping/components"),
   {
-    ssr: false,
     loading: Loader,
   }
 );
@@ -18,9 +17,10 @@ const DynamicEventMapping = dynamic(
 export default async function Page({
   params,
 }: {
-  params: { "source-id": string };
+  params: Promise<{ "source-id": string }>;
 }) {
-  const source = await getSource(params["source-id"]);
+  const { "source-id": sourceId } = await params;
+  const source = await getSource(sourceId);
   if (!source) notFound();
 
   const iframeNode = createIframeNode({ data: source });

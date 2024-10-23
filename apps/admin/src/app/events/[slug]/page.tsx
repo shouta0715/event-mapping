@@ -9,14 +9,13 @@ import { SourceFormDialog } from "@/features/sources/components/dialog";
 import { SearchSources } from "@/features/sources/components/search";
 import { getQ } from "@/utils";
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { name: string | undefined | string[] };
+export default async function Page(props: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ name: string | undefined | string[] }>;
 }) {
-  const event = await getEvent(params.slug, getQ(searchParams));
+  const { searchParams, params } = props;
+  const [p, s] = await Promise.all([params, searchParams]);
+  const event = await getEvent(p.slug, getQ(s));
 
   if (!event) return notFound();
 
