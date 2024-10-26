@@ -13,10 +13,10 @@ export default async function Page({
   params,
   searchParams,
 }: {
-  params: { slug: string };
+  params: { eventId: string };
   searchParams: { name: string | undefined | string[] };
 }) {
-  const event = await getEvent(params.slug, getQ(searchParams));
+  const event = await getEvent(params.eventId, getQ(searchParams));
 
   if (!event) return notFound();
 

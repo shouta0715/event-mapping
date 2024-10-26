@@ -18,9 +18,9 @@ const DynamicEventMapping = dynamic(
 export default async function Page({
   params,
 }: {
-  params: { "source-id": string };
+  params: { sourceId: string };
 }) {
-  const source = await getSource(params["source-id"]);
+  const source = await getSource(params.sourceId);
   if (!source) notFound();
 
   const iframeNode = createIframeNode({ data: source });
