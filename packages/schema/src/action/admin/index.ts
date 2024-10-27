@@ -44,3 +44,22 @@ export const uploadImageActionSchema = z.object({
 });
 
 export type UploadImageAction = z.infer<typeof uploadImageActionSchema>;
+
+export const vertexPositionSchema = z.enum([
+  "topLeft",
+  "topRight",
+  "bottomLeft",
+  "bottomRight",
+]);
+
+export type VertexPosition = z.infer<typeof vertexPositionSchema>;
+
+export const moveVertexActionSchema = z.object({
+  action: z.literal("moveVertex"),
+  id: z.string(),
+  x: z.number(),
+  y: z.number(),
+  position: vertexPositionSchema,
+});
+
+export type MoveVertexAction = z.infer<typeof moveVertexActionSchema>;
