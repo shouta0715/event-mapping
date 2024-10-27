@@ -1,4 +1,5 @@
 import { TerminalData } from "@event-mapping/schema";
+import { useState } from "react";
 import { useUpdateNodeData } from "@/hooks/node";
 
 type UseTerminalMenu = {
@@ -8,6 +9,7 @@ type UseTerminalMenu = {
 
 export function useTerminalMenu({ data, id }: UseTerminalMenu) {
   const { mutate } = useUpdateNodeData();
+  const [open, setOpen] = useState(false);
 
   const handleResetSize = () => {
     const w = data.windowWidth;
@@ -18,5 +20,9 @@ export function useTerminalMenu({ data, id }: UseTerminalMenu) {
     });
   };
 
-  return { handleResetSize };
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return { handleResetSize, open, setOpen, onClose };
 }
