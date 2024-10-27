@@ -144,6 +144,7 @@ export const IframeNode = memo(
               className="pointer-events-none absolute inset-0 -z-50 size-full cursor-not-allowed"
               onLoad={handleOnload}
             />
+
             <IframeInfo
               height={height ?? 0}
               isSelected={isSelected}
