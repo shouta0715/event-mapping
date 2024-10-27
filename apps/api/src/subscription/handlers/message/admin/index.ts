@@ -1,4 +1,10 @@
-import { EventAction, GlobalData, TerminalData } from "@event-mapping/schema";
+import {
+  EventAction,
+  EventMoveVertex,
+  GlobalData,
+  MoveVertexAction,
+  TerminalData,
+} from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
 import { createDefaultTerminalData, sendMessage } from "@/utils";
 
@@ -63,6 +69,25 @@ function leaveSessionHandler(this: Subscription, ws: WebSocket) {
   ws.close();
 }
 
+function moveVertexHandler(this: Subscription, data: MoveVertexAction) {
+  if (!this.admin) return;
+  const { id, x, y, position } = data;
+
+  const ws = this.getWsFromId(id);
+
+  if (!ws) return;
+
+  const eventData: EventMoveVertex = {
+    action: "moveVertex",
+
+    x,
+    y,
+    position,
+  };
+
+  sendMessage(ws, eventData);
+}
+
 function initializeSessionHandler(this: Subscription) {
   if (!this.admin || !this.source) return;
 
@@ -83,5 +108,6 @@ export function generateAdminMessageHandlers(this: Subscription) {
     joinSessionHandler: joinSessionHandler.bind(this),
     leaveSessionHandler: leaveSessionHandler.bind(this),
     initializeSessionHandler: initializeSessionHandler.bind(this),
+    moveVertexHandler: moveVertexHandler.bind(this),
   };
 }
