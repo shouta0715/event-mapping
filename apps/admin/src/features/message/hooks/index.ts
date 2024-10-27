@@ -20,7 +20,7 @@ export const useWebSocketMessage = ({
   sourceId,
   comlink,
 }: UseWebSocketMessageProps) => {
-  const { lastJsonMessage } = useWs(sourceId);
+  const { lastJsonMessage, sendJsonMessage } = useWs(sourceId);
   const { addNode, setNodes, removeNode } = useTerminalState((state) => ({
     addNode: state.addNode,
     setNodes: state.setNodes,
@@ -109,4 +109,6 @@ export const useWebSocketMessage = ({
     leaveHandler,
     uploadImageHandler,
   ]);
+
+  return { sendJsonMessage };
 };

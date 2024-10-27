@@ -17,7 +17,7 @@ const getWsUrl = (id: string) => {
 export function useWs(id: string) {
   const url = getWsUrl(id);
 
-  const { sendMessage, readyState, lastJsonMessage } = useWebSocket<
+  const { readyState, lastJsonMessage, sendJsonMessage } = useWebSocket<
     Exclude<AdminAction, AdminWarning>
   >(url, {
     reconnectInterval: (attemptNumber) =>
@@ -71,7 +71,7 @@ export function useWs(id: string) {
     isClosing,
     isClosed,
     isUninstantiated,
-    sendMessage,
+    sendJsonMessage,
     lastJsonMessage,
   };
 }
