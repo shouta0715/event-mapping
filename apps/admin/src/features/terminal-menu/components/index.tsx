@@ -80,7 +80,7 @@ export const TerminalMenu = ({
         </DialogTrigger>
       </ContextMenuContent>
 
-      <DialogContent className="max-w-max">
+      <DialogContent className="max-h-[90vh] max-w-max overflow-auto">
         <DialogHeader>
           <DialogTitle>マッピングを編集する</DialogTitle>
           <DialogDescription>
