@@ -31,7 +31,7 @@ const DynamicTerminalMapping = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="size-[600px] animate-pulse rounded-lg border bg-muted" />
+      <div className="size-full animate-pulse rounded-lg border bg-muted" />
     ),
   }
 );
@@ -80,14 +80,14 @@ export const TerminalMenu = ({
         </DialogTrigger>
       </ContextMenuContent>
 
-      <DialogContent className="max-h-[90vh] max-w-max overflow-auto">
+      <DialogContent className="flex h-dvh max-h-none w-dvw max-w-none flex-col overflow-auto rounded-none">
         <DialogHeader>
           <DialogTitle>マッピングを編集する</DialogTitle>
           <DialogDescription>
             マッピングの頂点を編集できます。
           </DialogDescription>
         </DialogHeader>
-        <div>
+        <div className="flex-1">
           <DynamicTerminalMapping data={data} id={id} />
         </div>
       </DialogContent>
