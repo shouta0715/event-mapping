@@ -92,7 +92,7 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     if (!parsed) return;
     if (parsed.action !== "moveVertex") return;
 
-    this.adminMessageHandlers.moveVertexHandler(parsed);
+    this.adminMessageHandlers.moveVertexHandler(parsed.data);
   }
 
   fetch(req: Request) {

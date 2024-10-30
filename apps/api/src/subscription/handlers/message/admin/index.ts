@@ -69,9 +69,9 @@ function leaveSessionHandler(this: Subscription, ws: WebSocket) {
   ws.close();
 }
 
-function moveVertexHandler(this: Subscription, data: MoveVertexAction) {
+function moveVertexHandler(this: Subscription, data: MoveVertexAction["data"]) {
   if (!this.admin) return;
-  const { id, x, y, position } = data;
+  const { id, positions } = data;
 
   const ws = this.getWsFromId(id);
 
@@ -79,10 +79,9 @@ function moveVertexHandler(this: Subscription, data: MoveVertexAction) {
 
   const eventData: EventMoveVertex = {
     action: "moveVertex",
-
-    x,
-    y,
-    position,
+    data: {
+      positions,
+    },
   };
 
   sendMessage(ws, eventData);
