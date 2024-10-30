@@ -3,7 +3,7 @@ import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
 import { useWs } from "@/features/websocket/hooks";
 import { useSourceId } from "@/global/store/provider";
-import { float } from "@/utils";
+import { round } from "@/utils";
 
 type Point = {
   x: number;
@@ -129,7 +129,7 @@ export function useTerminalMapping({ data, id }: UseTerminalMappingProps) {
 
     const positions: { x: number; y: number }[] = points.map((point, i) => {
       if (i === index) {
-        return { x: float(x), y: float(y) };
+        return { x: round(x), y: round(y) };
       }
 
       return { x: point.x, y: point.y };

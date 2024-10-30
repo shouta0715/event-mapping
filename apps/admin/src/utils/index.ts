@@ -23,6 +23,6 @@ export const calcScale = (original: Size, target: Size): number => {
   );
 };
 
-export const float = (value: number): number => {
+export const round = (value: number): number => {
   return Math.round(value);
 };
