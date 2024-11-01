@@ -1,6 +1,7 @@
 import {
   EventAction,
   EventInitialize,
+  EventMoveVertex,
   EventRestart,
   EventUpdate,
   EventUpdateGlobal,
@@ -8,6 +9,7 @@ import {
   UploadImageAction,
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
+import { applyMatrix3d } from "@event-mapping/event-sdk/handlers/helper";
 
 async function handleInitializeAction(
   this: EventHandler,
@@ -88,6 +90,15 @@ function handleWarningAction(
   console.warn(message);
 }
 
+function handleMoveVertexAction(
+  this: EventHandler,
+  data: EventMoveVertex["data"]
+) {
+  if (!this.canvas) return;
+
+  applyMatrix3d.call(this, data.positions);
+}
+
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
     case "initialize":
@@ -107,6 +118,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "warning":
       handleWarningAction.call(this, action.message);
+      break;
+    case "moveVertex":
+      handleMoveVertexAction.call(this, action.data);
       break;
     default:
       throw new Error(action satisfies never);
