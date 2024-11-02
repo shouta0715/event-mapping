@@ -2,10 +2,12 @@ import { Source } from "@event-mapping/db";
 import { ComlinkHandlers, GlobalData } from "@event-mapping/event-sdk";
 import { TerminalData } from "@event-mapping/schema";
 import * as Comlink from "comlink";
+import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
 import { IS_DEVELOPMENT } from "@/env";
 import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
+import { mappingModalAtom } from "@/global/modal";
 import { useSourceId, useTerminalState } from "@/global/store/provider";
 import { useUpdateIframeData } from "@/hooks/iframe";
 import { assertTerminalNode } from "@/utils";
@@ -16,7 +18,7 @@ type UseComlinkProps = {
 
 export function useComlink({ data }: UseComlinkProps) {
   const sourceId = useSourceId();
-
+  const isOpenModal = useAtomValue(mappingModalAtom);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const comlinkRef = useRef<Comlink.Remote<ComlinkHandlers> | null>(null);
   const { nodes } = useTerminalState((state) => ({
@@ -43,12 +45,15 @@ export function useComlink({ data }: UseComlinkProps) {
     });
   };
 
-  useWebSocketMessage({ sourceId, comlink: comlinkRef.current });
+  useWebSocketMessage({
+    sourceId,
+    comlink: comlinkRef.current,
+  });
 
   const handleOnload = useCallback(async () => {
     const iframe = iframeRef.current;
 
-    if (!iframe || !iframe.contentWindow) return;
+    if (!iframe || !iframe.contentWindow || iframe.src === "") return;
 
     comlinkRef.current = Comlink.wrap(
       Comlink.windowEndpoint(iframe.contentWindow)
@@ -72,12 +77,14 @@ export function useComlink({ data }: UseComlinkProps) {
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return () => {};
-    iframe.src = IS_DEVELOPMENT ? data.dev_url : data.url;
+
+    const url = IS_DEVELOPMENT ? data.dev_url : data.url;
+    iframe.src = isOpenModal ? "" : url;
 
     return () => {
       iframe.src = "";
     };
-  }, [data.dev_url, data.url, refreshKey]);
+  }, [data.dev_url, data.url, refreshKey, isOpenModal]);
 
   const handleResize = async (width: number, height: number) => {
     if (!comlinkRef.current) return;

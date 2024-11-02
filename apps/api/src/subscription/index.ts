@@ -1,5 +1,9 @@
 import { Source } from "@event-mapping/db";
-import { GlobalData, TerminalData } from "@event-mapping/schema";
+import {
+  GlobalData,
+  parseActionMessage,
+  TerminalData,
+} from "@event-mapping/schema";
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
 import { Env } from "@/env";
@@ -8,6 +12,7 @@ import {
   patchSourceHandler,
 } from "@/subscription/handlers/api/patch";
 import { restartHandler } from "@/subscription/handlers/api/post";
+import { saveTerminal } from "@/subscription/handlers/helper/save-terminal";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
 
 import { getImageHandler } from "@/subscription/handlers/images/get";
@@ -62,6 +67,11 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
 
   protected readonly getImageHandler = getImageHandler.bind(this);
 
+  /**
+   * Helper Functions
+   */
+  protected readonly saveTerminal = saveTerminal.bind(this);
+
   constructor(
     protected readonly state: DurableObjectState,
     protected readonly env: Env["Bindings"]
@@ -80,6 +90,15 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
 
   async webSocketError(ws: WebSocket) {
     this.adminMessageHandlers.leaveSessionHandler(ws);
+  }
+
+  async webSocketMessage(_: WebSocket, message: string) {
+    const parsed = parseActionMessage("admin", message);
+
+    if (!parsed) return;
+    if (parsed.action !== "moveVertex") return;
+
+    this.adminMessageHandlers.moveVertexHandler(parsed.data);
   }
 
   fetch(req: Request) {

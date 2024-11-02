@@ -49,3 +49,20 @@ export const eventUploadImageSchema = z.object({
 });
 
 export type EventUploadImage = z.infer<typeof eventUploadImageSchema>;
+
+export const eventMoveVertexSchema = z.object({
+  action: z.literal("moveVertex"),
+  data: z.object({
+    positions: z
+      .array(
+        z.object({
+          x: z.number(),
+          y: z.number(),
+        })
+      )
+      .length(4),
+    selectedIndex: z.number(),
+  }),
+});
+
+export type EventMoveVertex = z.infer<typeof eventMoveVertexSchema>;

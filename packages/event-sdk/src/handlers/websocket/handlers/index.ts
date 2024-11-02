@@ -1,6 +1,7 @@
 import {
   EventAction,
   EventInitialize,
+  EventMoveVertex,
   EventRestart,
   EventUpdate,
   EventUpdateGlobal,
@@ -8,6 +9,8 @@ import {
   UploadImageAction,
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
+import { applyMatrix3dToMarker } from "@event-mapping/event-sdk/handlers/helper/applay-marker";
+import { applyMatrix3d } from "@event-mapping/event-sdk/handlers/helper/apply-matrix";
 
 async function handleInitializeAction(
   this: EventHandler,
@@ -21,6 +24,9 @@ async function handleInitializeAction(
     this.setup(this.global, this.terminals, data.terminal);
     if (!this.canvas) this.canvas = document.querySelector("canvas");
     this.setCanvasClipPath();
+
+    applyMatrix3d.call(this, data.terminal.positions);
+
     this.initialized = true;
   };
 
@@ -88,6 +94,19 @@ function handleWarningAction(
   console.warn(message);
 }
 
+function handleMoveVertexAction(
+  this: EventHandler,
+  data: EventMoveVertex["data"]
+) {
+  if (!this.canvas) return;
+
+  const matrix3d = applyMatrix3d.call(this, data.positions);
+
+  if (!matrix3d || !this.marker) return;
+
+  applyMatrix3dToMarker.call(this, matrix3d, data.selectedIndex);
+}
+
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
     case "initialize":
@@ -107,6 +126,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "warning":
       handleWarningAction.call(this, action.message);
+      break;
+    case "moveVertex":
+      handleMoveVertexAction.call(this, action.data);
       break;
     default:
       throw new Error(action satisfies never);

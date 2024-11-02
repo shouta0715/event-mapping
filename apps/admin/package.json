@@ -20,6 +20,7 @@
     "@xyflow/react": "^12.3.0",
     "comlink": "^4.4.1",
     "copy-to-clipboard": "^3.3.3",
+    "jotai": "^2.8.4",
     "konva": "^9.3.16",
     "lucide-react": "^0.439.0",
     "next": "14.2.8",

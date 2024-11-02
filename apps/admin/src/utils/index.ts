@@ -15,9 +15,14 @@ type Size = {
   width: number;
   height: number;
 };
+
 export const calcScale = (original: Size, target: Size): number => {
   return Math.min(
     target.width / original.width,
     target.height / original.height
   );
+};
+
+export const round = (value: number): number => {
+  return Math.round(value);
 };

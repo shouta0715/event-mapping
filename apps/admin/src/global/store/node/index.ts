@@ -94,5 +94,11 @@ export const createNodeStore = ({
 
       set({ nodes: updatedNodes });
     },
+    getNodeData: (id: string) => {
+      const node = get().nodes.find((n) => n.id === id);
+      if (!node || !assertTerminalNode(node)) return undefined;
+
+      return node.data;
+    },
   };
 };

@@ -4,7 +4,7 @@ import {
 } from "@event-mapping/ui/components/context-menu";
 import { cn } from "@event-mapping/ui/lib/utils";
 import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 
 import { TerminalMenu } from "@/features/terminal-menu/components";
 import { TerminalNode as TTerminalNode } from "@/global/store/types";
@@ -152,15 +152,16 @@ export const TerminalNode = memo(
         width: params.width,
         height: params.height,
       };
+
       mutate({
         nodeId: id,
         data: newData,
       });
     };
 
-    const toggleKeepAspectRatio = () => {
+    const toggleKeepAspectRatio = useCallback(() => {
       setKeepAspectRatio((prev) => !prev);
-    };
+    }, []);
 
     return (
       <ContextMenu>
