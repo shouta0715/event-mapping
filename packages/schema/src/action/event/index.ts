@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { moveVertexPositionSchema } from "@event-mapping/schema/action/admin";
 import { globalDataSchema } from "@event-mapping/schema/global";
 import { terminalDataSchema } from "@event-mapping/schema/terminal";
 
@@ -54,7 +53,14 @@ export type EventUploadImage = z.infer<typeof eventUploadImageSchema>;
 export const eventMoveVertexSchema = z.object({
   action: z.literal("moveVertex"),
   data: z.object({
-    positions: moveVertexPositionSchema,
+    positions: z
+      .array(
+        z.object({
+          x: z.number(),
+          y: z.number(),
+        })
+      )
+      .length(4),
     selectedIndex: z.number(),
   }),
 });

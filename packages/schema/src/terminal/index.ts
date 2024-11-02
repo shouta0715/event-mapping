@@ -27,6 +27,14 @@ export const terminalDataSchema = z.object({
     bottom: coerceNumber,
     left: coerceNumber,
   }),
+  positions: z
+    .array(
+      z.object({
+        x: z.number(),
+        y: z.number(),
+      })
+    )
+    .length(4),
 });
 
 /**
