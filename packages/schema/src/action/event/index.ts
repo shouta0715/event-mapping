@@ -55,6 +55,7 @@ export const eventMoveVertexSchema = z.object({
   action: z.literal("moveVertex"),
   data: z.object({
     positions: moveVertexPositionSchema,
+    selectedIndex: z.number(),
   }),
 });
 

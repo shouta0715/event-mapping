@@ -59,6 +59,7 @@ export const moveVertexActionSchema = z.object({
   data: z.object({
     id: z.string(),
     positions: moveVertexPositionSchema,
+    selectedIndex: z.number(),
   }),
 });
 
