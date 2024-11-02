@@ -88,7 +88,11 @@ export const TerminalMenu = ({
           </DialogDescription>
         </DialogHeader>
         <div className="flex-1">
-          <DynamicTerminalMapping data={data} id={id} />
+          <DynamicTerminalMapping
+            data={data}
+            id={id}
+            onClose={() => setOpen(false)}
+          />
         </div>
       </DialogContent>
     </Dialog>

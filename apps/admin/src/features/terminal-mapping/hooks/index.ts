@@ -1,6 +1,8 @@
-import { TerminalData } from "@event-mapping/schema";
+import { MoveVertexAction, TerminalData } from "@event-mapping/schema";
 import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
+import { useWs } from "@/features/websocket/hooks";
+import { useSourceId, useTerminalState } from "@/global/store/provider";
 
 const FRAME_MAX_HEIGHT = window.innerHeight * 0.7;
 
@@ -21,8 +23,15 @@ const generateCornerPoints = (width: number, height: number) => {
 };
 
 export function useTerminalMapping({ data }: UseTerminalMappingProps) {
+  const sourceId = useSourceId();
+
+  const { sendJsonMessage } = useWs(sourceId);
   const { windowWidth: width, windowHeight: height } = data;
   const corners = generateCornerPoints(width, height);
+  const { updateNodeData, getNodeData } = useTerminalState((state) => ({
+    updateNodeData: state.updateNodeData,
+    getNodeData: state.getNodeData,
+  }));
 
   const stageRef = useRef<Konva.Stage>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -82,7 +91,36 @@ export function useTerminalMapping({ data }: UseTerminalMappingProps) {
     setWrapperWidth(wrapperRef.current.clientWidth - 4);
   }, [wrapperRef]);
 
+  const handleResetPosition = () => {
+    const nodeData = getNodeData(data.id);
+
+    if (!nodeData) return;
+
+    const defaultPoints = [
+      { x: 0, y: 0 },
+      { x: width, y: 0 },
+      { x: width, y: height },
+      { x: 0, y: height },
+    ];
+    updateNodeData(data.id, {
+      ...nodeData,
+      positions: defaultPoints,
+    });
+
+    const action: MoveVertexAction = {
+      action: "moveVertex",
+      data: {
+        id: data.id,
+        positions: defaultPoints,
+        selectedIndex: -1,
+      },
+    };
+
+    sendJsonMessage(action);
+  };
+
   return {
+    handleResetPosition,
     wrapperRef,
     stageRef,
     wrapperWidth,
@@ -93,5 +131,6 @@ export function useTerminalMapping({ data }: UseTerminalMappingProps) {
     width,
     height,
     corners,
+    sendJsonMessage,
   };
 }

@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 
+import { MoveVertexAction } from "@event-mapping/schema";
 import React from "react";
 import { Circle, Group, Line } from "react-konva";
 import { usePointGroup } from "@/features/terminal-mapping/hooks/use-point-group";
@@ -16,6 +17,7 @@ type PointsProps = {
   center: Point;
   id: string;
   defaultPoints: Omit<Point, "id">[];
+  sendJsonMessage: (action: MoveVertexAction) => void;
 };
 
 export const PointsGroup = ({
@@ -24,6 +26,7 @@ export const PointsGroup = ({
   id,
   RADIUS_SIZE,
   defaultPoints,
+  sendJsonMessage,
 }: PointsProps) => {
   const {
     points,
@@ -31,7 +34,7 @@ export const PointsGroup = ({
     draggable,
     setDraggable,
     handleDragMove,
-  } = usePointGroup({ defaultPoints, center, id });
+  } = usePointGroup({ defaultPoints, center, id, sendJsonMessage });
 
   return (
     <Group

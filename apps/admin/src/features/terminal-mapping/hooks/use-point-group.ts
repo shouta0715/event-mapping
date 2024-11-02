@@ -1,8 +1,6 @@
 import { MoveVertexAction } from "@event-mapping/schema";
 import Konva from "konva";
 import { useState } from "react";
-import { useWs } from "@/features/websocket/hooks";
-import { useSourceId } from "@/global/store/provider";
 import { round } from "@/utils";
 
 type Point = {
@@ -23,16 +21,15 @@ type UsePointGroupProps = {
   defaultPoints: Omit<Point, "id">[];
   center: Point;
   id: string;
+  sendJsonMessage: (action: MoveVertexAction) => void;
 };
 
 export const usePointGroup = ({
   defaultPoints,
   center,
   id,
+  sendJsonMessage,
 }: UsePointGroupProps) => {
-  const sourceId = useSourceId();
-
-  const { sendJsonMessage } = useWs(sourceId);
   const [points, setPoints] = useState<Point[]>(() =>
     generateInitialPoints(defaultPoints)
   );

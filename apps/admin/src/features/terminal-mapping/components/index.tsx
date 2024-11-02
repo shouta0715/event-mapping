@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { TerminalData } from "@event-mapping/schema";
+import { Button } from "@event-mapping/ui/components/button";
 import React from "react";
 import { Stage, Layer, Circle, Rect, Group } from "react-konva";
 import { PointsGroup } from "@/features/terminal-mapping/components/points-group";
@@ -8,11 +9,12 @@ import { useTerminalMapping } from "@/features/terminal-mapping/hooks";
 type TerminalMappingProps = {
   data: TerminalData;
   id: string;
+  onClose: () => void;
 };
 
 const colors = ["#3C8AF5", "#F59E0B", "#10B981", "#EF4444", "#0F766E"];
 
-function TerminalMapping({ data, id }: TerminalMappingProps) {
+function TerminalMapping({ data, id, onClose }: TerminalMappingProps) {
   const {
     wrapperRef,
     stageRef,
@@ -24,6 +26,8 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
     height,
     corners,
     RADIUS_SIZE,
+    handleResetPosition,
+    sendJsonMessage,
   } = useTerminalMapping({ data });
 
   return (
@@ -53,14 +57,28 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
             })}
           </Group>
           <PointsGroup
+            key={JSON.stringify(data.positions)}
             center={center}
             colors={colors}
             defaultPoints={data.positions}
             id={id}
             RADIUS_SIZE={RADIUS_SIZE}
+            sendJsonMessage={sendJsonMessage}
           />
         </Layer>
       </Stage>
+      <p className="flex justify-between">
+        <Button className="mt-4" onClick={onClose} variant="outline">
+          閉じる
+        </Button>
+        <Button
+          className="mt-4"
+          onClick={handleResetPosition}
+          variant="destructive"
+        >
+          元の位置に戻す
+        </Button>
+      </p>
     </div>
   );
 }
