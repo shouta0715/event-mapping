@@ -30,6 +30,12 @@ export const createDefaultTerminalData = ({
       bottom: 0,
       left: 0,
     },
+    positions: [
+      { x: 0, y: 0 },
+      { x: width, y: 0 },
+      { x: width, y: height },
+      { x: 0, y: height },
+    ],
   };
 };
 

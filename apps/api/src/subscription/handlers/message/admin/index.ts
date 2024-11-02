@@ -32,9 +32,7 @@ async function joinSessionHandler(
     ...prevTerminalData,
   };
 
-  this.sessions.set(ws, terminalData);
-
-  ws.serializeAttachment(terminalData);
+  await this.saveTerminal(sessionId, ws, terminalData);
 
   sendMessage(this.admin, {
     action: "join",
@@ -69,9 +67,12 @@ function leaveSessionHandler(this: Subscription, ws: WebSocket) {
   ws.close();
 }
 
+let timer: NodeJS.Timeout | null = null;
+const SAVE_DURATION = 1000;
+
 function moveVertexHandler(this: Subscription, data: MoveVertexAction["data"]) {
   if (!this.admin) return;
-  const { id, positions } = data;
+  const { id, positions, selectedIndex } = data;
 
   const ws = this.getWsFromId(id);
 
@@ -81,8 +82,29 @@ function moveVertexHandler(this: Subscription, data: MoveVertexAction["data"]) {
     action: "moveVertex",
     data: {
       positions,
+      selectedIndex,
     },
   };
+
+  if (timer) clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    const prevData = this.sessions.get(ws);
+    if (!prevData) return;
+    const newData = {
+      ...prevData,
+      positions: eventData.data.positions,
+    };
+    this.saveTerminal(id, ws, newData);
+    if (!this.admin) return;
+    sendMessage<MoveVertexAction>(this.admin, {
+      action: "moveVertex",
+      data: {
+        id,
+        ...eventData.data,
+      },
+    });
+  }, SAVE_DURATION);
 
   sendMessage(ws, eventData);
 }

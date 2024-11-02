@@ -12,6 +12,7 @@ import {
   patchSourceHandler,
 } from "@/subscription/handlers/api/patch";
 import { restartHandler } from "@/subscription/handlers/api/post";
+import { saveTerminal } from "@/subscription/handlers/helper/save-terminal";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
 
 import { getImageHandler } from "@/subscription/handlers/images/get";
@@ -65,6 +66,11 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
   private readonly uploadImageHandler = uploadImageHandler.bind(this);
 
   protected readonly getImageHandler = getImageHandler.bind(this);
+
+  /**
+   * Helper Functions
+   */
+  protected readonly saveTerminal = saveTerminal.bind(this);
 
   constructor(
     protected readonly state: DurableObjectState,
