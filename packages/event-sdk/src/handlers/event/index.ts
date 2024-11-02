@@ -2,6 +2,7 @@ import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { transform } from "@event-mapping/event-sdk/handlers/helper";
+import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
 import { handleEventAction } from "@event-mapping/event-sdk/handlers/websocket/handlers";
@@ -25,24 +26,32 @@ export class EventHandler<
 
   protected readonly handleEventAction = handleEventAction.bind(this);
 
+  protected readonly initializeMarker = initializeMarker.bind(this);
+
   protected canvas: HTMLCanvasElement | null = null;
 
   readonly transform = transform.bind(this);
 
   protected _p5_setup_called = false;
 
+  protected markerContainer: HTMLDivElement | null = null;
+
+  protected marker: HTMLDivElement | null = null;
+
+  protected readonly markerSize = 100;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.ws = this.getWebSocketClient();
     this.init();
-
-    this.p.setup = () => {
-      this._p5_setup_called = true;
-    };
   }
 
   private init() {
     this.connectWebsocket();
+    this.initializeMarker();
+    this.p.setup = () => {
+      this._p5_setup_called = true;
+    };
   }
 
   protected setCanvasClipPath() {

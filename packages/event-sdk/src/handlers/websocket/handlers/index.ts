@@ -9,7 +9,8 @@ import {
   UploadImageAction,
 } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
-import { applyMatrix3d } from "@event-mapping/event-sdk/handlers/helper";
+import { applyMatrix3dToMarker } from "@event-mapping/event-sdk/handlers/helper/applay-marker";
+import { applyMatrix3d } from "@event-mapping/event-sdk/handlers/helper/apply-matrix";
 
 async function handleInitializeAction(
   this: EventHandler,
@@ -96,7 +97,11 @@ function handleMoveVertexAction(
 ) {
   if (!this.canvas) return;
 
-  applyMatrix3d.call(this, data.positions);
+  const matrix3d = applyMatrix3d.call(this, data.positions);
+
+  if (!matrix3d || !this.marker) return;
+
+  applyMatrix3dToMarker.call(this, matrix3d, data.selectedIndex);
 }
 
 export function handleEventAction(this: EventHandler, action: EventAction) {
