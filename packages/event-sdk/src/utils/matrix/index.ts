@@ -69,20 +69,3 @@ export function homographyToMatrix3d(
 
   return [h00, h10, 0, h20, h01, h11, 0, h21, 0, 0, 1, 0, h02, h12, 0, h22];
 }
-
-export function getMarkerPosition(index: number, markerSize: number) {
-  const halfMarkerSize = markerSize / 2;
-
-  switch (index) {
-    case 0:
-      return { top: -halfMarkerSize, left: -halfMarkerSize };
-    case 1:
-      return { right: -halfMarkerSize, top: -halfMarkerSize };
-    case 2:
-      return { right: -halfMarkerSize, bottom: -halfMarkerSize };
-    case 3:
-      return { left: -halfMarkerSize, bottom: -halfMarkerSize };
-    default:
-      return null;
-  }
-}
