@@ -24,6 +24,9 @@ async function handleInitializeAction(
     this.setup(this.global, this.terminals, data.terminal);
     if (!this.canvas) this.canvas = document.querySelector("canvas");
     this.setCanvasClipPath();
+
+    applyMatrix3d.call(this, data.terminal.positions);
+
     this.initialized = true;
   };
 
