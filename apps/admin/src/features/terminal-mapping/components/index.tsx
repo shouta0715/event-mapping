@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import { TerminalData } from "@event-mapping/schema";
 import React from "react";
-import { Stage, Layer, Line, Circle, Rect, Group } from "react-konva";
+import { Stage, Layer, Circle, Rect, Group } from "react-konva";
+import { PointsGroup } from "@/features/terminal-mapping/components/points-group";
 import { useTerminalMapping } from "@/features/terminal-mapping/hooks";
 
 type TerminalMappingProps = {
@@ -16,9 +17,6 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
     wrapperRef,
     stageRef,
     wrapperWidth,
-    framePosition,
-    points,
-    draggable,
     FRAME_MAX_HEIGHT,
     FRAME_PADDING,
     center,
@@ -26,11 +24,7 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
     height,
     corners,
     RADIUS_SIZE,
-    handleDragMove,
-    handlePointFrameDragMove,
-    handleDragEnd,
-    setDraggable,
-  } = useTerminalMapping({ data, id });
+  } = useTerminalMapping({ data });
 
   return (
     <div ref={wrapperRef} className="size-full">
@@ -40,7 +34,7 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
         draggable
         height={FRAME_MAX_HEIGHT + FRAME_PADDING}
         style={{
-          background: `radial-gradient(circle at center, #ddd 2px, #fff 2px) 0 0 / 40px 40px`,
+          background: `radial-gradient(circle at center, #414141 2px, #2b2b2b 2px) 0 0 / 40px 40px`,
         }}
         width={wrapperWidth}
       >
@@ -58,40 +52,13 @@ function TerminalMapping({ data, id }: TerminalMappingProps) {
               );
             })}
           </Group>
-          <Group
-            draggable={draggable}
-            id="points"
-            onDragMove={handlePointFrameDragMove}
-            x={framePosition.x}
-            y={framePosition.y}
-          >
-            <Line
-              closed
-              points={points.flatMap((point) => [point.x, point.y])}
-              stroke="black"
-            />
-            {points.map((point, index) => {
-              const { x, y } = point;
-              const color = colors[index];
-
-              return (
-                <Group
-                  key={`point-${index}`}
-                  draggable
-                  id={`point-${index}`}
-                  onDragEnd={(e) => handleDragEnd(index, e)}
-                  onDragMove={(e) => handleDragMove(index, e)}
-                  onDragStart={() => setDraggable(false)}
-                  onMouseEnter={() => setDraggable(false)}
-                  onMouseLeave={() => setDraggable(true)}
-                  x={x}
-                  y={y}
-                >
-                  <Circle radius={RADIUS_SIZE} stroke={color} />
-                </Group>
-              );
-            })}
-          </Group>
+          <PointsGroup
+            center={center}
+            colors={colors}
+            defaultPoints={data.positions}
+            id={id}
+            RADIUS_SIZE={RADIUS_SIZE}
+          />
         </Layer>
       </Stage>
     </div>

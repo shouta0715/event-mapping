@@ -1,40 +1,28 @@
-import { MoveVertexAction, TerminalData } from "@event-mapping/schema";
+import { TerminalData } from "@event-mapping/schema";
 import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
-import { useWs } from "@/features/websocket/hooks";
-import { useSourceId } from "@/global/store/provider";
-import { round } from "@/utils";
-
-type Point = {
-  x: number;
-  y: number;
-  id: string;
-};
 
 const FRAME_MAX_HEIGHT = window.innerHeight * 0.7;
 
 const RADIUS_SIZE = 20;
 const FRAME_PADDING = 200;
 
-const generateInitialPoints = (maxX: number, maxY: number) => {
+type UseTerminalMappingProps = {
+  data: TerminalData;
+};
+
+const generateCornerPoints = (width: number, height: number) => {
   return [
-    { id: "point-0", x: 0, y: 0 },
-    { id: "point-1", x: maxX, y: 0 },
-    { id: "point-2", x: maxX, y: maxY },
-    { id: "point-3", x: 0, y: maxY },
+    { id: "corner-top-left", x: 0, y: 0 },
+    { id: "corner-top-right", x: width, y: 0 },
+    { id: "corner-bottom-right", x: width, y: height },
+    { id: "corner-bottom-left", x: 0, y: height },
   ];
 };
 
-type UseTerminalMappingProps = {
-  data: TerminalData;
-  id: string;
-};
-
-export function useTerminalMapping({ data, id }: UseTerminalMappingProps) {
+export function useTerminalMapping({ data }: UseTerminalMappingProps) {
   const { windowWidth: width, windowHeight: height } = data;
-  const corners = generateInitialPoints(width, height);
-
-  const sourceId = useSourceId();
+  const corners = generateCornerPoints(width, height);
 
   const stageRef = useRef<Konva.Stage>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -45,11 +33,6 @@ export function useTerminalMapping({ data, id }: UseTerminalMappingProps) {
     id: "center",
   };
 
-  const { sendJsonMessage } = useWs(sourceId);
-
-  const [points, setPoints] = useState<Point[]>(corners);
-  const [framePosition, setFramePosition] = useState<Point>(center);
-  const [draggable, setDraggable] = useState<boolean>(true);
   const [wrapperWidth, setWrapperWidth] = useState<number>(0);
 
   useEffect(() => {
@@ -99,60 +82,10 @@ export function useTerminalMapping({ data, id }: UseTerminalMappingProps) {
     setWrapperWidth(wrapperRef.current.clientWidth - 4);
   }, [wrapperRef]);
 
-  const handleDragMove = (
-    index: number,
-    e: Konva.KonvaEventObject<DragEvent>
-  ) => {
-    setDraggable(false);
-    const newPoints = [...points];
-    const x = e.target.x();
-    const y = e.target.y();
-
-    newPoints[index] = { id: `point-${index}`, x, y };
-
-    setPoints(newPoints);
-  };
-
-  const handlePointFrameDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
-    if (!draggable) return;
-    const x = e.target.x();
-    const y = e.target.y();
-
-    setFramePosition({ id: "center", x, y });
-  };
-
-  const handleDragEnd = (
-    index: number,
-    e: Konva.KonvaEventObject<DragEvent>
-  ) => {
-    const { x, y } = e.target.position();
-
-    const positions: { x: number; y: number }[] = points.map((point, i) => {
-      if (i === index) {
-        return { x: round(x), y: round(y) };
-      }
-
-      return { x: point.x, y: point.y };
-    });
-
-    const action: MoveVertexAction = {
-      action: "moveVertex",
-      data: {
-        id,
-        positions,
-      },
-    };
-
-    sendJsonMessage(action);
-  };
-
   return {
     wrapperRef,
     stageRef,
     wrapperWidth,
-    framePosition,
-    points,
-    draggable,
     FRAME_MAX_HEIGHT,
     FRAME_PADDING,
     RADIUS_SIZE,
@@ -160,9 +93,5 @@ export function useTerminalMapping({ data, id }: UseTerminalMappingProps) {
     width,
     height,
     corners,
-    handleDragMove,
-    handlePointFrameDragMove,
-    handleDragEnd,
-    setDraggable,
   };
 }

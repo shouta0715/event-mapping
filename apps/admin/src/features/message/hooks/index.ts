@@ -3,6 +3,7 @@ import {
   InitializeAction,
   JoinAction,
   LeaveAction,
+  MoveVertexAction,
   UploadImageAction,
 } from "@event-mapping/schema";
 import Comlink from "comlink";
@@ -21,11 +22,14 @@ export const useWebSocketMessage = ({
   comlink,
 }: UseWebSocketMessageProps) => {
   const { lastJsonMessage } = useWs(sourceId);
-  const { addNode, setNodes, removeNode } = useTerminalState((state) => ({
-    addNode: state.addNode,
-    setNodes: state.setNodes,
-    removeNode: state.removeNode,
-  }));
+  const { addNode, setNodes, removeNode, updateNodeData, getNodeData } =
+    useTerminalState((state) => ({
+      addNode: state.addNode,
+      setNodes: state.setNodes,
+      removeNode: state.removeNode,
+      updateNodeData: state.updateNodeData,
+      getNodeData: state.getNodeData,
+    }));
 
   const initializeHandler = useCallback(
     (data: InitializeAction["sessions"]) => {
@@ -82,6 +86,19 @@ export const useWebSocketMessage = ({
     [comlink]
   );
 
+  const moveVertexHandler = useCallback(
+    (data: MoveVertexAction["data"]) => {
+      const nodeData = getNodeData(data.id);
+      if (!nodeData) return;
+
+      updateNodeData(data.id, {
+        ...nodeData,
+        positions: data.positions,
+      });
+    },
+    [updateNodeData, getNodeData]
+  );
+
   useEffect(() => {
     if (!lastJsonMessage) return;
     const { action } = lastJsonMessage;
@@ -99,6 +116,9 @@ export const useWebSocketMessage = ({
       case "uploadImage":
         uploadImageHandler(lastJsonMessage.id);
         break;
+      case "moveVertex":
+        moveVertexHandler(lastJsonMessage.data);
+        break;
       default:
         throw new Error(action satisfies never);
     }
@@ -108,5 +128,6 @@ export const useWebSocketMessage = ({
     lastJsonMessage,
     leaveHandler,
     uploadImageHandler,
+    moveVertexHandler,
   ]);
 };
