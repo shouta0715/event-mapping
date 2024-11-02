@@ -28,8 +28,9 @@ export const PointsGroup = ({
   const {
     points,
     framePosition,
-    handlePointFrameDragMove,
     draggable,
+    pointerRefs,
+    handlePointFrameDragMove,
     setDraggable,
     handleDragEnd,
     handleDragMove,
@@ -56,6 +57,10 @@ export const PointsGroup = ({
         return (
           <Group
             key={`point-${index}`}
+            ref={(ref) => {
+              if (!ref) return;
+              pointerRefs.current[index] = ref;
+            }}
             draggable
             id={`point-${index}`}
             onDragEnd={(e) => handleDragEnd(index, e)}

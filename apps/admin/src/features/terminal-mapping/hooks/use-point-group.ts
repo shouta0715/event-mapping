@@ -1,6 +1,6 @@
 import { MoveVertexAction } from "@event-mapping/schema";
 import Konva from "konva";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useWs } from "@/features/websocket/hooks";
 import { useSourceId } from "@/global/store/provider";
 import { round } from "@/utils";
@@ -39,6 +39,8 @@ export const usePointGroup = ({
   const [framePosition, setFramePosition] = useState<Point>(center);
   const [draggable, setDraggable] = useState<boolean>(true);
 
+  const pointerRefs = useRef<Konva.Group[]>([]);
+
   const handleDragMove = (
     index: number,
     e: Konva.KonvaEventObject<DragEvent>
@@ -76,6 +78,23 @@ export const usePointGroup = ({
     const y = e.target.y();
 
     setFramePosition({ id: "center", x, y });
+
+    const newPoints = points.map((point) => ({
+      id: point.id,
+      x: point.x + (x - center.x),
+      y: point.y + (y - center.y),
+    }));
+
+    const action: MoveVertexAction = {
+      action: "moveVertex",
+      data: {
+        id,
+        positions: newPoints,
+        selectedIndex: -1,
+      },
+    };
+
+    sendJsonMessage(action);
   };
 
   const handleDragEnd = (
@@ -108,6 +127,7 @@ export const usePointGroup = ({
     points,
     framePosition,
     draggable,
+    pointerRefs,
     handleDragMove,
     handleDragEnd,
     handlePointFrameDragMove,
