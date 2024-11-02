@@ -27,12 +27,9 @@ export const PointsGroup = ({
 }: PointsProps) => {
   const {
     points,
-    framePosition,
-    draggable,
-    pointerRefs,
     handlePointFrameDragMove,
+    draggable,
     setDraggable,
-    handleDragEnd,
     handleDragMove,
   } = usePointGroup({ defaultPoints, center, id });
 
@@ -41,8 +38,8 @@ export const PointsGroup = ({
       draggable={draggable}
       id="points"
       onDragMove={handlePointFrameDragMove}
-      x={framePosition.x}
-      y={framePosition.y}
+      x={center.x}
+      y={center.y}
     >
       <Line
         closed
@@ -57,13 +54,8 @@ export const PointsGroup = ({
         return (
           <Group
             key={`point-${index}`}
-            ref={(ref) => {
-              if (!ref) return;
-              pointerRefs.current[index] = ref;
-            }}
             draggable
             id={`point-${index}`}
-            onDragEnd={(e) => handleDragEnd(index, e)}
             onDragMove={(e) => handleDragMove(index, e)}
             onDragStart={() => setDraggable(false)}
             onMouseEnter={() => setDraggable(false)}

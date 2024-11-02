@@ -1,6 +1,6 @@
 import { MoveVertexAction } from "@event-mapping/schema";
 import Konva from "konva";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useWs } from "@/features/websocket/hooks";
 import { useSourceId } from "@/global/store/provider";
 import { round } from "@/utils";
@@ -39,45 +39,10 @@ export const usePointGroup = ({
   const [framePosition, setFramePosition] = useState<Point>(center);
   const [draggable, setDraggable] = useState<boolean>(true);
 
-  const pointerRefs = useRef<Konva.Group[]>([]);
-
-  const handleDragMove = (
-    index: number,
-    e: Konva.KonvaEventObject<DragEvent>
-  ) => {
-    setDraggable(false);
-
-    const x = e.target.x();
-    const y = e.target.y();
-
-    const newPoints = points.map((point, i) => {
-      if (i === index) {
-        return { id: `point-${index}`, x: round(x), y: round(y) };
-      }
-
-      return point;
-    });
-
-    setPoints(newPoints);
-
-    const action: MoveVertexAction = {
-      action: "moveVertex",
-      data: {
-        id,
-        positions: newPoints,
-        selectedIndex: index,
-      },
-    };
-
-    sendJsonMessage(action);
-  };
-
   const handlePointFrameDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
     if (!draggable) return;
     const x = e.target.x();
     const y = e.target.y();
-
-    setFramePosition({ id: "center", x, y });
 
     const newPoints = points.map((point) => ({
       id: point.id,
@@ -95,27 +60,50 @@ export const usePointGroup = ({
     };
 
     sendJsonMessage(action);
+    setFramePosition({ x, y, id: "center" });
   };
 
-  const handleDragEnd = (
+  const handleDragMove = (
     index: number,
     e: Konva.KonvaEventObject<DragEvent>
   ) => {
-    const { x, y } = e.target.position();
+    setDraggable(false);
 
-    const newPositions: { x: number; y: number }[] = points.map((point, i) => {
-      if (i === index) {
-        return { x: round(x), y: round(y) };
-      }
+    const x = e.target.x();
+    const y = e.target.y();
 
-      return { x: point.x, y: point.y };
-    });
+    const actionPoints: Point[] = [];
+
+    setPoints((prev) =>
+      prev.map((point, i) => {
+        const frameAdjustedX = framePosition.x - center.x;
+        const frameAdjustedY = framePosition.y - center.y;
+
+        if (i === index) {
+          actionPoints.push({
+            id: point.id,
+            x: round(x + frameAdjustedX),
+            y: round(y + frameAdjustedY),
+          });
+
+          return { id: point.id, x: round(x), y: round(y) };
+        }
+
+        actionPoints.push({
+          id: point.id,
+          x: round(point.x + frameAdjustedX),
+          y: round(point.y + frameAdjustedY),
+        });
+
+        return point;
+      })
+    );
 
     const action: MoveVertexAction = {
       action: "moveVertex",
       data: {
         id,
-        positions: newPositions,
+        positions: actionPoints,
         selectedIndex: index,
       },
     };
@@ -127,9 +115,7 @@ export const usePointGroup = ({
     points,
     framePosition,
     draggable,
-    pointerRefs,
     handleDragMove,
-    handleDragEnd,
     handlePointFrameDragMove,
     setDraggable,
   };
