@@ -2,39 +2,27 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
 
-import { createEventClient } from "@event-mapping/event-sdk";
-import Matter from "matter-js";
+import { createEventClient, GlobalData } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
 type Meta = {
-  body: Matter.Body;
-  image: p5.Image;
-  velocity: p5.Vector;
+  color: p5.Color;
 };
 
-const MAX_BALL_SIZE = 400;
-const MIN_BALL_SIZE = 300;
-const WALL_THICKNESS = 40;
+let g: GlobalData;
+let angle = 0; // 初期の角度
 
-const { Engine, Bodies, Composite } = Matter;
+// 羽の数
+const bladeCount = 20;
 
-const matterSizeToP5Size = (bounds: Matter.Bounds) => {
-  const { min, max } = bounds;
-
-  return {
-    width: max.x - min.x,
-    height: max.y - min.y,
-  };
-};
+let blades: {
+  angle: number;
+  color: p5.Color;
+}[] = [];
 
 function sketch(pi: p5) {
   const p = pi;
-
-  let engine: Matter.Engine;
-  let world: Matter.World;
-  let runner: Matter.Runner;
-  let walls: Matter.Body[] = [];
 
   const e = createEventClient<Meta>(p, {
     apiUrl: env.VITE_API_URL,
@@ -42,120 +30,44 @@ function sketch(pi: p5) {
     sourceId: env.VITE_SOURCE_ID,
   });
 
-  const renderWall = (width: number, height: number) => {
-    const options = {
-      isStatic: true,
-      label: "wall",
-    };
-
-    const top = Bodies.rectangle(
-      width / 2,
-      WALL_THICKNESS / 2,
-      width,
-      WALL_THICKNESS,
-      options
-    );
-    const right = Bodies.rectangle(
-      width - WALL_THICKNESS / 2,
-      height / 2,
-      WALL_THICKNESS,
-      height,
-      options
-    );
-    const left = Bodies.rectangle(
-      WALL_THICKNESS / 2,
-      height / 2,
-      WALL_THICKNESS,
-      height,
-      options
-    );
-    const bottom = Bodies.rectangle(
-      width / 2,
-      height - WALL_THICKNESS / 2,
-      width,
-      WALL_THICKNESS,
-      options
-    );
-
-    Composite.add(world, [top, right, left, bottom]);
-    walls = [top, right, left, bottom];
-  };
-
-  const createCircle = (x: number, y: number) => {
-    const d = Math.random() * (MAX_BALL_SIZE - MIN_BALL_SIZE) + MIN_BALL_SIZE;
-
-    const circle = Bodies.circle(x, y, d / 2, {
-      restitution: 1.0,
-      friction: 0,
-      frictionAir: 0,
-    });
-
-    Composite.add(world, circle);
-
-    return { ...circle, d };
-  };
-
-  e.setup = (g) => {
+  e.setup = (globalData) => {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
+    p.angleMode(p.DEGREES);
+    g = globalData;
 
-    engine = Engine.create();
-    world = engine.world;
-
-    runner = Matter.Runner.create();
-
-    Matter.Runner.run(runner, engine);
-
-    renderWall(g.width, g.height);
-
-    engine.gravity.y = 0;
-    p.rectMode(p.CENTER);
-    p.imageMode(p.CENTER);
+    blades = Array.from({ length: bladeCount }, (_, i) => {
+      return {
+        angle: (i * 360) / bladeCount,
+        color: p.color(p.random(255), p.random(255), p.random(255)),
+      };
+    });
   };
 
   p.draw = () => {
-    p.background(0);
-    Engine.update(engine);
+    p.background(255);
 
-    for (const shape of e.shapes) {
-      if (shape.type !== "circle") continue;
+    for (const blade of blades) {
+      const currentG = g;
+      const currentAngle = angle;
 
-      e.transform(() =>
-        p.image(
-          shape.image,
-          shape.body.position.x,
-          shape.body.position.y,
-          shape.d,
-          shape.d
-        )
-      );
+      p.push();
+      e.transform(() => {
+        p.translate(currentG.width / 2, currentG.height / 2);
+        p.rotate(currentAngle + blade.angle);
+
+        p.fill(blade.color);
+        p.noStroke();
+        p.rect(0, -10, currentG.width / 2, 60);
+      });
+      p.pop();
     }
 
-    for (const wall of walls) {
-      const { width, height } = matterSizeToP5Size(wall.bounds);
-
-      e.rect(wall.position.x, wall.position.y, width, height);
-    }
+    angle += 0.02; // 角度を増やして回転を表現
   };
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
-  };
-
-  e.uploadedImage = (img) => {
-    const { d, ...circle } = createCircle(500, 500);
-
-    const velocity = p.createVector(p.random(-10, 10), p.random(-10, 10));
-    Matter.Body.setVelocity(circle, velocity);
-
-    e.shapes.add({
-      type: "circle",
-      position: p.createVector(200, 200),
-      velocity,
-      d,
-      image: img,
-      body: circle,
-    });
   };
 }
 
