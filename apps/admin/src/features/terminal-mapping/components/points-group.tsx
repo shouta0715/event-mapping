@@ -2,7 +2,7 @@
 
 import { MoveVertexAction } from "@event-mapping/schema";
 import React from "react";
-import { Circle, Group, Line } from "react-konva";
+import { Circle, Group, Line, Transformer } from "react-konva";
 import { usePointGroup } from "@/features/terminal-mapping/hooks/use-point-group";
 
 type Point = {
@@ -30,46 +30,55 @@ export const PointsGroup = ({
 }: PointsProps) => {
   const {
     points,
-    handlePointFrameDragMove,
     draggable,
+    transformerRef,
+    groupRef,
+    handlePointFrameDragMove,
     setDraggable,
     handleDragMove,
+    handleTransform,
   } = usePointGroup({ defaultPoints, center, id, sendJsonMessage });
 
   return (
-    <Group
-      draggable={draggable}
-      id="points"
-      onDragMove={handlePointFrameDragMove}
-      x={center.x}
-      y={center.y}
-    >
-      <Line
-        closed
-        points={points.flatMap((point) => [point.x, point.y])}
-        stroke="#3B82F6"
-        strokeWidth={4}
-      />
-      {points.map((point, index) => {
-        const { x, y } = point;
-        const color = colors[index];
+    <>
+      <Transformer ref={transformerRef} x={center.x} y={center.y} />
+      <Group
+        ref={groupRef}
+        draggable={draggable}
+        id="points"
+        onDragMove={handlePointFrameDragMove}
+        onTransform={handleTransform}
+        x={center.x}
+        y={center.y}
+      >
+        <Line
+          closed
+          points={points.flatMap((point) => [point.x, point.y])}
+          stroke="#3B82F6"
+          strokeWidth={8}
+        />
 
-        return (
-          <Group
-            key={`point-${index}`}
-            draggable
-            id={`point-${index}`}
-            onDragMove={(e) => handleDragMove(index, e)}
-            onDragStart={() => setDraggable(false)}
-            onMouseEnter={() => setDraggable(false)}
-            onMouseLeave={() => setDraggable(true)}
-            x={x}
-            y={y}
-          >
-            <Circle radius={RADIUS_SIZE} stroke={color} />
-          </Group>
-        );
-      })}
-    </Group>
+        {points.map((point, index) => {
+          const { x, y } = point;
+          const color = colors[index];
+
+          return (
+            <Group
+              key={`point-${index}`}
+              draggable
+              id={`point-${index}`}
+              onDragMove={(e) => handleDragMove(index, e)}
+              onDragStart={() => setDraggable(false)}
+              onMouseEnter={() => setDraggable(false)}
+              onMouseLeave={() => setDraggable(true)}
+              x={x}
+              y={y}
+            >
+              <Circle radius={RADIUS_SIZE} stroke={color} strokeWidth={4} />
+            </Group>
+          );
+        })}
+      </Group>
+    </>
   );
 };
