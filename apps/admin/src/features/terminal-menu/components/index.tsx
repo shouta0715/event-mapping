@@ -24,6 +24,8 @@ type TerminalMenuProps = {
   id: string;
   keepAspectRatio: boolean;
   toggleKeepAspectRatio: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 };
 
 const DynamicTerminalMapping = dynamic(
@@ -41,8 +43,10 @@ export const TerminalMenu = ({
   id,
   keepAspectRatio,
   toggleKeepAspectRatio,
+  open,
+  setOpen,
 }: TerminalMenuProps) => {
-  const { handleResetSize, open, setOpen } = useTerminalMenu({
+  const { handleResetSize } = useTerminalMenu({
     data,
     id,
   });
@@ -89,6 +93,7 @@ export const TerminalMenu = ({
         </DialogHeader>
         <div className="flex-1">
           <DynamicTerminalMapping
+            key={id}
             data={data}
             id={id}
             onClose={() => setOpen(false)}

@@ -1,6 +1,4 @@
 import { TerminalData } from "@event-mapping/schema";
-import { useAtom } from "jotai";
-import { mappingModalAtom } from "@/global/modal";
 import { useUpdateNodeData } from "@/hooks/node";
 
 type UseTerminalMenu = {
@@ -10,7 +8,6 @@ type UseTerminalMenu = {
 
 export function useTerminalMenu({ data, id }: UseTerminalMenu) {
   const { mutate } = useUpdateNodeData();
-  const [open, setOpen] = useAtom(mappingModalAtom);
 
   const handleResetSize = () => {
     const w = data.windowWidth;
@@ -21,9 +18,5 @@ export function useTerminalMenu({ data, id }: UseTerminalMenu) {
     });
   };
 
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  return { handleResetSize, open, setOpen, onClose };
+  return { handleResetSize };
 }

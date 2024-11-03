@@ -141,6 +141,7 @@ export const TerminalNode = memo(
     const [keepAspectRatio, setKeepAspectRatio] = useState(false);
     const { getIsNodeSelected } = useNodeHandler();
     const { mutate } = useUpdateNodeData();
+    const [open, setOpen] = useState(false);
 
     const isSelected = getIsNodeSelected(id);
 
@@ -193,9 +194,12 @@ export const TerminalNode = memo(
               width={width}
             />
             <TerminalMenu
+              key={id}
               data={data}
               id={id}
               keepAspectRatio={keepAspectRatio}
+              open={open}
+              setOpen={setOpen}
               toggleKeepAspectRatio={toggleKeepAspectRatio}
             />
           </div>
