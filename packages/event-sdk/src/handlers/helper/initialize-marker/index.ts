@@ -34,7 +34,7 @@ export function initializeMarker(this: EventHandler) {
     pointerEvents: "none",
     position: "absolute",
     display: "none",
-    border: "8px solid #FF0000",
+    border: "8px solid #94a3b8",
     borderRadius: "50%",
   });
   markerInner.appendChild(marker);

@@ -50,7 +50,7 @@ export function applyMatrix3dToMarker(
 
   if (selectedIndex === SELECTED_INDEX_ROLE.FRAME) {
     if (!this.markerContainer) return;
-    this.markerContainer.style.outline = "20px solid red";
+    this.markerContainer.style.outline = "20px solid #94a3b8";
 
     return;
   }
