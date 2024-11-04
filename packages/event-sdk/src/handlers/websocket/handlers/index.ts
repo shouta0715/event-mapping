@@ -107,6 +107,11 @@ function handleMoveVertexAction(
   applyMatrix3dToMarker.call(this, matrix3d, data.selectedIndex);
 }
 
+function handleDeleteAction(this: EventHandler) {
+  window.localStorage.removeItem("session_id");
+  window.location.reload();
+}
+
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
     case "initialize":
@@ -129,6 +134,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "moveVertex":
       handleMoveVertexAction.call(this, action.data);
+      break;
+    case "delete":
+      handleDeleteAction.call(this);
       break;
     default:
       throw new Error(action satisfies never);

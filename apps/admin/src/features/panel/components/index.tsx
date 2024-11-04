@@ -101,6 +101,7 @@ export function Panel({ event, source }: Props) {
         <IdPanel id={source.id} label="コンテンツID" />
       </div>
 
+      <h2 className="mt-6 text-sm font-semibold">接続中の端末</h2>
       <Accordion
         className="flex-1 overflow-y-auto"
         defaultValue={[selectedNodeId ?? ""]}

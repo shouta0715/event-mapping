@@ -66,3 +66,10 @@ export const eventMoveVertexSchema = z.object({
 });
 
 export type EventMoveVertex = z.infer<typeof eventMoveVertexSchema>;
+
+export const eventDeleteSchema = z.object({
+  action: z.literal("delete"),
+  id: z.string(),
+});
+
+export type EventDelete = z.infer<typeof eventDeleteSchema>;

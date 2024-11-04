@@ -8,6 +8,7 @@ import {
   uploadImageActionSchema,
 } from "@event-mapping/schema/action/admin";
 import {
+  eventDeleteSchema,
   eventInitializeSchema,
   eventMoveVertexSchema,
   eventRestartSchema,
@@ -39,6 +40,7 @@ export const eventActionSchema = z.union([
   eventRestartSchema,
   eventUploadImageSchema,
   eventMoveVertexSchema,
+  eventDeleteSchema,
 ]);
 
 export type EventAction = z.infer<typeof eventActionSchema>;

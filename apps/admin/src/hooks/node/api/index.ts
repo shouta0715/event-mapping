@@ -35,3 +35,21 @@ export const updateTerminalData = async ({
 
   return json;
 };
+
+export const deleteNodeCache = async ({
+  sourceId,
+  nodeId,
+}: {
+  sourceId: string;
+  nodeId: string;
+}) => {
+  const res = await fetch(getUrl(sourceId, nodeId), {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throwHttpErrorFromStatus(res.status);
+
+  return {
+    id: nodeId,
+  };
+};
