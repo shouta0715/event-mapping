@@ -53,6 +53,7 @@ export type FlowNodeActions = {
   updateNodeData: (id: string, data: TerminalData) => void;
   updateIframeData: (data: SourceInsert) => void;
   getNodeData: (id: string) => TerminalData | undefined;
+  deleteNode: (id: string) => void;
 };
 
 /**

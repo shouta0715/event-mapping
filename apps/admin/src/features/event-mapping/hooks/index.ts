@@ -1,8 +1,8 @@
 import { TerminalData } from "@event-mapping/schema";
-import { OnNodeDrag } from "@xyflow/react";
+import { OnNodeDrag, OnNodesDelete } from "@xyflow/react";
 import { useTerminalState } from "@/global/store/provider";
 import { NodeType } from "@/global/store/types";
-import { useNodeHandler, useUpdateNodeData } from "@/hooks/node";
+import { useDeleteNode, useNodeHandler, useUpdateNodeData } from "@/hooks/node";
 import { assertTerminalNode } from "@/utils";
 
 export const useEventMapping = () => {
@@ -17,7 +17,7 @@ export const useEventMapping = () => {
   );
 
   const { mutate } = useUpdateNodeData();
-
+  const { mutateAsync: deleteNode } = useDeleteNode();
   const { onNodeClick, onNodeDoubleClick, onPanClick } = useNodeHandler();
 
   const onNodeDragStop: OnNodeDrag<NodeType> = (_, node) => {
@@ -38,6 +38,16 @@ export const useEventMapping = () => {
     });
   };
 
+  const onNodeDelete: OnNodesDelete<NodeType> = async (targets) => {
+    if (targets.length !== 1) return;
+
+    const target = targets[0];
+
+    if (!assertTerminalNode(target)) return;
+
+    deleteNode({ nodeId: target.id });
+  };
+
   return {
     nodes,
     edges,
@@ -47,5 +57,6 @@ export const useEventMapping = () => {
     onNodeDoubleClick,
     onPanClick,
     onNodeDragStop,
+    onNodeDelete,
   };
 };

@@ -100,5 +100,9 @@ export const createNodeStore = ({
 
       return node.data;
     },
+    deleteNode: (id: string) => {
+      const prevNodes = get().nodes;
+      set({ nodes: prevNodes.filter((node) => node.id !== id) });
+    },
   };
 };
