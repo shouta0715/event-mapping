@@ -40,6 +40,19 @@ export const usePointGroup = ({
   const groupRef = useRef<Konva.Group>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
 
+  const sendActionData = (po: Point[], selectedIndex: number) => {
+    const action: MoveVertexAction = {
+      action: "moveVertex",
+      data: {
+        id,
+        positions: po,
+        selectedIndex,
+      },
+    };
+
+    sendJsonMessage(action);
+  };
+
   const handleScaleHandle = (scale: Vector2d) => {
     const group = groupRef.current;
     if (!group) return;
@@ -89,16 +102,7 @@ export const usePointGroup = ({
       y: round(point.y + groupPosition.y - center.y),
     }));
 
-    const action: MoveVertexAction = {
-      action: "moveVertex",
-      data: {
-        id,
-        positions: actionPoints,
-        selectedIndex: -1,
-      },
-    };
-
-    sendJsonMessage(action);
+    sendActionData(actionPoints, -1);
 
     group.scale({ x: 1, y: 1 });
 
@@ -157,16 +161,7 @@ export const usePointGroup = ({
       y: point.y + (y - center.y),
     }));
 
-    const action: MoveVertexAction = {
-      action: "moveVertex",
-      data: {
-        id,
-        positions: newPoints,
-        selectedIndex: -1,
-      },
-    };
-
-    sendJsonMessage(action);
+    sendActionData(newPoints, -1);
     setFramePosition({ x, y, id: "center" });
   };
 
@@ -206,16 +201,7 @@ export const usePointGroup = ({
       })
     );
 
-    const action: MoveVertexAction = {
-      action: "moveVertex",
-      data: {
-        id,
-        positions: actionPoints,
-        selectedIndex: index,
-      },
-    };
-
-    sendJsonMessage(action);
+    sendActionData(actionPoints, index);
     if (groupRef.current && transformerRef.current) {
       transformerRef.current.nodes([groupRef.current]);
     }
