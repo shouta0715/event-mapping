@@ -54,7 +54,7 @@ function leaveSessionHandler(this: Subscription, ws: WebSocket) {
 
   const target = this.sessions.get(ws);
 
-  if (!target) throw new Error("target not found");
+  if (!target) return;
 
   const { sessionId } = target;
   this.sessions.delete(ws);

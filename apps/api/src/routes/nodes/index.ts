@@ -10,7 +10,7 @@ const app = new Hono<Env>();
 app.use(
   cors({
     origin: "*",
-    allowMethods: ["PATCH"],
+    allowMethods: ["PATCH", "DELETE"],
     allowHeaders: ["Content-Type"],
   })
 );
@@ -23,7 +23,20 @@ app.patch("/:id", zValidator("json", terminalDataSchema), async (c) => {
 
   const res = await obj.patchNode(id, data);
 
+  if (!res) return c.json({ message: "not found" }, 404);
+
   return c.json(res);
+});
+
+app.delete("/:id", async (c) => {
+  const obj = getDO(c);
+  const { id } = c.req.param();
+
+  await obj.deleteNodeCache(id);
+
+  return c.json({
+    message: "ok",
+  });
 });
 
 export { app as nodesRouter };

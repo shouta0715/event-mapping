@@ -12,7 +12,16 @@ export async function patchNodeHandler(
 
   if (!session) return null;
 
-  this.eventMessageHandlers.updateHandler(session, data);
+  if (!this.global) return null;
+
+  sendMessage(session, {
+    action: "update",
+    data,
+  });
+
+  this.sessions.set(session, data);
+  session.serializeAttachment(data);
+  await this.storage.put<TerminalData>(data.sessionId, data);
 
   return { data };
 }

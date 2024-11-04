@@ -7,6 +7,7 @@ import {
 import { DurableObject } from "cloudflare:workers";
 import { Hono } from "hono";
 import { Env } from "@/env";
+import { deleteNodeCacheHandler } from "@/subscription/handlers/api/delete";
 import {
   patchNodeHandler,
   patchSourceHandler,
@@ -18,7 +19,7 @@ import { hibernationHandler } from "@/subscription/handlers/hibernation";
 import { getImageHandler } from "@/subscription/handlers/images/get";
 import { uploadImageHandler } from "@/subscription/handlers/images/upload";
 import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
-import { generateEventMessageHandler } from "@/subscription/handlers/message/event";
+
 import { registerHandler } from "@/subscription/handlers/register";
 
 const basePath = "/sources/:id/subscribe";
@@ -43,10 +44,6 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     typeof generateAdminMessageHandlers
   >;
 
-  protected readonly eventMessageHandlers: ReturnType<
-    typeof generateEventMessageHandler
-  >;
-
   private readonly registerHandler = registerHandler.bind(this);
 
   private readonly hibernationHandler = hibernationHandler.bind(this);
@@ -67,6 +64,8 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
 
   protected readonly getImageHandler = getImageHandler.bind(this);
 
+  private readonly deleteNodeCacheHandler = deleteNodeCacheHandler.bind(this);
+
   /**
    * Helper Functions
    */
@@ -80,7 +79,6 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     this.storage = state.storage;
     this.hibernationHandler();
     this.adminMessageHandlers = generateAdminMessageHandlers.call(this);
-    this.eventMessageHandlers = generateEventMessageHandler.call(this);
     this.registerHandler();
   }
 
@@ -123,6 +121,10 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
 
   async patchSource(data: Source) {
     return this.patchSourceHandler(data);
+  }
+
+  async deleteNodeCache(id: string) {
+    return this.deleteNodeCacheHandler(id);
   }
 
   async restart(ms = 100) {
