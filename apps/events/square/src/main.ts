@@ -9,7 +9,7 @@ import { env } from "@/env.js";
 const generatePositions = (g: GlobalData, p: p5) => {
   const COLOR_MAX = 255;
 
-  return Array.from({ length: 30 }, () => ({
+  return Array.from({ length: 100 }, () => ({
     x: p.random(0, g.width),
     y: p.random(0, g.height),
     size: p.random(0, 200),
