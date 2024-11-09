@@ -21,7 +21,21 @@ export class AdminHandler<
   }
 
   transform = (fn: () => void) => {
+    const { width, height } = this.global;
+
+    if (!width || !height) {
+      fn();
+
+      return;
+    }
+
+    const scaleW = this.p.width / width;
+    const scaleH = this.p.height / height;
+
+    this.p.push();
+    this.p.scale(scaleW, scaleH);
     fn();
+    this.p.pop();
   };
 
   circle: EventClient["circle"] = (x, y, d) => {
