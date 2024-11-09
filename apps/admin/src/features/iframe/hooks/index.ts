@@ -18,7 +18,7 @@ type UseComlinkProps = {
   data: Source;
 };
 
-const TIMEOUT = 0;
+const TIMEOUT = 30000;
 
 export function useComlink({ data }: UseComlinkProps) {
   const sourceId = useSourceId();
