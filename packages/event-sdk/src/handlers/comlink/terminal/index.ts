@@ -17,4 +17,6 @@ export function initializeHandler(
 ) {
   this.initialize(terminals, global);
   this.setup(global, terminals, undefined);
+
+  this.global = global;
 }
