@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@event-mapping/ui/components/dialog";
-import { ExternalLink, Move, RefreshCcw } from "lucide-react";
+import { ExternalLink, Lock, Move, RefreshCcw, Unlock } from "lucide-react";
 import React from "react";
 import { IframeNodeData } from "@/features/iframe/types";
 import { IframeForm } from "@/features/iframe-form/components";
@@ -25,24 +25,32 @@ type Props = {
   onRestart: () => Promise<void>;
   data: IframeNodeData;
   onSubmitForm: (data: SourceInsert) => void;
+  keepAspectRatio: boolean;
+  setKeepAspectRatio: (keepAspectRatio: boolean) => void;
 };
 
-export function IframeMenu({ onRestart, data, onSubmitForm }: Props) {
+export function IframeMenu({
+  onRestart,
+  data,
+  onSubmitForm,
+  keepAspectRatio,
+  setKeepAspectRatio,
+}: Props) {
   const {
     handleCenter,
     handleOpenContent,
     handleRestart,
     openEditForm,
     setOpenEditForm,
+    handleSubmitForm,
+    toggleKeepAspectRatio,
   } = useIframeMenu({
     onRestart,
     data,
+    onSubmitForm,
+    keepAspectRatio,
+    setKeepAspectRatio,
   });
-
-  const handleSubmitForm = (d: SourceInsert) => {
-    onSubmitForm(d);
-    setOpenEditForm(false);
-  };
 
   return (
     <Dialog onOpenChange={setOpenEditForm} open={openEditForm}>
@@ -62,8 +70,22 @@ export function IframeMenu({ onRestart, data, onSubmitForm }: Props) {
           コンテンツを開く
           <ContextMenuShortcut>⇧+⌘+O</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuSeparator />
 
+        <ContextMenuSeparator />
+        <ContextMenuItem
+          className="cursor-pointer"
+          onClick={toggleKeepAspectRatio}
+        >
+          {keepAspectRatio ? (
+            <Lock className="mr-2 size-4 text-primary" />
+          ) : (
+            <Unlock className="mr-2 size-4" />
+          )}
+          アスペクト比を{keepAspectRatio ? "解除" : "固定"}する
+          <span className="text-xs text-muted-foreground">
+            （{keepAspectRatio ? "固定中" : "解除中"}）
+          </span>
+        </ContextMenuItem>
         <DialogTrigger className="w-full">
           <ContextMenuItem className="cursor-pointer">
             コンテンツの設定を編集する

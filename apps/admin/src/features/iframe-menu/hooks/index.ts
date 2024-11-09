@@ -1,3 +1,4 @@
+import { SourceInsert } from "@event-mapping/db";
 import { useReactFlow } from "@xyflow/react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -7,9 +8,18 @@ import { IframeNodeData } from "@/features/iframe/types";
 type Props = {
   onRestart: () => Promise<void>;
   data: IframeNodeData;
+  onSubmitForm: (data: SourceInsert) => void;
+  keepAspectRatio: boolean;
+  setKeepAspectRatio: (keepAspectRatio: boolean) => void;
 };
 
-export function useIframeMenu({ onRestart, data }: Props) {
+export function useIframeMenu({
+  onRestart,
+  data,
+  onSubmitForm,
+  keepAspectRatio,
+  setKeepAspectRatio,
+}: Props) {
   const { setCenter } = useReactFlow();
   const [openEditForm, setOpenEditForm] = useState(false);
 
@@ -63,11 +73,22 @@ export function useIframeMenu({ onRestart, data }: Props) {
     };
   }, [handleOpenContent, handleRestart, handleCenter]);
 
+  const handleSubmitForm = (d: SourceInsert) => {
+    onSubmitForm(d);
+    setOpenEditForm(false);
+  };
+
+  const toggleKeepAspectRatio = () => {
+    setKeepAspectRatio(!keepAspectRatio);
+  };
+
   return {
     handleCenter,
     handleOpenContent,
     handleRestart,
     openEditForm,
     setOpenEditForm,
+    handleSubmitForm,
+    toggleKeepAspectRatio,
   };
 }
