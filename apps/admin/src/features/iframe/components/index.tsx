@@ -8,12 +8,13 @@ import {
 } from "@event-mapping/ui/components/context-menu";
 import { cn } from "@event-mapping/ui/lib/utils";
 import { NodeProps, NodeResizer, OnResizeEnd } from "@xyflow/react";
-import React, { memo, useId } from "react";
+import React, { memo, useId, useState } from "react";
 import { useComlink } from "@/features/iframe/hooks";
 import { IframeNode as TIframeNode } from "@/features/iframe/types";
 
 import { IframeMenu } from "@/features/iframe-menu/components";
 import { useNodeHandler } from "@/hooks/node";
+import { round } from "@/utils";
 
 type IframeProps = React.ComponentPropsWithoutRef<"iframe">;
 export const Iframe = memo(
@@ -97,6 +98,7 @@ const MAX_HEIGHT = MAX_IFRAME_SIZE.height;
 export const IframeNode = memo(
   ({ data, width, height, id }: NodeProps<TIframeNode>) => {
     const { getIsNodeSelected } = useNodeHandler();
+    const [keepAspectRatio, setKeepAspectRatio] = useState(false);
 
     const isSelected = getIsNodeSelected(id);
 
@@ -110,7 +112,7 @@ export const IframeNode = memo(
     } = useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
-      await handleResized(params.width, params.height);
+      await handleResized(round(params.width), round(params.height));
     };
 
     const handleSubmitForm = async (d: SourceInsert) => {
@@ -128,22 +130,34 @@ export const IframeNode = memo(
           <div className="group relative size-full">
             <NodeResizer
               handleStyle={{
-                width: 32,
-                height: 32,
+                width: 60,
+                height: 60,
                 zIndex: 9999,
                 backgroundColor: "hsl(var(--background))",
                 borderWidth: 2,
-                borderColor: isSelected
-                  ? "hsl(var(--primary))"
-                  : "hsl(var(--border))",
-                borderRadius: "var(--radius)",
+                borderColor: "hsl(var(--primary))",
+                borderRadius: keepAspectRatio ? "var(--radius)" : "9999px",
               }}
-              lineStyle={{
-                borderWidth: isSelected ? 6 : 4,
-                borderColor: isSelected
-                  ? "hsl(var(--primary))"
-                  : "hsl(var(--border))",
-              }}
+              keepAspectRatio={keepAspectRatio}
+              lineClassName={cn(
+                "[&.top]:!translate-y-[-100%]",
+                isSelected
+                  ? "[&.top]:!border-t-[20px]"
+                  : "[&.top]:!border-t-[10px]",
+
+                "[&.left]:!translate-x-[-100%]",
+                isSelected
+                  ? "[&.left]:!border-l-[20px]"
+                  : "[&.left]:!border-l-[10px]",
+
+                isSelected
+                  ? "[&.right]:!border-r-[20px] [&.right]:!translate-x-[calc(-100%+20px)]"
+                  : "[&.right]:!border-r-[10px] [&.right]:!translate-x-[calc(-100%+10px)]",
+
+                isSelected
+                  ? "[&.bottom]:!border-b-[20px] [&.bottom]:!translate-y-[calc(-100%+20px)]"
+                  : "[&.bottom]:!border-b-[10px] [&.bottom]:!translate-y-[calc(-100%+10px)]"
+              )}
               onResize={handleResize}
               onResizeEnd={handleResizeEnd}
             />
@@ -168,8 +182,10 @@ export const IframeNode = memo(
           </div>
           <IframeMenu
             data={data}
+            keepAspectRatio={keepAspectRatio}
             onRestart={handleRestart}
             onSubmitForm={handleSubmitForm}
+            setKeepAspectRatio={setKeepAspectRatio}
           />
         </ContextMenuTrigger>
       </ContextMenu>
