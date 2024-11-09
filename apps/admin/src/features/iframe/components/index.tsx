@@ -14,6 +14,7 @@ import { IframeNode as TIframeNode } from "@/features/iframe/types";
 
 import { IframeMenu } from "@/features/iframe-menu/components";
 import { useNodeHandler } from "@/hooks/node";
+import { round } from "@/utils";
 
 type IframeProps = React.ComponentPropsWithoutRef<"iframe">;
 export const Iframe = memo(
@@ -111,7 +112,7 @@ export const IframeNode = memo(
     } = useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
-      await handleResized(params.width, params.height);
+      await handleResized(round(params.width), round(params.height));
     };
 
     const handleSubmitForm = async (d: SourceInsert) => {
@@ -139,7 +140,7 @@ export const IframeNode = memo(
               }}
               keepAspectRatio={keepAspectRatio}
               lineClassName={cn(
-                " [&.top]:!translate-y-[-100%]",
+                "[&.top]:!translate-y-[-100%]",
                 isSelected
                   ? "[&.top]:!border-t-[20px]"
                   : "[&.top]:!border-t-[10px]",
