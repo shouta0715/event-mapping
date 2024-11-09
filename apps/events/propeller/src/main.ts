@@ -2,7 +2,7 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
 
-import { createEventClient, GlobalData } from "@event-mapping/event-sdk";
+import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
@@ -10,7 +10,6 @@ type Meta = {
   color: p5.Color;
 };
 
-let g: GlobalData;
 let angle = 0; // 初期の角度
 
 // 羽の数
@@ -30,11 +29,10 @@ function sketch(pi: p5) {
     sourceId: env.VITE_SOURCE_ID,
   });
 
-  e.setup = (globalData) => {
+  e.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
     p.angleMode(p.DEGREES);
-    g = globalData;
 
     blades = Array.from({ length: bladeCount }, (_, i) => {
       return {
@@ -48,7 +46,7 @@ function sketch(pi: p5) {
     p.background(255);
 
     for (const blade of blades) {
-      const currentG = g;
+      const currentG = e.global;
       const currentAngle = angle;
 
       p.push();
