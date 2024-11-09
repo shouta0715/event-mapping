@@ -1,3 +1,4 @@
+import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
 export function transform(this: EventHandler, cb: () => void) {
@@ -14,6 +15,24 @@ export function transform(this: EventHandler, cb: () => void) {
   this.p.push();
   this.p.translate(x, y);
   this.p.scale(scaleX, scaleY);
+  cb();
+  this.p.pop();
+}
+
+export function adminTransform(this: AdminHandler, cb: () => void) {
+  const { width, height } = this.global;
+
+  if (!width || !height) {
+    cb();
+
+    return;
+  }
+
+  const scaleW = this.p.width / width;
+  const scaleH = this.p.height / height;
+
+  this.p.push();
+  this.p.scale(scaleW, scaleH);
   cb();
   this.p.pop();
 }

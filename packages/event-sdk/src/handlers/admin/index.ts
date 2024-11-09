@@ -3,6 +3,7 @@ import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
+import { adminTransform } from "@event-mapping/event-sdk/handlers/helper";
 import {
   EventClientOptions,
   EventClient,
@@ -20,23 +21,7 @@ export class AdminHandler<
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
   }
 
-  transform = (fn: () => void) => {
-    const { width, height } = this.global;
-
-    if (!width || !height) {
-      fn();
-
-      return;
-    }
-
-    const scaleW = this.p.width / width;
-    const scaleH = this.p.height / height;
-
-    this.p.push();
-    this.p.scale(scaleW, scaleH);
-    fn();
-    this.p.pop();
-  };
+  transform = adminTransform.bind(this);
 
   circle: EventClient["circle"] = (x, y, d) => {
     this.p.circle(x, y, d);
