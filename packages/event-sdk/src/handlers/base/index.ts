@@ -48,6 +48,7 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
     this.shapes = new Shapes<TMeta>();
     this.global = { width: 0, height: 0 };
     this.p.randomSeed(this.seed);
+    this.p.frameRate(30);
     this.baseImageUrl = `${apiUrl}/sources/${sourceId}/images`;
   }
 

@@ -82,7 +82,7 @@ function sketch(pi: p5) {
   };
 
   const createCircle = (x: number, y: number) => {
-    const d = Math.random() * (MAX_BALL_SIZE - MIN_BALL_SIZE) + MIN_BALL_SIZE;
+    const d = p.random() * (MAX_BALL_SIZE - MIN_BALL_SIZE) + MIN_BALL_SIZE;
 
     const circle = Bodies.circle(x, y, d / 2, {
       restitution: 1.0,

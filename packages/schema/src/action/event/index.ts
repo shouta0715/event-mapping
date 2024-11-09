@@ -45,7 +45,10 @@ export type EventRestart = z.infer<typeof eventRestartSchema>;
 
 export const eventUploadImageSchema = z.object({
   action: z.literal("uploadImage"),
-  id: z.string(),
+  data: z.object({
+    id: z.string(),
+    timestamp: z.number(),
+  }),
 });
 
 export type EventUploadImage = z.infer<typeof eventUploadImageSchema>;
