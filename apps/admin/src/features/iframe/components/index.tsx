@@ -99,17 +99,23 @@ export const IframeNode = memo(
 
     const isSelected = getIsNodeSelected(id);
 
-    const { iframeRef, handleResize, handleOnload, handleRestart, refreshKey } =
-      useComlink({ data });
+    const {
+      iframeRef,
+      refreshKey,
+      handleResized,
+      handleOnload,
+      handleRestart,
+      handleResize,
+    } = useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
-      await handleResize(params.width, params.height);
+      await handleResized(params.width, params.height);
     };
 
     const handleSubmitForm = async (d: SourceInsert) => {
       const w = d.width ?? data.width;
       const h = d.height ?? data.height;
-      await handleResize(w, h);
+      await handleResized(w, h);
     };
 
     const scaleW = (width ?? 0) / MAX_WIDTH;
@@ -137,6 +143,7 @@ export const IframeNode = memo(
                   ? "hsl(var(--primary))"
                   : "hsl(var(--border))",
               }}
+              onResize={handleResize}
               onResizeEnd={handleResizeEnd}
             />
 
