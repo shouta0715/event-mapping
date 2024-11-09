@@ -45,7 +45,7 @@ function EventMapping({ event, source }: Props) {
       <ReactFlow
         edges={edges}
         fitView
-        minZoom={0.1}
+        minZoom={Number.NEGATIVE_INFINITY}
         nodes={nodes}
         nodeTypes={nodeTypes}
         onEdgesChange={onEdgesChange}
