@@ -179,12 +179,25 @@ export const TerminalNode = memo(
                 borderRadius: keepAspectRatio ? "var(--radius)" : "9999px",
               }}
               keepAspectRatio={keepAspectRatio}
-              lineStyle={{
-                borderWidth: isSelected ? 6 : 4,
-                borderColor: isSelected
-                  ? "hsl(var(--primary))"
-                  : "hsl(var(--border))",
-              }}
+              lineClassName={cn(
+                " [&.top]:!translate-y-[-100%]",
+                isSelected
+                  ? "[&.top]:!border-t-[10px]"
+                  : "[&.top]:!border-t-[4px]",
+
+                "[&.left]:!translate-x-[-100%]",
+                isSelected
+                  ? "[&.left]:!border-l-[10px]"
+                  : "[&.left]:!border-l-[4px]",
+
+                isSelected
+                  ? "[&.right]:!border-r-[10px] [&.right]:!translate-x-[calc(-100%+10px)]"
+                  : "[&.right]:!border-r-[4px] [&.right]:!translate-x-[calc(-100%+4px)]",
+
+                isSelected
+                  ? "[&.bottom]:!border-b-[10px] [&.bottom]:!translate-y-[calc(-100%+10px)]"
+                  : "[&.bottom]:!border-b-[4px] [&.bottom]:!translate-y-[calc(-100%+4px)]"
+              )}
               onResizeEnd={handleResizeEnd}
             />
             <TerminalInfo
