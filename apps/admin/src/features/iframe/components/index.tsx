@@ -1,6 +1,7 @@
 "use client";
 
 import { SourceInsert } from "@event-mapping/db";
+import { MAX_IFRAME_SIZE } from "@event-mapping/event-sdk";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -90,8 +91,8 @@ const IframeInfo = memo(
   }
 );
 
-const MAX_WIDTH = 1000;
-const MAX_HEIGHT = 1000;
+const MAX_WIDTH = MAX_IFRAME_SIZE.width;
+const MAX_HEIGHT = MAX_IFRAME_SIZE.height;
 
 export const IframeNode = memo(
   ({ data, width, height, id }: NodeProps<TIframeNode>) => {
