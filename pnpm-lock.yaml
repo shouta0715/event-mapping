@@ -262,7 +262,7 @@ importers:
         specifier: ^5.4.1
         version: 5.4.5
 
-  apps/events/sample:
+  apps/events/square:
     dependencies:
       '@event-mapping/event-sdk':
         specifier: workspace:*

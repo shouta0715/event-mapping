@@ -1,6 +1,7 @@
 "use client";
 
 import { SourceInsert } from "@event-mapping/db";
+import { MAX_IFRAME_SIZE } from "@event-mapping/event-sdk";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -12,7 +13,6 @@ import { useComlink } from "@/features/iframe/hooks";
 import { IframeNode as TIframeNode } from "@/features/iframe/types";
 
 import { IframeMenu } from "@/features/iframe-menu/components";
-import { useUpdateIframeData } from "@/hooks/iframe";
 import { useNodeHandler } from "@/hooks/node";
 
 type IframeProps = React.ComponentPropsWithoutRef<"iframe">;
@@ -91,27 +91,36 @@ const IframeInfo = memo(
   }
 );
 
+const MAX_WIDTH = MAX_IFRAME_SIZE.width;
+const MAX_HEIGHT = MAX_IFRAME_SIZE.height;
+
 export const IframeNode = memo(
   ({ data, width, height, id }: NodeProps<TIframeNode>) => {
     const { getIsNodeSelected } = useNodeHandler();
 
     const isSelected = getIsNodeSelected(id);
 
-    const { mutate } = useUpdateIframeData();
-    const { iframeRef, handleResize, handleOnload, handleRestart, refreshKey } =
-      useComlink({ data });
+    const {
+      iframeRef,
+      refreshKey,
+      handleResized,
+      handleOnload,
+      handleRestart,
+      handleResize,
+    } = useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
-      mutate({ data: { ...data, width: params.width, height: params.height } });
-      await handleResize(params.width, params.height);
+      await handleResized(params.width, params.height);
     };
 
     const handleSubmitForm = async (d: SourceInsert) => {
       const w = d.width ?? data.width;
       const h = d.height ?? data.height;
-      mutate({ data: { ...d, width: w, height: h } });
-      await handleResize(w, h);
+      await handleResized(w, h);
     };
+
+    const scaleW = (width ?? 0) / MAX_WIDTH;
+    const scaleH = (height ?? 0) / MAX_HEIGHT;
 
     return (
       <ContextMenu>
@@ -135,14 +144,20 @@ export const IframeNode = memo(
                   ? "hsl(var(--primary))"
                   : "hsl(var(--border))",
               }}
+              onResize={handleResize}
               onResizeEnd={handleResizeEnd}
             />
 
             <Iframe
               key={refreshKey}
               ref={iframeRef}
-              className="pointer-events-none absolute inset-0 -z-50 size-full cursor-not-allowed"
+              className="pointer-events-none absolute inset-0 -z-50 size-full origin-top-left cursor-not-allowed"
               onLoad={handleOnload}
+              style={{
+                transform: `scale(${scaleW}, ${scaleH})`,
+                maxWidth: MAX_WIDTH,
+                maxHeight: MAX_HEIGHT,
+              }}
             />
 
             <IframeInfo

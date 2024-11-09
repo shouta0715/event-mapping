@@ -1,9 +1,11 @@
 import { Source } from "@event-mapping/db";
 import { ComlinkHandlers, GlobalData } from "@event-mapping/event-sdk";
 import { TerminalData } from "@event-mapping/schema";
+import { OnResize } from "@xyflow/react";
 import * as Comlink from "comlink";
 import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { IS_DEVELOPMENT } from "@/env";
 import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
@@ -16,17 +18,21 @@ type UseComlinkProps = {
   data: Source;
 };
 
+const TIMEOUT = 30000;
+
 export function useComlink({ data }: UseComlinkProps) {
   const sourceId = useSourceId();
   const isOpenModal = useAtomValue(mappingModalAtom);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const comlinkRef = useRef<Comlink.Remote<ComlinkHandlers> | null>(null);
-  const { nodes } = useTerminalState((state) => ({
+  const { nodes, updateIframeData } = useTerminalState((state) => ({
     nodes: state.nodes,
+    updateIframeData: state.updateIframeData,
   }));
 
   const { mutateAsync, refreshKey, setRefreshKey } = useRestart(sourceId);
-  const { mutateAsync: mutateAsyncUpdateIframeData } = useUpdateIframeData();
+  const { mutateAsync: mutateAsyncUpdateIframeData } =
+    useUpdateIframeData(false);
 
   const handleRestart = async () => {
     const iframe = iframeRef.current;
@@ -86,18 +92,40 @@ export function useComlink({ data }: UseComlinkProps) {
     };
   }, [data.dev_url, data.url, refreshKey, isOpenModal]);
 
-  const handleResize = async (width: number, height: number) => {
+  const handleResized = async (width: number, height: number) => {
     if (!comlinkRef.current) return;
 
-    await comlinkRef.current.resize(width, height);
-    await mutateAsyncUpdateIframeData({ data: { ...data, width, height } });
+    try {
+      await Promise.race([
+        comlinkRef.current.resize(width, height),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("timeout")), TIMEOUT);
+        }),
+      ]);
+      await mutateAsyncUpdateIframeData({ data: { ...data, width, height } });
+    } catch (error) {
+      toast.error("サイズの変更を行えませんでした。");
+
+      if (error instanceof Error && error.message === "timeout") {
+        comlinkRef.current?.resize(data.width, data.height);
+      }
+
+      updateIframeData(data);
+    }
+  };
+
+  const handleResize: OnResize = async (_, params) => {
+    if (!comlinkRef.current) return;
+
+    comlinkRef.current.resize(params.width, params.height);
   };
 
   return {
     iframeRef,
+    refreshKey,
+    handleResized,
     handleResize,
     handleOnload,
     handleRestart,
-    refreshKey,
   };
 }

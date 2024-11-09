@@ -42,4 +42,6 @@ export async function patchSourceHandler(this: Subscription, data: Source) {
       data: this.global,
     });
   }
+
+  this.saveAdmin({ source: data, global: this.global });
 }

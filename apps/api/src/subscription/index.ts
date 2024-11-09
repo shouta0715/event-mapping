@@ -13,6 +13,7 @@ import {
   patchSourceHandler,
 } from "@/subscription/handlers/api/patch";
 import { restartHandler } from "@/subscription/handlers/api/post";
+import { saveAdmin } from "@/subscription/handlers/helper/save-admin";
 import { saveTerminal } from "@/subscription/handlers/helper/save-terminal";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
 
@@ -70,6 +71,8 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
    * Helper Functions
    */
   protected readonly saveTerminal = saveTerminal.bind(this);
+
+  protected readonly saveAdmin = saveAdmin.bind(this);
 
   constructor(
     protected readonly state: DurableObjectState,
