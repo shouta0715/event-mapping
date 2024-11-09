@@ -80,10 +80,19 @@ function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
 
 function handleUploadImageAction(
   this: EventHandler,
-  id: UploadImageAction["id"]
+  data: UploadImageAction["data"]
 ) {
+  const { timestamp, id } = data;
   const img = this.p.loadImage(`${this.baseImageUrl}/${id}`);
-  this.uploadedImage(img, { url: `${this.baseImageUrl}/${id}`, id });
+
+  if (timestamp < Date.now()) return;
+
+  setTimeout(() => {
+    this.uploadedImage(img, {
+      url: `${this.baseImageUrl}/${id}`,
+      id,
+    });
+  }, timestamp - Date.now());
 }
 
 function handleWarningAction(
@@ -127,7 +136,7 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       handleRestartAction.call(this, action.time);
       break;
     case "uploadImage":
-      handleUploadImageAction.call(this, action.id);
+      handleUploadImageAction.call(this, action.data);
       break;
     case "warning":
       handleWarningAction.call(this, action.message);

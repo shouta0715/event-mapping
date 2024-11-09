@@ -1,4 +1,4 @@
-import { TerminalData } from "@event-mapping/schema";
+import { TerminalData, UploadImageAction } from "@event-mapping/schema";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
 
 export type ComlinkHandlers = {
@@ -6,5 +6,5 @@ export type ComlinkHandlers = {
   join: (terminal: TerminalData) => void;
   leave: (id: string) => void;
   initialize: (terminals: TerminalData[], global: GlobalData) => void;
-  uploaded: (id: string) => void;
+  uploaded: (data: UploadImageAction["data"]) => void;
 };

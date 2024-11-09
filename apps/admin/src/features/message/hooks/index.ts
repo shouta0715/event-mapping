@@ -80,8 +80,8 @@ export const useWebSocketMessage = ({
   );
 
   const uploadImageHandler = useCallback(
-    (id: UploadImageAction["id"]) => {
-      comlink?.uploaded(id);
+    (data: UploadImageAction["data"]) => {
+      comlink?.uploaded(data);
     },
     [comlink]
   );
@@ -114,7 +114,7 @@ export const useWebSocketMessage = ({
         leaveHandler(lastJsonMessage.sessionId);
         break;
       case "uploadImage":
-        uploadImageHandler(lastJsonMessage.id);
+        uploadImageHandler(lastJsonMessage.data);
         break;
       case "moveVertex":
         moveVertexHandler(lastJsonMessage.data);

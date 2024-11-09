@@ -40,7 +40,10 @@ export type LeaveAction = z.infer<typeof leaveActionSchema>;
 
 export const uploadImageActionSchema = z.object({
   action: z.literal("uploadImage"),
-  id: z.string(),
+  data: z.object({
+    id: z.string(),
+    timestamp: z.number(),
+  }),
 });
 
 export type UploadImageAction = z.infer<typeof uploadImageActionSchema>;
