@@ -54,9 +54,6 @@ export function registerHandler(this: Subscription) {
     }
 
     this.state.acceptWebSocket(server, ["session", session_id]);
-    this.state.setWebSocketAutoResponse(
-      new WebSocketRequestResponsePair("ping", "pong")
-    );
 
     if (!this.global) {
       return c.json({ message: "Global not found" }, 404);
