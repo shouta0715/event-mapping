@@ -44,7 +44,7 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
   ) {
     const { apiUrl, sourceId } = options;
     this.p = p;
-    this.seed = Math.random();
+    this.seed = 100;
     this.shapes = new Shapes<TMeta>();
     this.global = { width: 0, height: 0 };
     this.p.randomSeed(this.seed);
