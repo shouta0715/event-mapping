@@ -1,3 +1,4 @@
+import { MAX_IFRAME_SIZE } from "@event-mapping/event-sdk/constants";
 import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
@@ -28,8 +29,25 @@ export function adminTransform(this: AdminHandler, cb: () => void) {
     return;
   }
 
-  const scaleW = this.p.width / width;
-  const scaleH = this.p.height / height;
+  const doNotScale =
+    width <= MAX_IFRAME_SIZE.width && height <= MAX_IFRAME_SIZE.height;
+
+  if (doNotScale) {
+    cb();
+
+    return;
+  }
+
+  let scaleW = 1;
+  let scaleH = 1;
+
+  if (width > MAX_IFRAME_SIZE.width) {
+    scaleW = this.p.width / width;
+  }
+
+  if (height > MAX_IFRAME_SIZE.height) {
+    scaleH = this.p.height / height;
+  }
 
   this.p.push();
   this.p.scale(scaleW, scaleH);
