@@ -134,7 +134,10 @@ function sketch(pi: p5) {
     for (const wall of walls) {
       const { width, height } = matterSizeToP5Size(wall.bounds);
 
-      e.rect(wall.position.x, wall.position.y, width, height);
+      p.fill("#fff");
+      e.transform(() =>
+        p.rect(wall.position.x, wall.position.y, width, height)
+      );
     }
   };
 
@@ -156,6 +159,10 @@ function sketch(pi: p5) {
       image: img,
       body: circle,
     });
+  };
+
+  e.updatedGlobal = (global) => {
+    renderWall(global.width, global.height);
   };
 }
 
