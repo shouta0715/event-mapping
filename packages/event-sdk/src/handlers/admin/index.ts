@@ -14,14 +14,17 @@ export class AdminHandler<
 > extends BaseHandler<TMeta> {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
+  transform = adminTransform.bind(this);
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
+    this.init();
+  }
 
+  private init() {
     const handlers = this.comlinkHandlers();
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
   }
-
-  transform = adminTransform.bind(this);
 
   circle: EventClient["circle"] = (x, y, d) => {
     this.transform(() => this.p.circle(x, y, d));
