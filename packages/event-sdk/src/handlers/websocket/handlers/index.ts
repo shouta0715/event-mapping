@@ -44,6 +44,7 @@ function handleUpdateGlobalAction(
   data: EventUpdateGlobal["data"]
 ) {
   this.global = data;
+  this.updatedGlobal(data);
 }
 
 function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {

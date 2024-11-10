@@ -10,4 +10,5 @@ export function resizeHandler(
   const h = Math.min(height, MAX_IFRAME_SIZE.height);
   this.p.resizeCanvas(w, h);
   this.global = { width, height };
+  this.updatedGlobal({ width, height });
 }

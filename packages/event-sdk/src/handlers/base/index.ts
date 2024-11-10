@@ -67,6 +67,8 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
     if (this.isInIframe) this.initialized = true;
   }
 
+  updatedGlobal: (global: GlobalData) => void = () => {};
+
   abstract transform: (fn: () => void) => void;
 
   abstract circle: (x: number, y: number, d: number) => void;
