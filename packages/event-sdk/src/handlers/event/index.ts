@@ -15,15 +15,15 @@ import {
 export class EventHandler<
   TMeta extends Record<string, unknown> = Record<string, unknown>,
 > extends BaseHandler<TMeta> {
-  protected readonly ws: WebSocket;
+  protected ws: WebSocket | null = null;
 
   protected terminal: TerminalData | null = null;
 
   protected restartTime: number = 0;
 
-  private readonly getWebSocketClient = getWebsocketClient.bind(this);
+  protected readonly getWebSocketClient = getWebsocketClient.bind(this);
 
-  private readonly connectWebsocket = connectWebsocket.bind(this);
+  protected readonly connectWebsocket = connectWebsocket.bind(this);
 
   protected readonly handleEventAction = handleEventAction.bind(this);
 
@@ -45,7 +45,6 @@ export class EventHandler<
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
-    this.ws = this.getWebSocketClient();
     this.init();
   }
 
