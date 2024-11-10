@@ -1,126 +1,13 @@
-import {
-  EventAction,
-  EventInitialize,
-  EventMoveVertex,
-  EventRestart,
-  EventUpdate,
-  EventUpdateGlobal,
-  EventWarning,
-  UploadImageAction,
-} from "@event-mapping/schema";
+import { EventAction } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
-import { applyMatrix3dToMarker } from "@event-mapping/event-sdk/handlers/helper/applay-marker";
-import { applyMatrix3d } from "@event-mapping/event-sdk/handlers/helper/apply-matrix";
-
-async function handleInitializeAction(
-  this: EventHandler,
-  data: EventInitialize["data"]
-) {
-  if (this.initialized) return;
-  this.terminal = data.terminal;
-  this.global = data.global;
-
-  const setupHandler = () => {
-    this.setup(this.global, this.terminals, data.terminal);
-    if (!this.canvas) this.canvas = document.querySelector("canvas");
-    this.setCanvasClipPath();
-
-    applyMatrix3d.call(this, data.terminal.positions);
-
-    this.initialized = true;
-  };
-
-  if (this._p5_setup_called) {
-    setupHandler();
-
-    return;
-  }
-
-  this.p.setup = setupHandler;
-}
-
-function handleUpdateGlobalAction(
-  this: EventHandler,
-  data: EventUpdateGlobal["data"]
-) {
-  this.global = data;
-  this.updatedGlobal(data);
-}
-
-function handleUpdateAction(this: EventHandler, data: EventUpdate["data"]) {
-  this.terminal = data;
-
-  if (!this.canvas) return;
-
-  this.setCanvasClipPath();
-}
-
-function handleRestartAction(this: EventHandler, time: EventRestart["time"]) {
-  this.restartTime = time;
-
-  setTimeout(() => {
-    window.location.reload();
-    if (!this.terminal) return;
-
-    if (this._p5_setup_called) {
-      this.setup(this.global, this.terminals, this.terminal);
-
-      this.initialized = true;
-
-      return;
-    }
-
-    this.p.setup = () => {
-      if (!this.terminal) return;
-
-      this.setup(this.global, this.terminals, this.terminal);
-      this.initialized = true;
-    };
-  }, time - Date.now());
-}
-
-function handleUploadImageAction(
-  this: EventHandler,
-  data: UploadImageAction["data"]
-) {
-  const { timestamp, id } = data;
-  const img = this.p.loadImage(`${this.baseImageUrl}/${id}`);
-
-  if (timestamp < Date.now()) return;
-
-  setTimeout(() => {
-    this.uploadedImage(img, {
-      url: `${this.baseImageUrl}/${id}`,
-      id,
-    });
-  }, timestamp - Date.now());
-}
-
-function handleWarningAction(
-  this: EventHandler,
-  message: EventWarning["message"]
-) {
-  // eslint-disable-next-line no-console
-  console.warn(message);
-}
-
-function handleMoveVertexAction(
-  this: EventHandler,
-  data: EventMoveVertex["data"]
-) {
-  if (!this.canvas) return;
-
-  const matrix3d = applyMatrix3d.call(this, data.positions);
-
-  if (!matrix3d || !this.marker) return;
-
-  applyMatrix3dToMarker.call(this, matrix3d, data.selectedIndex);
-}
-
-function handleDeleteAction(this: EventHandler) {
-  window.localStorage.removeItem("session_id");
-  window.location.reload();
-}
+import { handleDeleteAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/delete";
+import { handleUpdateGlobalAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/global";
+import { handleUploadImageAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/image";
+import { handleInitializeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/initialize";
+import { handleRestartAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/restart";
+import { handleUpdateAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/update";
+import { handleMoveVertexAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/vertex";
+import { handleWarningAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/warn";
 
 export function handleEventAction(this: EventHandler, action: EventAction) {
   switch (action.action) {
