@@ -2,6 +2,7 @@ import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { transform } from "@event-mapping/event-sdk/handlers/helper";
+import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
@@ -28,6 +29,8 @@ export class EventHandler<
 
   protected readonly initializeMarker = initializeMarker.bind(this);
 
+  protected readonly setCanvasClipPath = setCanvasClipPath.bind(this);
+
   protected canvas: HTMLCanvasElement | null = null;
 
   readonly transform = transform.bind(this);
@@ -52,15 +55,6 @@ export class EventHandler<
     this.p.setup = () => {
       this._p5_setup_called = true;
     };
-  }
-
-  protected setCanvasClipPath() {
-    if (!this.terminal) return;
-    if (!this.canvas) return;
-
-    const { left, top, right, bottom } = this.terminal.margin;
-
-    this.canvas.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
   }
 
   circle: EventClient["circle"] = (x, y, d) => {
