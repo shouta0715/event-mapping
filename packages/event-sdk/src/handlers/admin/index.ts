@@ -1,20 +1,27 @@
 /* eslint-disable no-restricted-globals */
+import { Quadtree } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
 import { adminTransform } from "@event-mapping/event-sdk/handlers/helper";
+import { initializeQuadtree } from "@event-mapping/event-sdk/handlers/quadtree";
 import {
   EventClientOptions,
   EventClient,
 } from "@event-mapping/event-sdk/types";
+import { Shape } from "@event-mapping/event-sdk/types/shape";
 
 export class AdminHandler<
   TMeta extends Record<string, unknown> = Record<string, unknown>,
 > extends BaseHandler<TMeta> {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
+  protected readonly initializeQuadtree = initializeQuadtree.bind(this);
+
   transform = adminTransform.bind(this);
+
+  protected quadtree: Quadtree<Shape<TMeta>> | null = null;
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
