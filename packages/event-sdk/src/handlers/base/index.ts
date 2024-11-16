@@ -1,12 +1,12 @@
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 
-import { Shapes } from "@event-mapping/event-sdk/handlers/shapes";
 import {
   EventClient,
   EventClientOptions,
 } from "@event-mapping/event-sdk/types";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
+import { Shape } from "@event-mapping/event-sdk/types/shape";
 
 export abstract class BaseHandler<TMeta extends Record<string, unknown>>
   implements EventClient<TMeta>
@@ -14,8 +14,6 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
   protected readonly isInIframe = window.self !== window.top;
 
   protected readonly p: p5;
-
-  shapes: Shapes<TMeta>;
 
   protected terminals: TerminalData[] = [];
 
@@ -26,6 +24,8 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
   protected readonly baseImageUrl: string;
 
   initialized = false;
+
+  shapes: Shape<TMeta>[] = [];
 
   setup: (
     global: GlobalData,
@@ -45,7 +45,6 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
     const { apiUrl, sourceId } = options;
     this.p = p;
     this.seed = 100;
-    this.shapes = new Shapes<TMeta>();
     this.global = { width: 0, height: 0 };
     this.p.randomSeed(this.seed);
     this.p.frameRate(30);

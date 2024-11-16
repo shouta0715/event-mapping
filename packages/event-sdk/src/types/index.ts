@@ -1,8 +1,7 @@
-import { Shapes } from "@event-mapping/event-sdk/handlers/shapes";
+import { Shape } from "@event-mapping/event-sdk/types/shape";
 
 export * from "./admin";
 export * from "./global";
-export * from "./p5";
 
 export type EventClientOptions = {
   apiUrl: string;
@@ -56,5 +55,5 @@ export interface EventClient<
     x3: number,
     y3: number
   ) => void;
-  shapes: Shapes<TMeta>;
+  shapes: Shape<TMeta>[];
 }
