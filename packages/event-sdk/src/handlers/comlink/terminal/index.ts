@@ -19,4 +19,5 @@ export function initializeHandler(
   this.setup(global, terminals, undefined);
 
   this.global = global;
+  this.initializeQuadtree();
 }

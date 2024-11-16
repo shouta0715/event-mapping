@@ -1,6 +1,8 @@
 import { MAX_IFRAME_SIZE } from "@event-mapping/event-sdk/constants";
 import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 
+let timer: number | null = null;
+
 export function resizeHandler(
   this: AdminHandler,
   width: number,
@@ -11,4 +13,9 @@ export function resizeHandler(
   this.p.resizeCanvas(w, h);
   this.global = { width, height };
   this.updatedGlobal({ width, height });
+  if (timer) clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    this.initializeQuadtree();
+  }, 100);
 }
