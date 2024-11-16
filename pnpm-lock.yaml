@@ -558,6 +558,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
+      '@timohausmann/quadtree-ts':
+        specifier: ^2.2.2
+        version: 2.2.2
       comlink:
         specifier: ^4.4.1
         version: 4.4.1
@@ -4419,6 +4422,10 @@ packages:
     dependencies:
       '@tanstack/query-core': 5.56.2
       react: 18.3.1
+    dev: false
+
+  /@timohausmann/quadtree-ts@2.2.2:
+    resolution: {integrity: sha512-emYbmmbTb+S3F75yvt03KQ3pMO3v/4BzjbAVnflbYq3zJfcurTfZHeriK8o7T0lFzBz3kBw2Pn41vlK3pD8spw==}
     dev: false
 
   /@tokenizer/token@0.3.0:
