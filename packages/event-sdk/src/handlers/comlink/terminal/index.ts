@@ -4,10 +4,13 @@ import { GlobalData } from "@event-mapping/event-sdk/types/global";
 
 export function joinHandler(this: AdminHandler, terminal: TerminalData) {
   this.join(terminal);
+
+  this.insertTerminal(terminal);
 }
 
 export function leaveHandler(this: AdminHandler, id: string) {
   this.leave(id);
+  this.removeTerminal(id);
 }
 
 export function initializeHandler(

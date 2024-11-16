@@ -13,6 +13,7 @@ type Size =
 export interface Shape<TMeta extends Record<string, unknown>>
   extends Indexable {
   position: p5.Vector;
+  velocity: p5.Vector;
   size: Size;
   data: TMeta;
 }

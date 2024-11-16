@@ -1,27 +1,41 @@
 /* eslint-disable no-restricted-globals */
-import { Quadtree } from "@timohausmann/quadtree-ts";
+import { TerminalData } from "@event-mapping/schema";
+import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
 import { adminTransform } from "@event-mapping/event-sdk/handlers/helper";
-import { initializeQuadtree } from "@event-mapping/event-sdk/handlers/quadtree";
+import {
+  initializeQuadtree,
+  insertTerminal,
+  removeTerminal,
+} from "@event-mapping/event-sdk/handlers/quadtree";
 import {
   EventClientOptions,
   EventClient,
+  QuadtreeShape,
 } from "@event-mapping/event-sdk/types";
-import { Shape } from "@event-mapping/event-sdk/types/shape";
 
 export class AdminHandler<
   TMeta extends Record<string, unknown> = Record<string, unknown>,
 > extends BaseHandler<TMeta> {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
+  /**
+   * @description Quadtree handlers
+   */
   protected readonly initializeQuadtree = initializeQuadtree.bind(this);
+
+  protected readonly insertTerminal = insertTerminal.bind(this);
+
+  protected readonly removeTerminal = removeTerminal.bind(this);
+
+  protected terminalRects: Map<string, Rectangle<TerminalData>> = new Map();
 
   transform = adminTransform.bind(this);
 
-  protected quadtree: Quadtree<Shape<TMeta>> | null = null;
+  protected quadtree: Quadtree<QuadtreeShape> | null = null;
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
