@@ -1,7 +1,11 @@
 import {
+  EnterShapeAction,
   EventAction,
+  EventEnterShape,
+  EventLeaveShape,
   EventMoveVertex,
   GlobalData,
+  LeaveShapeAction,
   MoveVertexAction,
   TerminalData,
 } from "@event-mapping/schema";
@@ -14,6 +18,7 @@ async function joinSessionHandler(
   global: GlobalData
 ) {
   if (!this.admin) return;
+
   const { sessionId, width, height, ws } = data;
   const defaultTerminalData = createDefaultTerminalData({
     width,
@@ -72,6 +77,7 @@ const SAVE_DURATION = 1000;
 
 function moveVertexHandler(this: Subscription, data: MoveVertexAction["data"]) {
   if (!this.admin) return;
+
   const { id, positions, selectedIndex } = data;
 
   const ws = this.getWsFromId(id);
@@ -124,11 +130,45 @@ function initializeSessionHandler(this: Subscription) {
   });
 }
 
+function enterShapeHandler(this: Subscription, data: EnterShapeAction["data"]) {
+  if (!this.admin) return;
+  const { rectId } = data;
+
+  const ws = this.getWsFromId(rectId);
+
+  if (!ws) return;
+
+  const eventData: EventEnterShape = {
+    action: "enterShape",
+    data,
+  };
+
+  sendMessage(ws, eventData);
+}
+
+function leaveShapeHandler(this: Subscription, data: LeaveShapeAction["data"]) {
+  if (!this.admin) return;
+  const { id, rectId } = data;
+  const ws = this.getWsFromId(rectId);
+  if (!ws) return;
+
+  const eventData: EventLeaveShape = {
+    action: "leaveShape",
+    data: {
+      id,
+    },
+  };
+
+  sendMessage(ws, eventData);
+}
+
 export function generateAdminMessageHandlers(this: Subscription) {
   return {
     joinSessionHandler: joinSessionHandler.bind(this),
     leaveSessionHandler: leaveSessionHandler.bind(this),
     initializeSessionHandler: initializeSessionHandler.bind(this),
     moveVertexHandler: moveVertexHandler.bind(this),
+    enterShapeHandler: enterShapeHandler.bind(this),
+    leaveShapeHandler: leaveShapeHandler.bind(this),
   };
 }
