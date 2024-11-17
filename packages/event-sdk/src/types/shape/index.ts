@@ -2,14 +2,10 @@ import { Indexable } from "@timohausmann/quadtree-ts";
 import p5 from "p5";
 import { TTData } from "@event-mapping/event-sdk/types/global";
 
-export type ShapeSize =
-  | {
-      w: number;
-      h: number;
-    }
-  | {
-      d: number;
-    };
+export type ShapeSize = {
+  w: number;
+  h: number;
+};
 
 export interface ShapeProps<TMeta extends TTData = TTData> {
   id?: string;
@@ -26,6 +22,6 @@ export interface IShape<TData extends TTData = TTData>
 export interface IShapes<TData extends TTData = TTData> {
   items: IShape<TData>[];
   add: (data: ShapeProps<TData>) => void;
-  remove: (id: string, data: ShapeProps<TData>) => void;
+  remove: (id: string) => void;
   clear: () => void;
 }
