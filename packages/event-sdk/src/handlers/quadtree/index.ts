@@ -4,6 +4,7 @@ import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 import { QuadtreeShape } from "@event-mapping/event-sdk/types";
 
 export function insertTerminal(this: AdminHandler, terminals: TerminalData) {
+  if (!this.quadtree) return;
   const rect = new Rectangle<TerminalData>({
     x: terminals.startX,
     y: terminals.startY,
@@ -15,9 +16,13 @@ export function insertTerminal(this: AdminHandler, terminals: TerminalData) {
   this.terminalRects.set(terminals.id, rect);
 
   this.quadtree?.insert(rect);
+
+  this.shapes._updateQuadtree(this.quadtree);
 }
 
 export function removeTerminal(this: AdminHandler, id: string) {
+  if (!this.quadtree) return;
+
   const target = this.terminalRects.get(id);
 
   if (!target) return;
@@ -25,13 +30,15 @@ export function removeTerminal(this: AdminHandler, id: string) {
   this.quadtree?.remove(target);
 
   this.terminalRects.delete(id);
+
+  this.shapes._updateQuadtree(this.quadtree);
 }
 
 export function initializeQuadtree(this: AdminHandler) {
   if (this.global.width === 0 || this.global.height === 0) return;
 
   this.quadtree = new Quadtree<QuadtreeShape>({
-    maxObjects: 1000,
+    maxObjects: 4,
     maxLevels: 5,
     x: 0,
     y: 0,
@@ -58,4 +65,6 @@ export function initializeQuadtree(this: AdminHandler) {
   rectangles.forEach((rect) => {
     this.quadtree?.insert(rect);
   });
+
+  this.shapes._updateQuadtree(this.quadtree);
 }
