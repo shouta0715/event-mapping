@@ -3,4 +3,4 @@
  */
 
 export const fallbackOnEnter = () => {};
-export const fallbackOnLeave = () => {};
+export const fallbackOnExit = () => {};

@@ -13,16 +13,16 @@ export class AdminShapes<TData extends TTData = TTData>
 
   private readonly onEnter: (rectId: string, data: ShapeProps<TData>) => void;
 
-  private readonly onLeave: (rectId: string, data: ShapeProps<TData>) => void;
+  private readonly onExit: (rectId: string, id: string) => void;
 
   constructor(
     qt: Quadtree<QuadtreeShape> | null,
     onEnter: (rectId: string, data: ShapeProps<TData>) => void,
-    onLeave: (rectId: string, data: ShapeProps<TData>) => void
+    onExit: (rectId: string, id: string) => void
   ) {
     this.qt = qt;
     this.onEnter = onEnter;
-    this.onLeave = onLeave;
+    this.onExit = onExit;
   }
 
   add(data: ShapeProps<TData>): void {
@@ -31,7 +31,7 @@ export class AdminShapes<TData extends TTData = TTData>
       isAdmin: true,
       data: { ...data, id },
       onEnter: this.onEnter,
-      onLeave: this.onLeave,
+      onExit: this.onExit,
       qt: this.qt,
     });
     this.items.push(shape);

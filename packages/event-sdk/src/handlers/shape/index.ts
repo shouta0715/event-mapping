@@ -7,7 +7,7 @@ import { exitRectangle } from "@event-mapping/event-sdk/handlers/shape/actions/e
 import { shapeIsColliding } from "@event-mapping/event-sdk/handlers/shape/colliding";
 import {
   fallbackOnEnter,
-  fallbackOnLeave,
+  fallbackOnExit,
 } from "@event-mapping/event-sdk/handlers/shape/fallback";
 import { getShape } from "@event-mapping/event-sdk/handlers/shape/get-shape";
 import { qtIndex } from "@event-mapping/event-sdk/handlers/shape/qt";
@@ -23,7 +23,7 @@ type ConstructorProps<TData extends TTData = any> = {
   isAdmin: boolean;
   data: ShapeProps<TData>;
   onEnter?: (rectId: string, data: ShapeProps<TData>) => void;
-  onLeave?: (rectId: string, data: ShapeProps<TData>) => void;
+  onExit?: (rectId: string, id: string) => void;
   qt?: Quadtree<QuadtreeShape> | null;
 };
 
@@ -44,7 +44,7 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
 
   protected readonly onEnter: (rectId: string, data: ShapeProps<TData>) => void;
 
-  protected readonly onLeave: (rectId: string, data: ShapeProps<TData>) => void;
+  protected readonly onExit: (rectId: string, id: string) => void;
 
   protected readonly shapeIsColliding = shapeIsColliding.bind(this);
 
@@ -60,13 +60,7 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
 
   qtIndex = qtIndex.bind(this);
 
-  constructor({
-    isAdmin,
-    data,
-    onEnter,
-    onLeave,
-    qt,
-  }: ConstructorProps<TData>) {
+  constructor({ isAdmin, data, onEnter, onExit, qt }: ConstructorProps<TData>) {
     this.id = data.id || createId();
     this.position = data.position;
     this.velocity = data.velocity;
@@ -75,6 +69,6 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
     this.isAdmin = isAdmin;
     this.qt = qt;
     this.onEnter = onEnter ?? fallbackOnEnter;
-    this.onLeave = onLeave ?? fallbackOnLeave;
+    this.onExit = onExit ?? fallbackOnExit;
   }
 }
