@@ -16,7 +16,7 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class EventHandler<TData extends TTData = any> extends BaseHandler {
-  protected ws: WebSocket | null = null;
+  protected ws: WebSocket;
 
   protected terminal: TerminalData | null = null;
 
@@ -49,6 +49,7 @@ export class EventHandler<TData extends TTData = any> extends BaseHandler {
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.shapes = new EventShapes<TData>();
+    this.ws = this.getWebSocketClient();
     this.init();
   }
 
