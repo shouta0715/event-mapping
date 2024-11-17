@@ -55,12 +55,6 @@ export abstract class BaseHandler implements EventClient {
     this.terminals = this.terminals.filter((t) => t.id !== id);
   }
 
-  initialize(terminals: TerminalData[], global: GlobalData): void {
-    this.terminals = terminals;
-    this.global = global;
-    if (this.isInIframe) this.initialized = true;
-  }
-
   updatedGlobal: (global: GlobalData) => void = () => {};
 
   abstract transform: (fn: () => void) => void;
