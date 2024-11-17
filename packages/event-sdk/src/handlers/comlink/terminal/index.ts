@@ -18,9 +18,9 @@ export function initializeHandler(
   terminals: TerminalData[],
   global: GlobalData
 ) {
-  this.initialize(terminals, global);
-  this.setup(global, terminals, undefined);
-
   this.global = global;
+  this.terminals = terminals;
   this.initializeQuadtree();
+  this.setup(global, terminals, undefined);
+  this.initialized = true;
 }
