@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import { TerminalData } from "@event-mapping/schema";
+import { EnterShapeAction, TerminalData } from "@event-mapping/schema";
 import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
@@ -18,7 +18,9 @@ import {
   QuadtreeShape,
   TTData,
   ShapeProps,
+  AdminComlinkHandlers,
 } from "@event-mapping/event-sdk/types";
+import { p5VectorToObject } from "@event-mapping/event-sdk/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class AdminHandler<TData extends TTData = any> extends BaseHandler {
@@ -41,6 +43,8 @@ export class AdminHandler<TData extends TTData = any> extends BaseHandler {
 
   shapes: AdminShapes<TData>;
 
+  protected adminComlinkHandlers: AdminComlinkHandlers | null = null;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
 
@@ -52,17 +56,31 @@ export class AdminHandler<TData extends TTData = any> extends BaseHandler {
     this.init();
   }
 
-  private onEnter = (rectId: string, data: ShapeProps<TData>) => {
-    console.log("enter", rectId, data);
+  private onEnter = async (rectId: string, data: ShapeProps<TData>) => {
+    if (!data.id) return;
+
+    const sendData: EnterShapeAction["data"] = {
+      rectId,
+      id: data.id,
+      size: data.size,
+      position: p5VectorToObject(data.position),
+      velocity: p5VectorToObject(data.velocity),
+      meta: data.data,
+    };
+
+    this.adminComlinkHandlers?.enterShape(rectId, sendData);
   };
 
-  private onLeave = (rectId: string, data: ShapeProps<TData>) => {
-    console.log("exit", rectId, data);
+  private onLeave = async (rectId: string, id: string) => {
+    this.adminComlinkHandlers?.leaveShape(rectId, id);
   };
 
   private init() {
     const handlers = this.comlinkHandlers();
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
+    this.adminComlinkHandlers = Comlink.wrap(
+      Comlink.windowEndpoint(self.parent)
+    );
   }
 
   circle: EventClient["circle"] = (x, y, d) => {
