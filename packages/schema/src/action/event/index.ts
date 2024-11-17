@@ -76,3 +76,34 @@ export const eventDeleteSchema = z.object({
 });
 
 export type EventDelete = z.infer<typeof eventDeleteSchema>;
+
+export const eventEnterShapeSchema = z.object({
+  action: z.literal("enterShape"),
+  data: z.object({
+    id: z.string(),
+    size: z.object({
+      w: z.number(),
+      h: z.number(),
+    }),
+    position: z.object({
+      x: z.number(),
+      y: z.number(),
+    }),
+    velocity: z.object({
+      x: z.number(),
+      y: z.number(),
+    }),
+    meta: z.record(z.unknown()),
+  }),
+});
+
+export type EventEnterShape = z.infer<typeof eventEnterShapeSchema>;
+
+export const eventLeaveShapeSchema = z.object({
+  action: z.literal("leaveShape"),
+  data: z.object({
+    id: z.string(),
+  }),
+});
+
+export type EventLeaveShape = z.infer<typeof eventLeaveShapeSchema>;
