@@ -54,7 +54,7 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
 
   protected collidingShapes: Set<string> = new Set();
 
-  protected tracking = trackingShape.bind(this);
+  tracking = trackingShape.bind(this);
 
   getShape = getShape.bind(this);
 
