@@ -6,11 +6,8 @@ import {
   EventClientOptions,
 } from "@event-mapping/event-sdk/types";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
-import { Shape } from "@event-mapping/event-sdk/types/shape";
 
-export abstract class BaseHandler<TMeta extends Record<string, unknown>>
-  implements EventClient<TMeta>
-{
+export abstract class BaseHandler implements EventClient {
   protected readonly isInIframe = window.self !== window.top;
 
   protected readonly p: p5;
@@ -24,8 +21,6 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
   protected readonly baseImageUrl: string;
 
   initialized = false;
-
-  shapes: Shape<TMeta>[] = [];
 
   setup: (
     global: GlobalData,
