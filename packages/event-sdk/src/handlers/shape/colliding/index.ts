@@ -42,7 +42,7 @@ export const rectangleRectangleCollision = <T>(
   );
 };
 
-export function isColliding<T>(
+export function shapeIsColliding<T>(
   shape: Circle<T> | Rectangle<T>,
   rect: QuadtreeShape
 ): boolean {
