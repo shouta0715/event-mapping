@@ -11,15 +11,17 @@ import {
   insertTerminal,
   removeTerminal,
 } from "@event-mapping/event-sdk/handlers/quadtree";
+import { AdminShapes } from "@event-mapping/event-sdk/handlers/shapes/admin";
 import {
   EventClientOptions,
   EventClient,
   QuadtreeShape,
+  TTData,
+  ShapeProps,
 } from "@event-mapping/event-sdk/types";
 
-export class AdminHandler<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseHandler<TMeta> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class AdminHandler<TData extends TTData = any> extends BaseHandler {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
   /**
@@ -37,10 +39,26 @@ export class AdminHandler<
 
   protected quadtree: Quadtree<QuadtreeShape> | null = null;
 
+  shapes: AdminShapes<TData>;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
+
+    this.shapes = new AdminShapes<TData>(
+      this.quadtree,
+      this.onEnter,
+      this.onLeave
+    );
     this.init();
   }
+
+  private onEnter = (rectId: string, data: ShapeProps<TData>) => {
+    console.log("enter", rectId, data);
+  };
+
+  private onLeave = (rectId: string, data: ShapeProps<TData>) => {
+    console.log("exit", rectId, data);
+  };
 
   private init() {
     const handlers = this.comlinkHandlers();

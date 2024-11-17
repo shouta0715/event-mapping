@@ -4,17 +4,18 @@ import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { transform } from "@event-mapping/event-sdk/handlers/helper";
 import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
+import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
 import { handleEventAction } from "@event-mapping/event-sdk/handlers/websocket/handlers";
 import {
   EventClient,
   EventClientOptions,
+  TTData,
 } from "@event-mapping/event-sdk/types";
 
-export class EventHandler<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseHandler<TMeta> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class EventHandler<TData extends TTData = any> extends BaseHandler {
   protected ws: WebSocket | null = null;
 
   protected terminal: TerminalData | null = null;
@@ -43,8 +44,11 @@ export class EventHandler<
 
   protected readonly markerSize = 100;
 
+  shapes: EventShapes<TData>;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
+    this.shapes = new EventShapes<TData>();
     this.init();
   }
 
