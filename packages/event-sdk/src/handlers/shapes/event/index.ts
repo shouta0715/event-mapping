@@ -1,15 +1,14 @@
 import { Shape } from "@event-mapping/event-sdk/handlers/shape";
+import { TTData } from "@event-mapping/event-sdk/types";
 import { IShapes, ShapeProps } from "@event-mapping/event-sdk/types/shape";
 
-export class EventShapes<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> implements IShapes<TMeta>
+export class EventShapes<TData extends TTData = TTData>
+  implements IShapes<TData>
 {
-  items: Shape<TMeta>[] = [];
+  items: Shape<TData>[] = [];
 
-  add(_: ShapeProps<TMeta>): void {
+  add(_: ShapeProps<TData>): void {
     // Not Needed
-    // This method is only used by the AdminShapes class
     // This method is only used by the AdminShapes class
     // to prevent type errors
   }
@@ -18,10 +17,10 @@ export class EventShapes<
    * @description Adds a shape using the `add` method.
    * @param shape - The shape to add
    */
-  _internal_add(data: ShapeProps<TMeta>): void {
+  _internal_add(data: ShapeProps<TData>): void {
     if (!data.id) throw new Error("Shape id is required");
 
-    const shape = new Shape<TMeta>({
+    const shape = new Shape<TData>({
       isAdmin: false,
       data,
     });
@@ -37,7 +36,7 @@ export class EventShapes<
     this.items = [];
   }
 
-  [Symbol.iterator](): IterableIterator<Shape<TMeta>> {
+  [Symbol.iterator](): IterableIterator<Shape<TData>> {
     return this.items[Symbol.iterator]();
   }
 }
