@@ -37,14 +37,6 @@ const TerminalInfo = ({
             <p className="text-center text-4xl font-semibold">
               <span className="font-semibold">{data.displayname}</span>
             </p>
-            <div className="flex size-full items-center justify-center">
-              <div className="flex flex-col gap-10 text-4xl">
-                <p className="flex flex-col items-center gap-2 font-semibold">
-                  倍率
-                  <span className="tabular-nums">{data.scale}倍</span>
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* margin top */}
