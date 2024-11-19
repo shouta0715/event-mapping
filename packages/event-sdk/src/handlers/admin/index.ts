@@ -3,7 +3,10 @@ import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
-import { adminTransform } from "@event-mapping/event-sdk/handlers/helper";
+import {
+  adminTransform,
+  adminTransformed,
+} from "@event-mapping/event-sdk/handlers/helper";
 import {
   EventClientOptions,
   EventClient,
@@ -14,7 +17,9 @@ export class AdminHandler<
 > extends BaseHandler<TMeta> {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
-  transform = adminTransform.bind(this);
+  readonly transform = adminTransform.bind(this);
+
+  readonly transformed = adminTransformed.bind(this);
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
