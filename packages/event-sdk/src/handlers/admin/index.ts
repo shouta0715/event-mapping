@@ -6,7 +6,10 @@ import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
-import { adminTransform } from "@event-mapping/event-sdk/handlers/helper";
+import {
+  adminTransform,
+  adminTransformed,
+} from "@event-mapping/event-sdk/handlers/helper";
 import {
   initializeQuadtree,
   insertTerminal,
@@ -41,7 +44,9 @@ export class AdminHandler<
 
   protected terminalRects: Map<string, Rectangle<TerminalData>> = new Map();
 
-  transform = adminTransform.bind(this);
+  readonly transform = adminTransform.bind(this);
+
+  readonly transformed = adminTransformed.bind(this);
 
   protected quadtree: Quadtree<QuadtreeShape> | null = null;
 

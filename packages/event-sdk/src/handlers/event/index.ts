@@ -2,7 +2,10 @@
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
-import { transform } from "@event-mapping/event-sdk/handlers/helper";
+import {
+  transform,
+  transformed,
+} from "@event-mapping/event-sdk/handlers/helper";
 import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
 import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
@@ -39,6 +42,8 @@ export class EventHandler<
   protected canvas: HTMLCanvasElement | null = null;
 
   readonly transform = transform.bind(this);
+
+  readonly transformed = transformed.bind(this);
 
   protected _p5_setup_called = false;
 
