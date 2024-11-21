@@ -155,6 +155,7 @@ function leaveShapeHandler(this: Subscription, data: LeaveShapeAction["data"]) {
   const eventData: EventLeaveShape = {
     action: "leaveShape",
     data: {
+      rectId,
       id,
     },
   };
