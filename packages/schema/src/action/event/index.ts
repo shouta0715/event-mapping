@@ -93,7 +93,7 @@ export const eventEnterShapeSchema = z.object({
       x: z.number(),
       y: z.number(),
     }),
-    meta: z.record(z.unknown()),
+    meta: z.record(z.any()),
   }),
 });
 
