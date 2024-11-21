@@ -2,11 +2,7 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
 
-import {
-  createEventClient,
-  GlobalData,
-  ShapeProps,
-} from "@event-mapping/event-sdk";
+import { createEventClient, GlobalData } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
@@ -28,13 +24,17 @@ const generatePositions = (g: GlobalData, p: p5) => {
 };
 
 type Meta = {
+  color: p5.Color;
+};
+
+type ShareData = {
   color: string;
 };
 
 function sketch(pi: p5) {
   const p = pi;
 
-  const e = createEventClient<Meta>(p, {
+  const e = createEventClient<Meta, ShareData>(p, {
     apiUrl: env.VITE_API_URL,
     wsUrl: env.VITE_WS_URL,
     sourceId: env.VITE_SOURCE_ID,
@@ -47,14 +47,13 @@ function sketch(pi: p5) {
     const positions = generatePositions(g, p);
 
     for (const position of positions) {
-      const shape: ShapeProps<Meta> = {
+      e.shapes.tracking({
         position: p.createVector(position.x, position.y),
-        velocity: p.createVector(10, 10),
         size: { w: position.size, h: position.size },
-        data: { color: position.color },
-      };
-
-      e.shapes.add(shape);
+        velocity: p.createVector(10, 10),
+        meta: { color: p.color(position.color) },
+        shareData: { color: position.color },
+      });
     }
   };
 
@@ -81,7 +80,7 @@ function sketch(pi: p5) {
         shape.velocity.y *= -1;
       }
 
-      p.fill(p.color(shape.data.color.toString()));
+      p.fill(shape.meta.color);
 
       e.rect(shape.position.x, shape.position.y, shape.size.w, shape.size.h);
     }
@@ -89,6 +88,22 @@ function sketch(pi: p5) {
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
+
+  e.shapes.enter = (id, { meta, position, velocity, size }) => {
+    e.shapes.add({
+      id,
+      position,
+      velocity,
+      size,
+      meta: {
+        color: p.color(meta.color),
+      },
+    });
+  };
+
+  e.shapes.exit = (id) => {
+    e.shapes.remove(id);
   };
 }
 
