@@ -6,9 +6,10 @@ export function enterRectangle(this: Shape, rectId: string): void {
     position: this.position,
     velocity: this.velocity,
     size: this.size,
-    data: this.data,
+    meta: this.meta,
+    shareData: this.shareData,
   };
 
   this.collidingShapes.add(rectId);
-  this.onEnter(rectId, data);
+  this.onEnter?.(rectId, data);
 }
