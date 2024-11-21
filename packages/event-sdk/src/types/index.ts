@@ -1,8 +1,6 @@
-import { Shapes } from "@event-mapping/event-sdk/handlers/shapes";
-
 export * from "./admin";
 export * from "./global";
-export * from "./p5";
+export * from "./shape";
 
 export type EventClientOptions = {
   apiUrl: string;
@@ -10,9 +8,7 @@ export type EventClientOptions = {
   sourceId: string;
 };
 
-export interface EventClient<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> {
+export interface EventClient {
   circle: (x: number, y: number, d: number) => void;
   ellipse: (x: number, y: number, w: number, h?: number) => void;
   line: (x1: number, y1: number, x2: number, y2: number) => void;
@@ -56,5 +52,4 @@ export interface EventClient<
     x3: number,
     y3: number
   ) => void;
-  shapes: Shapes<TMeta>;
 }

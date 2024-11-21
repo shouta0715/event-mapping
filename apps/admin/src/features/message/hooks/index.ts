@@ -21,7 +21,7 @@ export const useWebSocketMessage = ({
   sourceId,
   comlink,
 }: UseWebSocketMessageProps) => {
-  const { lastJsonMessage } = useWs(sourceId);
+  const { lastJsonMessage, sendJsonMessage } = useWs(sourceId);
   const { addNode, setNodes, removeNode, updateNodeData, getNodeData } =
     useTerminalState((state) => ({
       addNode: state.addNode,
@@ -33,17 +33,27 @@ export const useWebSocketMessage = ({
 
   const initializeHandler = useCallback(
     (data: InitializeAction["sessions"]) => {
-      const nodes: TerminalNode[] = data.map((session) => ({
-        id: session.id,
-        type: "terminal",
-        position: {
-          x: session.startX,
-          y: session.startY,
-        },
-        width: session.width,
-        height: session.height,
-        data: session,
-      }));
+      const set = new Set<string>();
+
+      const nodes: TerminalNode[] = [];
+
+      for (const session of data) {
+        if (set.has(session.id)) continue;
+        const node: TerminalNode = {
+          id: session.id,
+          type: "terminal",
+          position: {
+            x: session.startX,
+            y: session.startY,
+          },
+          width: session.width,
+          height: session.height,
+          data: session,
+        };
+
+        nodes.push(node);
+        set.add(session.id);
+      }
 
       setNodes(nodes);
     },
@@ -119,6 +129,10 @@ export const useWebSocketMessage = ({
       case "moveVertex":
         moveVertexHandler(lastJsonMessage.data);
         break;
+      case "enterShape":
+        break;
+      case "leaveShape":
+        break;
       default:
         throw new Error(action satisfies never);
     }
@@ -130,4 +144,8 @@ export const useWebSocketMessage = ({
     uploadImageHandler,
     moveVertexHandler,
   ]);
+
+  return {
+    sendJsonMessage,
+  };
 };

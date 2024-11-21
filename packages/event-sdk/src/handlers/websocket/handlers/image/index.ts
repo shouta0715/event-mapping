@@ -10,8 +10,10 @@ export function handleUploadImageAction(
 
   if (timestamp < Date.now()) return;
 
+  this.images.set(id, img);
+
   setTimeout(() => {
-    this.uploadedImage(img, {
+    this.uploadedImage({
       url: `${this.baseImageUrl}/${id}`,
       id,
     });

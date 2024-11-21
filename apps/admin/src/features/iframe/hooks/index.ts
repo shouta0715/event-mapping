@@ -1,6 +1,14 @@
 import { Source } from "@event-mapping/db";
-import { ComlinkHandlers, GlobalData } from "@event-mapping/event-sdk";
-import { TerminalData } from "@event-mapping/schema";
+import {
+  AdminComlinkHandlers,
+  ComlinkHandlers,
+  GlobalData,
+} from "@event-mapping/event-sdk";
+import {
+  EnterShapeAction,
+  LeaveShapeAction,
+  TerminalData,
+} from "@event-mapping/schema";
 import { OnResize } from "@xyflow/react";
 import * as Comlink from "comlink";
 import { useAtomValue } from "jotai";
@@ -51,16 +59,59 @@ export function useComlink({ data }: UseComlinkProps) {
     });
   };
 
-  useWebSocketMessage({
+  const { sendJsonMessage } = useWebSocketMessage({
     sourceId,
     comlink: comlinkRef.current,
   });
+
+  const enterShapeHandler: AdminComlinkHandlers["enterShape"] = useCallback(
+    (rectId, shape) => {
+      if (!rectId || !shape.id) return;
+
+      const sendData: EnterShapeAction["data"] = {
+        rectId,
+        id: shape.id,
+        size: shape.size,
+        position: shape.position,
+        velocity: shape.velocity,
+        meta: shape.meta,
+      };
+
+      sendJsonMessage<EnterShapeAction>({
+        action: "enterShape",
+        data: sendData,
+      });
+    },
+    [sendJsonMessage]
+  );
+
+  const leaveShapeHandler: AdminComlinkHandlers["leaveShape"] = useCallback(
+    (rectId, id) => {
+      if (!rectId || !id) return;
+
+      sendJsonMessage<LeaveShapeAction>({
+        action: "leaveShape",
+        data: { rectId, id },
+      });
+    },
+    [sendJsonMessage]
+  );
+
+  const exposeHandlers = useCallback((): AdminComlinkHandlers => {
+    return {
+      enterShape: enterShapeHandler,
+      leaveShape: leaveShapeHandler,
+    };
+  }, [enterShapeHandler, leaveShapeHandler]);
 
   const handleOnload = useCallback(async () => {
     const iframe = iframeRef.current;
 
     if (!iframe || !iframe.contentWindow || iframe.src === "") return;
 
+    const handlers = exposeHandlers();
+
+    Comlink.expose(handlers, Comlink.windowEndpoint(iframe.contentWindow));
     comlinkRef.current = Comlink.wrap(
       Comlink.windowEndpoint(iframe.contentWindow)
     );
@@ -78,7 +129,7 @@ export function useComlink({ data }: UseComlinkProps) {
       height: data.height ?? 0,
     };
     await comlinkRef.current.initialize(terminals, global);
-  }, [nodes, data]);
+  }, [exposeHandlers, data.width, data.height, nodes]);
 
   useEffect(() => {
     const iframe = iframeRef.current;

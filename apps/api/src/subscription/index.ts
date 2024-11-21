@@ -97,9 +97,17 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     const parsed = parseActionMessage("admin", message);
 
     if (!parsed) return;
-    if (parsed.action !== "moveVertex") return;
+    if (parsed.action === "moveVertex") {
+      this.adminMessageHandlers.moveVertexHandler(parsed.data);
+    }
 
-    this.adminMessageHandlers.moveVertexHandler(parsed.data);
+    if (parsed.action === "enterShape") {
+      this.adminMessageHandlers.enterShapeHandler(parsed.data);
+    }
+
+    if (parsed.action === "leaveShape") {
+      this.adminMessageHandlers.leaveShapeHandler(parsed.data);
+    }
   }
 
   fetch(req: Request) {

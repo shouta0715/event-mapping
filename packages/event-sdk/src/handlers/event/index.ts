@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
@@ -7,18 +8,22 @@ import {
 } from "@event-mapping/event-sdk/handlers/helper";
 import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
+import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
 import { handleEventAction } from "@event-mapping/event-sdk/handlers/websocket/handlers";
 import {
   EventClient,
   EventClientOptions,
+  TTData,
+  TTrackingData,
 } from "@event-mapping/event-sdk/types";
 
 export class EventHandler<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseHandler<TMeta> {
-  protected ws: WebSocket | null = null;
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = any,
+> extends BaseHandler {
+  protected ws: WebSocket;
 
   protected terminal: TerminalData | null = null;
 
@@ -48,8 +53,14 @@ export class EventHandler<
 
   protected readonly markerSize = 100;
 
+  shapes: EventShapes<TData, TrackingData>;
+
+  readonly __is_admin__ = false;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
+    this.shapes = new EventShapes<TData>();
+    this.ws = this.getWebSocketClient();
     this.init();
   }
 

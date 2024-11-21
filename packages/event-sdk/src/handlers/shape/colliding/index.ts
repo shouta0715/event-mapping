@@ -1,0 +1,68 @@
+/* eslint-disable prefer-const */
+import { Circle, Rectangle } from "@timohausmann/quadtree-ts";
+import { Shape } from "@event-mapping/event-sdk/handlers/shape";
+import { QuadtreeShape } from "@event-mapping/event-sdk/types";
+
+export const circleRectangleCollision = <T>(
+  circle: Circle<T>,
+  rect: QuadtreeShape,
+  isCenter: boolean
+): boolean => {
+  let { x: circleX, y: circleY, r } = circle;
+  let { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rect;
+
+  if (isCenter) {
+    rectX -= rectWidth / 2;
+    rectY -= rectHeight / 2;
+    circleX -= r;
+    circleY -= r;
+  }
+
+  const closestX = Math.max(rectX, Math.min(circleX, rectX + rectWidth));
+  const closestY = Math.max(rectY, Math.min(circleY, rectY + rectHeight));
+
+  const distanceX = circleX - closestX;
+  const distanceY = circleY - closestY;
+  const distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+  return distanceSquared <= r * r;
+};
+
+export const rectangleRectangleCollision = <T>(
+  rect1: Rectangle<T>,
+  rect2: QuadtreeShape,
+  isCenter: boolean
+): boolean => {
+  let { x: rect1X, y: rect1Y, width: rect1Width, height: rect1Height } = rect1;
+
+  let { x: rect2X, y: rect2Y, width: rect2Width, height: rect2Height } = rect2;
+
+  if (isCenter) {
+    rect1X -= rect1Width / 2;
+    rect1Y -= rect1Height / 2;
+    rect2X -= rect2Width / 2;
+    rect2Y -= rect2Height / 2;
+  }
+
+  return (
+    rect1X < rect2X + rect2Width &&
+    rect1X + rect1Width > rect2X &&
+    rect1Y < rect2Y + rect2Height &&
+    rect1Y + rect1Height > rect2Y
+  );
+};
+
+export function shapeIsColliding<T>(
+  this: Shape,
+  shape: Circle<T> | Rectangle<T>,
+  rect: QuadtreeShape
+): boolean {
+  if (shape instanceof Circle) {
+    return circleRectangleCollision(shape, rect, this.options.isCenter);
+  }
+  if (shape instanceof Rectangle) {
+    return rectangleRectangleCollision(shape, rect, this.options.isCenter);
+  }
+
+  return false;
+}

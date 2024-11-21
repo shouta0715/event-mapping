@@ -1,17 +1,25 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable new-cap */
 /* eslint-disable no-new */
 
-import { createEventClient } from "@event-mapping/event-sdk";
+import {
+  createEventClient,
+  ShapeMeta,
+  TTrackingData,
+} from "@event-mapping/event-sdk";
 import Matter from "matter-js";
 import p5 from "p5";
 import { env } from "@/env.js";
 
-type Meta = {
+interface Meta extends ShapeMeta {
   body: Matter.Body;
-  image: p5.Image;
-  velocity: p5.Vector;
-};
+  image: string;
+}
+
+interface TrackingMeta extends TTrackingData {
+  image: string;
+}
 
 const MAX_BALL_SIZE = 400;
 const MIN_BALL_SIZE = 300;
@@ -36,7 +44,7 @@ function sketch(pi: p5) {
   let runner: Matter.Runner;
   let walls: Matter.Body[] = [];
 
-  const e = createEventClient<Meta>(p, {
+  const e = createEventClient<Meta, TrackingMeta>(p, {
     apiUrl: env.VITE_API_URL,
     wsUrl: env.VITE_WS_URL,
     sourceId: env.VITE_SOURCE_ID,
@@ -81,8 +89,14 @@ function sketch(pi: p5) {
     walls = [top, right, left, bottom];
   };
 
-  const createCircle = (x: number, y: number) => {
-    const d = p.random() * (MAX_BALL_SIZE - MIN_BALL_SIZE) + MIN_BALL_SIZE;
+  const createCircle = (
+    x: number,
+    y: number,
+    velocity: p5.Vector,
+    size?: number
+  ) => {
+    const d =
+      size ?? p.random() * (MAX_BALL_SIZE - MIN_BALL_SIZE) + MIN_BALL_SIZE;
 
     const circle = Bodies.circle(x, y, d / 2, {
       restitution: 1.0,
@@ -91,6 +105,7 @@ function sketch(pi: p5) {
     });
 
     Composite.add(world, circle);
+    Matter.Body.setVelocity(circle, velocity);
 
     return { ...circle, d };
   };
@@ -109,6 +124,7 @@ function sketch(pi: p5) {
     renderWall(g.width, g.height);
 
     engine.gravity.y = 0;
+
     p.rectMode(p.CENTER);
     p.imageMode(p.CENTER);
   };
@@ -118,15 +134,29 @@ function sketch(pi: p5) {
     Engine.update(engine);
 
     for (const shape of e.shapes) {
-      if (shape.type !== "circle") continue;
+      shape.tracking();
+
+      shape.position.set(
+        shape.meta.body.position.x,
+        shape.meta.body.position.y
+      );
+
+      shape.velocity.set(
+        shape.meta.body.velocity.x,
+        shape.meta.body.velocity.y
+      );
+
+      const img = e.images.get(shape.meta.image);
+
+      if (!img) return;
 
       e.transform(() =>
         p.image(
-          shape.image,
-          shape.body.position.x,
-          shape.body.position.y,
-          shape.d,
-          shape.d
+          img,
+          shape.position.x,
+          shape.position.y,
+          shape.size.w,
+          shape.size.h
         )
       );
     }
@@ -146,23 +176,58 @@ function sketch(pi: p5) {
   };
 
   e.uploadedImage = (img) => {
-    const { d, ...circle } = createCircle(500, 500);
+    if (!e.__is_admin__) return;
+    const initialPosition = {
+      x: 500,
+      y: e.global.height - 300,
+    };
+    const velocity = p.createVector(p.random(-1, 10), p.random(-1, 10));
 
-    const velocity = p.createVector(p.random(-10, 10), p.random(-10, 10));
-    Matter.Body.setVelocity(circle, velocity);
+    const { d, ...circle } = createCircle(
+      initialPosition.x,
+      initialPosition.y,
+      velocity
+    );
 
-    e.shapes.add({
-      type: "circle",
-      position: p.createVector(200, 200),
-      velocity,
-      d,
-      image: img,
-      body: circle,
-    });
+    e.shapes.tracking(
+      {
+        position: p.createVector(circle.position.x, circle.position.y),
+        velocity,
+        size: { w: d, h: d },
+        meta: { image: img.id, body: circle },
+        shareData: { image: img.id },
+      },
+      { isCircle: true, isCenter: true }
+    );
   };
 
   e.updatedGlobal = (global) => {
     renderWall(global.width, global.height);
+  };
+
+  e.shapes.enter = (id, { meta, position, velocity, size }) => {
+    const { ...circle } = createCircle(
+      position.x,
+      position.y,
+      velocity,
+      size.w
+    );
+
+    e.shapes.add({
+      id,
+      position,
+      velocity,
+      size,
+      meta: {
+        body: circle,
+        image: meta.image,
+      },
+    });
+  };
+
+  e.shapes.exit = (id) => {
+    e.shapes.remove(id);
+    e.images.delete(id);
   };
 }
 

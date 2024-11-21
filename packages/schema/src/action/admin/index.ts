@@ -65,3 +65,36 @@ export const moveVertexActionSchema = z.object({
 });
 
 export type MoveVertexAction = z.infer<typeof moveVertexActionSchema>;
+
+export const enterShapeActionSchema = z.object({
+  action: z.literal("enterShape"),
+  data: z.object({
+    rectId: z.string(),
+    id: z.string(),
+    size: z.object({
+      w: z.number(),
+      h: z.number(),
+    }),
+    position: z.object({
+      x: z.number(),
+      y: z.number(),
+    }),
+    velocity: z.object({
+      x: z.number(),
+      y: z.number(),
+    }),
+    meta: z.record(z.any()),
+  }),
+});
+
+export type EnterShapeAction = z.infer<typeof enterShapeActionSchema>;
+
+export const leaveShapeActionSchema = z.object({
+  action: z.literal("leaveShape"),
+  data: z.object({
+    id: z.string(),
+    rectId: z.string(),
+  }),
+});
+
+export type LeaveShapeAction = z.infer<typeof leaveShapeActionSchema>;

@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-restricted-globals */
+import { EnterShapeAction, TerminalData } from "@event-mapping/schema";
+import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
@@ -8,27 +11,87 @@ import {
   adminTransformed,
 } from "@event-mapping/event-sdk/handlers/helper";
 import {
+  initializeQuadtree,
+  insertTerminal,
+  removeTerminal,
+} from "@event-mapping/event-sdk/handlers/quadtree";
+import { AdminShapes } from "@event-mapping/event-sdk/handlers/shapes/admin";
+import {
   EventClientOptions,
   EventClient,
+  QuadtreeShape,
+  TTData,
+  AdminComlinkHandlers,
+  TTrackingData,
+  TrackingShapeProps,
 } from "@event-mapping/event-sdk/types";
+import { p5VectorToObject } from "@event-mapping/event-sdk/utils";
 
 export class AdminHandler<
-  TMeta extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseHandler<TMeta> {
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = any,
+> extends BaseHandler {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
+
+  /**
+   * @description Quadtree handlers
+   */
+  protected readonly initializeQuadtree = initializeQuadtree.bind(this);
+
+  protected readonly insertTerminal = insertTerminal.bind(this);
+
+  protected readonly removeTerminal = removeTerminal.bind(this);
+
+  protected terminalRects: Map<string, Rectangle<TerminalData>> = new Map();
 
   readonly transform = adminTransform.bind(this);
 
   readonly transformed = adminTransformed.bind(this);
 
+  protected quadtree: Quadtree<QuadtreeShape> | null = null;
+
+  shapes: AdminShapes<TData, TrackingData>;
+
+  protected adminComlinkHandlers: AdminComlinkHandlers | null = null;
+
+  readonly __is_admin__ = true;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
+
+    this.shapes = new AdminShapes<TData, TrackingData>(
+      this.quadtree,
+      this.onEnter,
+      this.onLeave
+    );
     this.init();
   }
+
+  private onEnter = async (rectId: string, data: TrackingShapeProps<TData>) => {
+    if (!data.id) return;
+
+    const sendData: EnterShapeAction["data"] = {
+      rectId,
+      id: data.id,
+      size: data.size,
+      position: p5VectorToObject(data.position),
+      velocity: p5VectorToObject(data.velocity),
+      meta: data.shareData,
+    };
+
+    this.adminComlinkHandlers?.enterShape(rectId, sendData);
+  };
+
+  private onLeave = async (rectId: string, id: string) => {
+    this.adminComlinkHandlers?.leaveShape(rectId, id);
+  };
 
   private init() {
     const handlers = this.comlinkHandlers();
     Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
+    this.adminComlinkHandlers = Comlink.wrap(
+      Comlink.windowEndpoint(self.parent)
+    );
   }
 
   circle: EventClient["circle"] = (x, y, d) => {

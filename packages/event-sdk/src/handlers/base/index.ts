@@ -1,21 +1,16 @@
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 
-import { Shapes } from "@event-mapping/event-sdk/handlers/shapes";
 import {
   EventClient,
   EventClientOptions,
 } from "@event-mapping/event-sdk/types";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
 
-export abstract class BaseHandler<TMeta extends Record<string, unknown>>
-  implements EventClient<TMeta>
-{
+export abstract class BaseHandler implements EventClient {
   protected readonly isInIframe = window.self !== window.top;
 
   protected readonly p: p5;
-
-  shapes: Shapes<TMeta>;
 
   protected terminals: TerminalData[] = [];
 
@@ -27,16 +22,15 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
 
   initialized = false;
 
+  images: Map<string, p5.Image> = new Map();
+
   setup: (
     global: GlobalData,
     terminals: TerminalData[],
     terminal?: TerminalData
   ) => void = () => {};
 
-  uploadedImage: (
-    img: p5.Image,
-    { url, id }: { url: string; id: string }
-  ) => void = () => {};
+  uploadedImage: (data: { url: string; id: string }) => void = () => {};
 
   constructor(
     p: p5,
@@ -45,7 +39,6 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
     const { apiUrl, sourceId } = options;
     this.p = p;
     this.seed = 100;
-    this.shapes = new Shapes<TMeta>();
     this.global = { width: 0, height: 0 };
     this.p.randomSeed(this.seed);
     this.p.frameRate(30);
@@ -59,12 +52,6 @@ export abstract class BaseHandler<TMeta extends Record<string, unknown>>
 
   leave(id: string): void {
     this.terminals = this.terminals.filter((t) => t.id !== id);
-  }
-
-  initialize(terminals: TerminalData[], global: GlobalData): void {
-    this.terminals = terminals;
-    this.global = global;
-    if (this.isInIframe) this.initialized = true;
   }
 
   updatedGlobal: (global: GlobalData) => void = () => {};
