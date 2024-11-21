@@ -103,7 +103,7 @@ export const eventLeaveShapeSchema = z.object({
   action: z.literal("leaveShape"),
   data: z.object({
     id: z.string(),
-    meta: z.record(z.unknown()),
+    rectId: z.string(),
   }),
 });
 
