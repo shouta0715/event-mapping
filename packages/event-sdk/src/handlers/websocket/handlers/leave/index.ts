@@ -5,5 +5,5 @@ export function handleLeaveShapeAction(
   this: EventHandler,
   data: EventLeaveShape["data"]
 ) {
-  this.shapes.remove(data.id);
+  this.shapes.exit(data.id);
 }
