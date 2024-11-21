@@ -12,22 +12,48 @@ import {
 import { getShape } from "@event-mapping/event-sdk/handlers/shape/get-shape";
 import { qtIndex } from "@event-mapping/event-sdk/handlers/shape/qt";
 import { trackingShape } from "@event-mapping/event-sdk/handlers/shape/tracking";
-import { QuadtreeShape, TTData } from "@event-mapping/event-sdk/types";
 import {
+  QuadtreeShape,
+  TTData,
+  TTrackingData,
+} from "@event-mapping/event-sdk/types";
+import {
+  defaultTrackingShapeOptions,
   IShape,
   ShapeProps,
   ShapeSize,
+  TrackingShapeOptions,
+  TrackingShapeProps,
 } from "@event-mapping/event-sdk/types/shape";
 
-type ConstructorProps<TData extends TTData = any> = {
-  isAdmin: boolean;
-  data: ShapeProps<TData>;
-  onEnter?: (rectId: string, data: ShapeProps<TData>) => void;
-  onExit?: (rectId: string, id: string) => void;
-  qt?: Quadtree<QuadtreeShape> | null;
-};
+type ConstructorProps<
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = TTrackingData,
+  TIsTracking extends boolean = boolean,
+> = TIsTracking extends true
+  ? {
+      isTracking: true;
+      shape: ShapeProps<TData>;
+      onEnter: (
+        rectId: string,
+        shape: TrackingShapeProps<TData, TrackingData>
+      ) => void;
+      onExit: (rectId: string, shape_id: string) => void;
+      qt: Quadtree<QuadtreeShape> | null;
+      shareData?: TrackingData;
+      options: TrackingShapeOptions;
+    }
+  : {
+      isTracking: false;
+      shape: ShapeProps<TData>;
+    };
 
-export class Shape<TData extends TTData = any> implements IShape<TData> {
+export class Shape<
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = any,
+  TIsTracking extends boolean = boolean,
+> implements IShape<TData, TrackingData>
+{
   readonly id: string;
 
   readonly position: p5.Vector;
@@ -36,15 +62,20 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
 
   readonly size: ShapeSize;
 
-  readonly data: TData;
+  readonly shareData?: TrackingData;
 
-  readonly isAdmin: boolean;
+  readonly isTracking: boolean;
+
+  readonly meta: TData;
 
   readonly qt?: Quadtree<QuadtreeShape> | null;
 
-  protected readonly onEnter: (rectId: string, data: ShapeProps<TData>) => void;
+  protected readonly onEnter?: (
+    rectId: string,
+    shape: TrackingShapeProps<TData, TrackingData>
+  ) => void;
 
-  protected readonly onExit: (rectId: string, id: string) => void;
+  protected readonly onExit?: (rectId: string, id: string) => void;
 
   protected readonly shapeIsColliding = shapeIsColliding.bind(this);
 
@@ -54,21 +85,36 @@ export class Shape<TData extends TTData = any> implements IShape<TData> {
 
   protected collidingShapes: Set<string> = new Set();
 
+  protected readonly options: NonNullable<TrackingShapeOptions>;
+
   tracking = trackingShape.bind(this);
 
   getShape = getShape.bind(this);
 
   qtIndex = qtIndex.bind(this);
 
-  constructor({ isAdmin, data, onEnter, onExit, qt }: ConstructorProps<TData>) {
-    this.id = data.id || createId();
-    this.position = data.position;
-    this.velocity = data.velocity;
-    this.size = data.size;
-    this.data = data.data;
-    this.isAdmin = isAdmin;
-    this.qt = qt;
-    this.onEnter = onEnter ?? fallbackOnEnter;
-    this.onExit = onExit ?? fallbackOnExit;
+  constructor(props: ConstructorProps<TData, TrackingData, TIsTracking>) {
+    this.isTracking = props.isTracking;
+
+    if (props.isTracking) {
+      this.id = props.shape.id || createId();
+      this.position = props.shape.position;
+      this.velocity = props.shape.velocity;
+      this.size = props.shape.size;
+      this.meta = props.shape.meta;
+      this.options = props.options;
+
+      this.shareData = props.shareData;
+      this.qt = props.qt;
+      this.onEnter = props.onEnter ?? fallbackOnEnter;
+      this.onExit = props.onExit ?? fallbackOnExit;
+    } else {
+      this.id = props.shape.id || createId();
+      this.position = props.shape.position;
+      this.velocity = props.shape.velocity;
+      this.size = props.shape.size;
+      this.meta = props.shape.meta;
+      this.options = defaultTrackingShapeOptions;
+    }
   }
 }
