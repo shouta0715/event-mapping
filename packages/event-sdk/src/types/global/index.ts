@@ -3,8 +3,13 @@ export type GlobalData = {
   height: number;
 };
 
-export type CanSerialize = string | number | boolean | null | TTData | TTData[];
+export type CanSerialize = string | number | boolean | null;
 
 export type TTData = Record<string, unknown>;
 
 export type ShapeMeta = TTData;
+
+export type TTrackingData = Record<
+  string,
+  CanSerialize | Record<string, CanSerialize> | CanSerialize[]
+>;
