@@ -49,6 +49,8 @@ export class AdminHandler<
 
   protected adminComlinkHandlers: AdminComlinkHandlers | null = null;
 
+  readonly __is_admin__ = true;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
 

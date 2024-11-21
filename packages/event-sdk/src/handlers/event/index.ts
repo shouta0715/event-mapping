@@ -50,6 +50,8 @@ export class EventHandler<
 
   shapes: EventShapes<TData, TrackingData>;
 
+  readonly __is_admin__ = false;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.shapes = new EventShapes<TData>();
