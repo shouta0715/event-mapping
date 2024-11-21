@@ -2,9 +2,8 @@ import { Shape } from "@event-mapping/event-sdk/handlers/shape";
 
 export function trackingShape(this: Shape): void {
   if (!this.qt) return;
-  if (!this.isAdmin) return;
+  if (!this.isTracking) return;
 
-  // 現在の形状を定義
   const shape = this.getShape();
 
   const potentialCollisions = this.qt.retrieve(shape);
