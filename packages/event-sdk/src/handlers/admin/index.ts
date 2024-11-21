@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-restricted-globals */
 import { EnterShapeAction, TerminalData } from "@event-mapping/schema";
 import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
@@ -17,13 +18,16 @@ import {
   EventClient,
   QuadtreeShape,
   TTData,
-  ShapeProps,
   AdminComlinkHandlers,
+  TTrackingData,
+  TrackingShapeProps,
 } from "@event-mapping/event-sdk/types";
 import { p5VectorToObject } from "@event-mapping/event-sdk/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class AdminHandler<TData extends TTData = any> extends BaseHandler {
+export class AdminHandler<
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = any,
+> extends BaseHandler {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
 
   /**
@@ -41,14 +45,14 @@ export class AdminHandler<TData extends TTData = any> extends BaseHandler {
 
   protected quadtree: Quadtree<QuadtreeShape> | null = null;
 
-  shapes: AdminShapes<TData>;
+  shapes: AdminShapes<TData, TrackingData>;
 
   protected adminComlinkHandlers: AdminComlinkHandlers | null = null;
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
 
-    this.shapes = new AdminShapes<TData>(
+    this.shapes = new AdminShapes<TData, TrackingData>(
       this.quadtree,
       this.onEnter,
       this.onLeave
@@ -56,7 +60,7 @@ export class AdminHandler<TData extends TTData = any> extends BaseHandler {
     this.init();
   }
 
-  private onEnter = async (rectId: string, data: ShapeProps<TData>) => {
+  private onEnter = async (rectId: string, data: TrackingShapeProps<TData>) => {
     if (!data.id) return;
 
     const sendData: EnterShapeAction["data"] = {
@@ -65,7 +69,7 @@ export class AdminHandler<TData extends TTData = any> extends BaseHandler {
       size: data.size,
       position: p5VectorToObject(data.position),
       velocity: p5VectorToObject(data.velocity),
-      meta: data.data,
+      meta: data.shareData,
     };
 
     this.adminComlinkHandlers?.enterShape(rectId, sendData);

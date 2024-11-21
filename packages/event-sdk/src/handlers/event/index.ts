@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
@@ -12,10 +13,13 @@ import {
   EventClient,
   EventClientOptions,
   TTData,
+  TTrackingData,
 } from "@event-mapping/event-sdk/types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class EventHandler<TData extends TTData = any> extends BaseHandler {
+export class EventHandler<
+  TData extends TTData = any,
+  TrackingData extends TTrackingData = any,
+> extends BaseHandler {
   protected ws: WebSocket;
 
   protected terminal: TerminalData | null = null;
@@ -44,7 +48,7 @@ export class EventHandler<TData extends TTData = any> extends BaseHandler {
 
   protected readonly markerSize = 100;
 
-  shapes: EventShapes<TData>;
+  shapes: EventShapes<TData, TrackingData>;
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
