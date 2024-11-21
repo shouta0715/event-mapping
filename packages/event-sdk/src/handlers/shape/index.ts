@@ -87,11 +87,11 @@ export class Shape<
 
   protected readonly options: NonNullable<TrackingShapeOptions>;
 
-  tracking = trackingShape.bind(this);
+  readonly tracking = trackingShape.bind(this);
 
-  getShape = getShape.bind(this);
+  protected readonly getShape = getShape.bind(this);
 
-  qtIndex = qtIndex.bind(this);
+  readonly qtIndex = qtIndex.bind(this);
 
   constructor(props: ConstructorProps<TData, TrackingData, TIsTracking>) {
     this.isTracking = props.isTracking;
