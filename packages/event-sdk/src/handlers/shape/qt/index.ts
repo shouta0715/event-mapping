@@ -3,12 +3,12 @@ import { Circle, NodeGeometry, Rectangle } from "@timohausmann/quadtree-ts";
 import { Shape } from "@event-mapping/event-sdk/handlers/shape";
 
 export function qtIndex(this: Shape, node: NodeGeometry): number[] {
-  if ("d" in this.size) {
+  if (this.options?.isCircle) {
     return Circle.prototype.qtIndex.call(
       {
         x: this.position.x,
         y: this.position.y,
-        r: this.size.d,
+        r: this.size.w,
       },
       node
     );
