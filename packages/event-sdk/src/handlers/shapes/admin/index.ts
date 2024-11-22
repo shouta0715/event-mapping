@@ -82,6 +82,10 @@ export class AdminShapes<
 
   exit: (id: string) => void = () => {};
 
+  get(id: string): Shape<TData, TrackingData> | undefined {
+    return this._cache_items.get(id);
+  }
+
   has(id: string): boolean {
     return this._cache_items.has(id);
   }

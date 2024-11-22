@@ -12,10 +12,8 @@ export const circleRectangleCollision = <T>(
   let { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rect;
 
   if (isCenter) {
-    rectX -= rectWidth / 2;
-    rectY -= rectHeight / 2;
-    circleX -= r;
-    circleY -= r;
+    circleX += r / 2;
+    circleY += r / 2;
   }
 
   const closestX = Math.max(rectX, Math.min(circleX, rectX + rectWidth));
@@ -30,19 +28,11 @@ export const circleRectangleCollision = <T>(
 
 export const rectangleRectangleCollision = <T>(
   rect1: Rectangle<T>,
-  rect2: QuadtreeShape,
-  isCenter: boolean
+  rect2: QuadtreeShape
 ): boolean => {
   let { x: rect1X, y: rect1Y, width: rect1Width, height: rect1Height } = rect1;
 
   let { x: rect2X, y: rect2Y, width: rect2Width, height: rect2Height } = rect2;
-
-  if (isCenter) {
-    rect1X -= rect1Width / 2;
-    rect1Y -= rect1Height / 2;
-    rect2X -= rect2Width / 2;
-    rect2Y -= rect2Height / 2;
-  }
 
   return (
     rect1X < rect2X + rect2Width &&
@@ -61,7 +51,7 @@ export function shapeIsColliding<T>(
     return circleRectangleCollision(shape, rect, this.options.isCenter);
   }
   if (shape instanceof Rectangle) {
-    return rectangleRectangleCollision(shape, rect, this.options.isCenter);
+    return rectangleRectangleCollision(shape, rect);
   }
 
   return false;

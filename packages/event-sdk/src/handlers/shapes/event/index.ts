@@ -44,6 +44,10 @@ export class EventShapes<
     this._cache_items.clear();
   }
 
+  get(id: string): Shape<TData> | undefined {
+    return this._cache_items.get(id);
+  }
+
   enter: (id: string, data: EnterShapeProps<TrackingData>) => void = () => {};
 
   exit: (id: string) => void = () => {};

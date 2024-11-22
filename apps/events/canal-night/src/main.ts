@@ -90,6 +90,7 @@ function sketch(pi: p5) {
   };
 
   const createCircle = (
+    id: string,
     x: number,
     y: number,
     velocity: p5.Vector,
@@ -102,6 +103,7 @@ function sketch(pi: p5) {
       restitution: 1.0,
       friction: 0,
       frictionAir: 0,
+      label: id,
     });
 
     Composite.add(world, circle);
@@ -184,6 +186,7 @@ function sketch(pi: p5) {
     const velocity = p.createVector(p.random(-1, 10), p.random(-1, 10));
 
     const { d, ...circle } = createCircle(
+      data.id,
       initialPosition.x,
       initialPosition.y,
       velocity
@@ -207,6 +210,7 @@ function sketch(pi: p5) {
 
   e.shapes.enter = (id, { meta, position, velocity, size }) => {
     const { ...circle } = createCircle(
+      id,
       position.x,
       position.y,
       velocity,
@@ -226,6 +230,18 @@ function sketch(pi: p5) {
   };
 
   e.shapes.exit = (id) => {
+    const target = e.shapes.get(id);
+
+    if (!target) return;
+
+    const removeTarget = Matter.Composite.get(
+      world,
+      target.meta.body.id,
+      "body"
+    );
+
+    Matter.Composite.remove(world, removeTarget, true);
+
     e.shapes.remove(id);
     e.images.remove(id);
   };
