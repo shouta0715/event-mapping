@@ -175,8 +175,8 @@ function sketch(pi: p5) {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 
-  e.uploadedImage = (img) => {
-    if (!e.__is_admin__) return;
+  e.images.uploaded = (data) => {
+    if (!data.isAdmin) return;
     const initialPosition = {
       x: 500,
       y: e.global.height - 300,
@@ -194,8 +194,8 @@ function sketch(pi: p5) {
         position: p.createVector(circle.position.x, circle.position.y),
         velocity,
         size: { w: d, h: d },
-        meta: { image: img.id, body: circle },
-        shareData: { image: img.id },
+        meta: { image: data.id, body: circle },
+        shareData: { image: data.id },
       },
       { isCircle: true, isCenter: true }
     );
@@ -227,7 +227,7 @@ function sketch(pi: p5) {
 
   e.shapes.exit = (id) => {
     e.shapes.remove(id);
-    e.images.delete(id);
+    e.images.remove(id);
   };
 }
 

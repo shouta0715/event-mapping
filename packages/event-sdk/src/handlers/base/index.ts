@@ -22,15 +22,11 @@ export abstract class BaseHandler implements EventClient {
 
   initialized = false;
 
-  images: Map<string, p5.Image> = new Map();
-
   setup: (
     global: GlobalData,
     terminals: TerminalData[],
     terminal?: TerminalData
   ) => void = () => {};
-
-  uploadedImage: (data: { url: string; id: string }) => void = () => {};
 
   constructor(
     p: p5,

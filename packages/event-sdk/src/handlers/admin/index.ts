@@ -10,6 +10,7 @@ import {
   adminTransform,
   adminTransformed,
 } from "@event-mapping/event-sdk/handlers/helper";
+import { Images } from "@event-mapping/event-sdk/handlers/images";
 import {
   initializeQuadtree,
   insertTerminal,
@@ -56,6 +57,8 @@ export class AdminHandler<
 
   readonly __is_admin__ = true;
 
+  readonly images: Images;
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
 
@@ -64,6 +67,7 @@ export class AdminHandler<
       this.onEnter,
       this.onLeave
     );
+    this.images = new Images(p, true, this.baseImageUrl);
     this.init();
   }
 

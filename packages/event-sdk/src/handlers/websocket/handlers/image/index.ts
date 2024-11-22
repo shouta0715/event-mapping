@@ -6,16 +6,16 @@ export function handleUploadImageAction(
   data: EventUploadImage["data"]
 ) {
   const { timestamp, id } = data;
-  const img = this.p.loadImage(`${this.baseImageUrl}/${id}`);
 
   if (timestamp < Date.now()) return;
 
-  this.images.set(id, img);
+  this.images.set(id);
 
   setTimeout(() => {
-    this.uploadedImage({
+    this.images.uploaded({
       url: `${this.baseImageUrl}/${id}`,
       id,
+      isAdmin: false,
     });
   }, timestamp - Date.now());
 }
