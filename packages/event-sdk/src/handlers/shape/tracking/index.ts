@@ -22,6 +22,7 @@ export function trackingShape(this: Shape): void {
     } else {
       const shouldExit = this.collidingShapes.has(rectId);
       if (!shouldExit) continue;
+
       this.exitRectangle(rectId);
     }
   }
