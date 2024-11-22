@@ -8,6 +8,7 @@ import {
 } from "@event-mapping/event-sdk/handlers/helper";
 import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
+import { Images } from "@event-mapping/event-sdk/handlers/images";
 import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
@@ -55,11 +56,14 @@ export class EventHandler<
 
   shapes: EventShapes<TData, TrackingData>;
 
+  readonly images: Images;
+
   readonly __is_admin__ = false;
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
     this.shapes = new EventShapes<TData>();
+    this.images = new Images(p, false, this.baseImageUrl);
     this.ws = this.getWebSocketClient();
     this.init();
   }
