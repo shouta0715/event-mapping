@@ -1,4 +1,5 @@
 import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
+import { healthCheckHandler } from "@event-mapping/event-sdk/handlers/comlink/health-check";
 import { uploadedImageHandler } from "@event-mapping/event-sdk/handlers/comlink/image";
 import {
   mouseClickedHandler,
@@ -22,6 +23,7 @@ export function generateComlinkHandlers(this: AdminHandler): ComlinkHandlers {
     resize: resizeHandler.bind(this),
     join: joinHandler.bind(this),
     leave: leaveHandler.bind(this),
+    healthCheck: healthCheckHandler.bind(this),
     initialize: initializeHandler.bind(this),
     uploaded: uploadedImageHandler.bind(this),
     prompt: promptHandler.bind(this),
