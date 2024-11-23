@@ -6,6 +6,9 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
 } from "@event-mapping/ui/components/context-menu";
 import {
   Dialog,
@@ -15,7 +18,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@event-mapping/ui/components/dialog";
-import { ExternalLink, Lock, Move, RefreshCcw, Unlock } from "lucide-react";
+import {
+  ExternalLink,
+  Lock,
+  Move,
+  RefreshCcw,
+  SquareTerminal,
+  Unlock,
+} from "lucide-react";
 import React from "react";
 import { IframeNodeData } from "@/features/iframe/types";
 import { IframeForm } from "@/features/iframe-form/components";
@@ -27,6 +37,7 @@ type Props = {
   onSubmitForm: (data: SourceInsert) => void;
   keepAspectRatio: boolean;
   setKeepAspectRatio: (keepAspectRatio: boolean) => void;
+  handlePrompt: (target: "admin" | "all") => void;
 };
 
 export function IframeMenu({
@@ -35,6 +46,7 @@ export function IframeMenu({
   onSubmitForm,
   keepAspectRatio,
   setKeepAspectRatio,
+  handlePrompt,
 }: Props) {
   const {
     handleCenter,
@@ -65,6 +77,28 @@ export function IframeMenu({
           真ん中に移動する
           <ContextMenuShortcut>⌘+M</ContextMenuShortcut>
         </ContextMenuItem>
+        <ContextMenuSub>
+          <ContextMenuSubTrigger inset>
+            <SquareTerminal className="mr-2 size-4" />
+            プロンプトの実行
+          </ContextMenuSubTrigger>
+          <ContextMenuSubContent className="w-80">
+            <ContextMenuItem
+              className="cursor-pointer"
+              onClick={() => handlePrompt("admin")}
+            >
+              管理画面のプロンプトを実行する
+              <ContextMenuShortcut>⌘+P</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem
+              className="cursor-pointer"
+              onClick={() => handlePrompt("all")}
+            >
+              全端末のプロンプトを実行する
+              <ContextMenuShortcut>⇧+⌘+P</ContextMenuShortcut>
+            </ContextMenuItem>
+          </ContextMenuSubContent>
+        </ContextMenuSub>
         <ContextMenuItem className="cursor-pointer" onClick={handleOpenContent}>
           <ExternalLink className="mr-2 size-4 " />
           コンテンツを開く
@@ -72,6 +106,9 @@ export function IframeMenu({
         </ContextMenuItem>
 
         <ContextMenuSeparator />
+        <p className="px-2 py-1 text-sm text-muted-foreground">
+          コンテンツの変更設定
+        </p>
         <ContextMenuItem
           className="cursor-pointer"
           onClick={toggleKeepAspectRatio}
