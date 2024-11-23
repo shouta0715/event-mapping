@@ -6,6 +6,9 @@ import { handleUpdateGlobalAction } from "@event-mapping/event-sdk/handlers/webs
 import { handleUploadImageAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/image";
 import { handleInitializeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/initialize";
 import { handleLeaveShapeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/leave";
+import { handleMouseClickedAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/mouse/clicked";
+import { handleMousePressedAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/mouse/pressed";
+import { handleMouseReleasedAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/mouse/release";
 import { handlePromptAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/prompt";
 import { handleRestartAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/restart";
 import { handleUpdateAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/update";
@@ -46,6 +49,16 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "prompt":
       handlePromptAction.call(this, action.data);
+
+      break;
+    case "mousePressed":
+      handleMousePressedAction.call(this, action.data);
+      break;
+    case "mouseReleased":
+      handleMouseReleasedAction.call(this, action.data);
+      break;
+    case "mouseClicked":
+      handleMouseClickedAction.call(this, action.data);
       break;
     default:
       throw new Error(action satisfies never);
