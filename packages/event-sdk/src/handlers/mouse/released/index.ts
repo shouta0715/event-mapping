@@ -17,6 +17,7 @@ export function eventMouseReleased(this: EventHandler): void {
       data: { x, y },
     };
 
+    this.mouseReleased(message.data);
     this.sendMessage(message);
   };
 }

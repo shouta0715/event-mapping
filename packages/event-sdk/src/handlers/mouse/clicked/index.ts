@@ -1,8 +1,8 @@
-import { MousePressedAction } from "@event-mapping/schema";
+import { MouseClickedAction } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
-export function eventMousePressed(this: EventHandler): void {
-  this.p.mousePressed = () => {
+export function eventMouseClicked(this: EventHandler): void {
+  this.p.mouseClicked = () => {
     const { terminal } = this;
     if (!terminal) return;
 
@@ -12,12 +12,12 @@ export function eventMousePressed(this: EventHandler): void {
     const x = _x + terminal.startX;
     const y = _y + terminal.startY;
 
-    const message: MousePressedAction = {
-      action: "mousePressed",
+    const message: MouseClickedAction = {
+      action: "mouseClicked",
       data: { x, y },
     };
 
-    this.mousePressed(message.data);
+    this.mouseClicked(message.data);
     this.sendMessage(message);
   };
 }
