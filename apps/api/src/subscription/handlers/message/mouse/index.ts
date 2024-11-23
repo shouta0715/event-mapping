@@ -13,6 +13,7 @@ type MouseAction =
 
 function sendMouseMessage<T extends MouseAction>(
   this: Subscription,
+  ws: WebSocket,
   action: T["action"],
   data: T["data"]
 ) {
@@ -23,6 +24,7 @@ function sendMouseMessage<T extends MouseAction>(
   const sessions = this.sessions.keys();
 
   for (const session of sessions) {
+    if (session === ws) continue;
     sendMessage(session, {
       action,
       data,
@@ -37,23 +39,26 @@ function sendMouseMessage<T extends MouseAction>(
 
 function mousePressedHandler(
   this: Subscription,
+  ws: WebSocket,
   data: MousePressedAction["data"]
 ) {
-  sendMouseMessage.call(this, "mousePressed", data);
+  sendMouseMessage.call(this, ws, "mousePressed", data);
 }
 
 function mouseReleasedHandler(
   this: Subscription,
+  ws: WebSocket,
   data: MouseReleasedAction["data"]
 ) {
-  sendMouseMessage.call(this, "mouseReleased", data);
+  sendMouseMessage.call(this, ws, "mouseReleased", data);
 }
 
 function mouseClickedHandler(
   this: Subscription,
+  ws: WebSocket,
   data: MouseClickedAction["data"]
 ) {
-  sendMouseMessage.call(this, "mouseClicked", data);
+  sendMouseMessage.call(this, ws, "mouseClicked", data);
 }
 
 export function generateMouseMessageHandlers(this: Subscription) {

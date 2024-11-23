@@ -110,12 +110,12 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     this.adminMessageHandlers.leaveSessionHandler(ws);
   }
 
-  async webSocketMessage(_: WebSocket, message: string) {
+  async webSocketMessage(ws: WebSocket, message: string) {
     const parsed = parseActionMessage("admin", message);
 
     if (!parsed) return;
 
-    this.messageHandler(parsed);
+    this.messageHandler(parsed, ws);
   }
 
   fetch(req: Request) {
