@@ -6,6 +6,7 @@ import { handleUpdateGlobalAction } from "@event-mapping/event-sdk/handlers/webs
 import { handleUploadImageAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/image";
 import { handleInitializeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/initialize";
 import { handleLeaveShapeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/leave";
+import { handlePromptAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/prompt";
 import { handleRestartAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/restart";
 import { handleUpdateAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/update";
 import { handleMoveVertexAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/vertex";
@@ -42,6 +43,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "leaveShape":
       handleLeaveShapeAction.call(this, action.data);
+      break;
+    case "prompt":
+      handlePromptAction.call(this, action.data);
       break;
     default:
       throw new Error(action satisfies never);
