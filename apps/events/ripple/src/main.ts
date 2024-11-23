@@ -76,6 +76,12 @@ function sketch(pi: p5) {
       }
     });
 
+    e.getMouses().forEach((mouse) => {
+      p.stroke(255, 0, 0);
+      p.fill(0, 0, 0);
+      e.ellipse(mouse.x, mouse.y, 100, 100);
+    });
+
     p.textSize(32);
     p.fill(255);
     e.transform(() => p.text(`${e.mouseX}, ${e.mouseY}`, e.mouseX, e.mouseY));

@@ -7,4 +7,6 @@ export function handleMouseDraggedAction(
 ) {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
+  this.mouseDragged({ x: data.x, y: data.y });
 }

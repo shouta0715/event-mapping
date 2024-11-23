@@ -14,6 +14,7 @@ export function mouseClickedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseClicked(data);
 }
 
@@ -23,6 +24,7 @@ export function mousePressedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mousePressed(data);
 }
 
@@ -32,6 +34,7 @@ export function mouseReleasedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseReleased(data);
 }
 
@@ -41,6 +44,7 @@ export function mouseDoubleClickedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseDoubleClicked(data);
 }
 
@@ -50,6 +54,7 @@ export function mouseMovedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseMoved(data);
 }
 
@@ -59,5 +64,6 @@ export function mouseDraggedHandler(
 ): void {
   this.mouseX = data.x;
   this.mouseY = data.y;
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseDragged(data);
 }
