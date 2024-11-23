@@ -52,6 +52,8 @@ export abstract class BaseHandler implements EventClient {
 
   updatedGlobal: (global: GlobalData) => void = () => {};
 
+  prompt: () => void = () => {};
+
   abstract transform: (fn: () => void) => void;
 
   abstract circle: (x: number, y: number, d: number) => void;
