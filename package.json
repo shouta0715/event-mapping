@@ -10,6 +10,7 @@
     "dev:propeller": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/propeller'...",
     "dev:grid-text": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/grid-text'...",
     "dev:mouse-event": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/mouse-event'...",
+    "dev:edge-touch": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/edge-touch'...",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
