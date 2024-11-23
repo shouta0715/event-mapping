@@ -52,7 +52,6 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "prompt":
       handlePromptAction.call(this, action.data);
-
       break;
     case "mousePressed":
       handleMousePressedAction.call(this, action.data);
