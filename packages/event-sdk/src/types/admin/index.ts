@@ -6,6 +6,9 @@ import {
   PromptAction,
   TerminalData,
   UploadImageAction,
+  MouseDoubleClickedAction,
+  MouseMovedAction,
+  MouseDraggedAction,
 } from "@event-mapping/schema";
 import { Rectangle } from "@timohausmann/quadtree-ts";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
@@ -20,6 +23,9 @@ export type ComlinkHandlers = {
   mouseClicked: (data: MouseClickedAction["data"]) => void;
   mousePressed: (data: MousePressedAction["data"]) => void;
   mouseReleased: (data: MouseReleasedAction["data"]) => void;
+  mouseDoubleClicked: (data: MouseDoubleClickedAction["data"]) => void;
+  mouseMoved: (data: MouseMovedAction["data"]) => void;
+  mouseDragged: (data: MouseDraggedAction["data"]) => void;
 };
 
 export type AdminComlinkHandlers = {

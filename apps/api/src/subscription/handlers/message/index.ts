@@ -25,6 +25,15 @@ export function messageHandler(
     case "mouseClicked":
       this.mouseMessageHandlers.mouseClickedHandler(ws, action.data);
       break;
+    case "mouseDoubleClicked":
+      this.mouseMessageHandlers.mouseDoubleClickedHandler(ws, action.data);
+      break;
+    case "mouseMoved":
+      this.mouseMessageHandlers.mouseMovedHandler(ws, action.data);
+      break;
+    case "mouseDragged":
+      this.mouseMessageHandlers.mouseDraggedHandler(ws, action.data);
+      break;
     default:
       break;
   }

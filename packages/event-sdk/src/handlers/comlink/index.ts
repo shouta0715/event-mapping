@@ -4,6 +4,9 @@ import {
   mouseClickedHandler,
   mousePressedHandler,
   mouseReleasedHandler,
+  mouseDoubleClickedHandler,
+  mouseMovedHandler,
+  mouseDraggedHandler,
 } from "@event-mapping/event-sdk/handlers/comlink/mouse";
 import { promptHandler } from "@event-mapping/event-sdk/handlers/comlink/prompt";
 import { resizeHandler } from "@event-mapping/event-sdk/handlers/comlink/resize";
@@ -25,5 +28,8 @@ export function generateComlinkHandlers(this: AdminHandler): ComlinkHandlers {
     mouseClicked: mouseClickedHandler.bind(this),
     mousePressed: mousePressedHandler.bind(this),
     mouseReleased: mouseReleasedHandler.bind(this),
+    mouseDoubleClicked: mouseDoubleClickedHandler.bind(this),
+    mouseMoved: mouseMovedHandler.bind(this),
+    mouseDragged: mouseDraggedHandler.bind(this),
   };
 }

@@ -6,12 +6,16 @@ import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
-const ripples: {
+type Ripple = {
   x: number;
   y: number;
   radius: number;
   alpha: number;
-}[] = [];
+};
+
+const clickedRipples: Ripple[] = [];
+
+const doubleClickedRipples: Ripple[] = [];
 
 function sketch(pi: p5) {
   const p = pi;
@@ -30,21 +34,51 @@ function sketch(pi: p5) {
   p.draw = () => {
     p.background(0);
 
-    ripples.forEach((ripple, i) => {
-      const ri = ripples[i];
+    clickedRipples.forEach((ripple, i) => {
+      const ri = clickedRipples[i];
       if (!ri) return;
 
       p.stroke(77, 215, 227, ri.alpha);
       p.strokeWeight(4);
+      p.fill(0);
       e.ellipse(ri.x, ri.y, ri.radius * 10, ri.radius * 10);
 
       ri.radius += 1;
       ri.alpha -= 1;
 
       if (ri.alpha <= 0) {
-        ripples.splice(i, 1);
+        clickedRipples.splice(i, 1);
       }
     });
+
+    doubleClickedRipples.forEach((ripple, i) => {
+      const ri = doubleClickedRipples[i];
+      if (!ri) return;
+
+      p.stroke(255, 255, 0, ri.alpha);
+      p.strokeWeight(4);
+
+      e.quad(
+        ri.x,
+        ri.y,
+        ri.x + 100,
+        ri.y,
+        ri.x + 100,
+        ri.y + 100,
+        ri.x,
+        ri.y + 100
+      );
+
+      ri.alpha -= 5;
+
+      if (ri.alpha <= 0) {
+        doubleClickedRipples.splice(i, 1);
+      }
+    });
+
+    p.textSize(32);
+    p.fill(255);
+    e.transform(() => p.text(`${e.mouseX}, ${e.mouseY}`, e.mouseX, e.mouseY));
   };
 
   p.windowResized = () => {
@@ -52,7 +86,16 @@ function sketch(pi: p5) {
   };
 
   e.mousePressed = ({ x, y }) => {
-    ripples.push({
+    clickedRipples.push({
+      x,
+      y,
+      radius: 0,
+      alpha: 255,
+    });
+  };
+
+  e.mouseDoubleClicked = ({ x, y }) => {
+    doubleClickedRipples.push({
       x,
       y,
       radius: 0,

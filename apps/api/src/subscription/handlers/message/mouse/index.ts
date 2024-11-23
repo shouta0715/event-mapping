@@ -1,5 +1,8 @@
 import {
   MouseClickedAction,
+  MouseDoubleClickedAction,
+  MouseDraggedAction,
+  MouseMovedAction,
   MousePressedAction,
   MouseReleasedAction,
 } from "@event-mapping/schema";
@@ -9,7 +12,10 @@ import { sendMessage } from "@/utils";
 type MouseAction =
   | MousePressedAction
   | MouseReleasedAction
-  | MouseClickedAction;
+  | MouseClickedAction
+  | MouseDoubleClickedAction
+  | MouseMovedAction
+  | MouseDraggedAction;
 
 function sendMouseMessage<T extends MouseAction>(
   this: Subscription,
@@ -61,10 +67,37 @@ function mouseClickedHandler(
   sendMouseMessage.call(this, ws, "mouseClicked", data);
 }
 
+function mouseDoubleClickedHandler(
+  this: Subscription,
+  ws: WebSocket,
+  data: MouseDoubleClickedAction["data"]
+) {
+  sendMouseMessage.call(this, ws, "mouseDoubleClicked", data);
+}
+
+function mouseMovedHandler(
+  this: Subscription,
+  ws: WebSocket,
+  data: MouseMovedAction["data"]
+) {
+  sendMouseMessage.call(this, ws, "mouseMoved", data);
+}
+
+function mouseDraggedHandler(
+  this: Subscription,
+  ws: WebSocket,
+  data: MouseDraggedAction["data"]
+) {
+  sendMouseMessage.call(this, ws, "mouseDragged", data);
+}
+
 export function generateMouseMessageHandlers(this: Subscription) {
   return {
     mousePressedHandler: mousePressedHandler.bind(this),
     mouseReleasedHandler: mouseReleasedHandler.bind(this),
     mouseClickedHandler: mouseClickedHandler.bind(this),
+    mouseDoubleClickedHandler: mouseDoubleClickedHandler.bind(this),
+    mouseMovedHandler: mouseMovedHandler.bind(this),
+    mouseDraggedHandler: mouseDraggedHandler.bind(this),
   };
 }
