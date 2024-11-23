@@ -14,11 +14,13 @@ export function eventMouseReleased(this: EventHandler): void {
 
     const message: MouseReleasedAction = {
       action: "mouseReleased",
-      data: { x, y },
+      data: { id: terminal.id, x, y },
     };
 
     this.mouseX = x;
     this.mouseY = y;
+
+    this.mouses.set(terminal.id, { x, y });
 
     this.mouseReleased(message.data);
     this.sendMessage(message);

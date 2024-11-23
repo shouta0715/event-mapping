@@ -14,11 +14,13 @@ export function eventMousePressed(this: EventHandler): void {
 
     const message: MousePressedAction = {
       action: "mousePressed",
-      data: { x, y },
+      data: { id: terminal.id, x, y },
     };
 
     this.mouseX = x;
     this.mouseY = y;
+
+    this.mouses.set(terminal.id, { x, y });
 
     this.mousePressed(message.data);
     this.sendMessage(message);

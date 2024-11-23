@@ -63,6 +63,12 @@ export abstract class BaseHandler implements EventClient {
 
   mouseY: number = 0;
 
+  mouses: Map<string, { x: number; y: number }> = new Map();
+
+  getMouses(): { x: number; y: number }[] {
+    return Array.from(this.mouses.values());
+  }
+
   mousePressed: (props: { x: number; y: number }) => void = () => {};
 
   mouseReleased: (props: { x: number; y: number }) => void = () => {};

@@ -14,11 +14,13 @@ export function eventMouseDoubleClicked(this: EventHandler): void {
 
     const message: MouseDoubleClickedAction = {
       action: "mouseDoubleClicked",
-      data: { x, y },
+      data: { id: terminal.id, x, y },
     };
 
     this.mouseX = x;
     this.mouseY = y;
+
+    this.mouses.set(terminal.id, { x, y });
 
     this.mouseDoubleClicked(message.data);
     this.sendMessage(message);

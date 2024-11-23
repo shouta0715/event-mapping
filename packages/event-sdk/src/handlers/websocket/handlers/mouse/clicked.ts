@@ -7,6 +7,6 @@ export function handleMouseClickedAction(
 ) {
   this.mouseX = data.x;
   this.mouseY = data.y;
-
+  this.mouses.set(data.id, { x: data.x, y: data.y });
   this.mouseClicked({ x: data.x, y: data.y });
 }
