@@ -17,6 +17,7 @@ export type ComlinkHandlers = {
   resize: (width: number, height: number) => void;
   join: (terminal: TerminalData) => void;
   leave: (id: string) => void;
+  healthCheck: () => boolean;
   initialize: (terminals: TerminalData[], global: GlobalData) => void;
   uploaded: (data: UploadImageAction["data"]) => void;
   prompt: (data: PromptAction["data"]) => void;

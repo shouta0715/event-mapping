@@ -15,6 +15,7 @@ import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { IS_DEVELOPMENT } from "@/env";
+import { useHealthCheck } from "@/features/iframe/hooks/use-helth-check";
 import { usePrompt } from "@/features/iframe/hooks/use-prompt";
 import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
@@ -42,6 +43,7 @@ export function useComlink({ data }: UseComlinkProps) {
   const { mutateAsync, refreshKey, setRefreshKey } = useRestart(sourceId);
   const { mutateAsync: mutateAsyncUpdateIframeData } =
     useUpdateIframeData(false);
+  const { startHealthCheck, stopHealthCheck } = useHealthCheck();
 
   const handleRestart = async () => {
     const iframe = iframeRef.current;
@@ -130,7 +132,9 @@ export function useComlink({ data }: UseComlinkProps) {
       height: data.height ?? 0,
     };
     await comlinkRef.current.initialize(terminals, global);
-  }, [exposeHandlers, data.width, data.height, nodes]);
+
+    startHealthCheck(comlinkRef.current?.healthCheck);
+  }, [exposeHandlers, data.width, data.height, nodes, startHealthCheck]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -141,8 +145,9 @@ export function useComlink({ data }: UseComlinkProps) {
 
     return () => {
       iframe.src = "";
+      stopHealthCheck();
     };
-  }, [data.dev_url, data.url, refreshKey, isOpenModal]);
+  }, [data.dev_url, data.url, refreshKey, isOpenModal, stopHealthCheck]);
 
   const handleResized = async (width: number, height: number) => {
     if (!comlinkRef.current) return;
