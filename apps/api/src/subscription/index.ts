@@ -12,7 +12,11 @@ import {
   patchNodeHandler,
   patchSourceHandler,
 } from "@/subscription/handlers/api/patch";
-import { restartHandler } from "@/subscription/handlers/api/post";
+import {
+  eventPromptHandler,
+  promptHandler,
+  restartHandler,
+} from "@/subscription/handlers/api/post";
 import { saveAdmin } from "@/subscription/handlers/helper/save-admin";
 import { saveTerminal } from "@/subscription/handlers/helper/save-terminal";
 import { hibernationHandler } from "@/subscription/handlers/hibernation";
@@ -57,6 +61,10 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
   private readonly patchSourceHandler = patchSourceHandler.bind(this);
 
   private readonly restartHandler = restartHandler.bind(this);
+
+  private readonly promptHandler = promptHandler.bind(this);
+
+  private readonly eventPromptHandler = eventPromptHandler.bind(this);
 
   /**
    * 画像関連のHandlers
@@ -148,5 +156,13 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
 
   async getImage(id: string) {
     return this.getImageHandler(id);
+  }
+
+  async prompt(target: "all" | "admin" = "all", ms = 1000) {
+    return this.promptHandler(target, ms);
+  }
+
+  async eventPrompt(id: string, ms = 1000) {
+    return this.eventPromptHandler(id, ms);
   }
 }

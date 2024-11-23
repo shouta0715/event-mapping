@@ -25,6 +25,15 @@ app.use(
   })
 );
 
+app.use(
+  "/:id/prompt",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type"],
+  })
+);
+
 app.get("/:slug", async (c) => {
   const { slug } = c.req.param();
   const e = await c.var.db.query.sources.findFirst({
@@ -97,6 +106,26 @@ app.post(
     const time = await stub.restart(ms);
 
     return c.json({ time });
+  }
+);
+
+const promptTargetSchema = z.enum(["all", "admin"]).default("all");
+
+app.post(
+  "/:id/prompt",
+  zValidator("json", z.object({ timestamp: z.number() })),
+  async (c) => {
+    const { id } = c.req.param();
+    const { timestamp } = c.req.valid("json");
+
+    const target = promptTargetSchema.parse(c.req.query("target"));
+
+    const subscription = c.env.SUBSCRIPTION.idFromName(id);
+    const stub = c.env.SUBSCRIPTION.get(subscription);
+
+    await stub.prompt(target, timestamp);
+
+    return c.json({ message: "ok" });
   }
 );
 
