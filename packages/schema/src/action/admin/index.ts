@@ -98,3 +98,12 @@ export const leaveShapeActionSchema = z.object({
 });
 
 export type LeaveShapeAction = z.infer<typeof leaveShapeActionSchema>;
+
+export const promptActionSchema = z.object({
+  action: z.literal("prompt"),
+  data: z.object({
+    timestamp: z.number(),
+  }),
+});
+
+export type PromptAction = z.infer<typeof promptActionSchema>;

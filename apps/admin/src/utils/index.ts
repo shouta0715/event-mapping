@@ -26,3 +26,9 @@ export const calcScale = (original: Size, target: Size): number => {
 export const round = (value: number): number => {
   return Math.round(value);
 };
+
+export const wait = async (ms: number) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};

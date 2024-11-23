@@ -4,6 +4,7 @@ import {
   JoinAction,
   LeaveAction,
   MoveVertexAction,
+  PromptAction,
   UploadImageAction,
 } from "@event-mapping/schema";
 import Comlink from "comlink";
@@ -109,6 +110,13 @@ export const useWebSocketMessage = ({
     [updateNodeData, getNodeData]
   );
 
+  const promptHandler = useCallback(
+    (data: PromptAction["data"]) => {
+      comlink?.prompt(data);
+    },
+    [comlink]
+  );
+
   useEffect(() => {
     if (!lastJsonMessage) return;
     const { action } = lastJsonMessage;
@@ -133,6 +141,9 @@ export const useWebSocketMessage = ({
         break;
       case "leaveShape":
         break;
+      case "prompt":
+        promptHandler(lastJsonMessage.data);
+        break;
       default:
         throw new Error(action satisfies never);
     }
@@ -143,6 +154,7 @@ export const useWebSocketMessage = ({
     leaveHandler,
     uploadImageHandler,
     moveVertexHandler,
+    promptHandler,
   ]);
 
   return {

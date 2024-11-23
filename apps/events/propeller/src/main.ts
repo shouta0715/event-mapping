@@ -15,6 +15,8 @@ let angle = 0; // 初期の角度
 // 羽の数
 const bladeCount = 20;
 
+let direction = 1;
+
 let blades: {
   angle: number;
   color: p5.Color;
@@ -61,11 +63,15 @@ function sketch(pi: p5) {
       p.pop();
     }
 
-    angle += 0.02; // 角度を増やして回転を表現
+    angle += 0.2 * direction; // 角度を増やして回転を表現
   };
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
+
+  e.prompt = () => {
+    direction *= -1;
   };
 }
 

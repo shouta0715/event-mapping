@@ -1,5 +1,6 @@
 import {
   EnterShapeAction,
+  PromptAction,
   TerminalData,
   UploadImageAction,
 } from "@event-mapping/schema";
@@ -12,6 +13,7 @@ export type ComlinkHandlers = {
   leave: (id: string) => void;
   initialize: (terminals: TerminalData[], global: GlobalData) => void;
   uploaded: (data: UploadImageAction["data"]) => void;
+  prompt: (data: PromptAction["data"]) => void;
 };
 
 export type AdminComlinkHandlers = {

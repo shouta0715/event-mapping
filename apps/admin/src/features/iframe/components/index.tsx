@@ -109,6 +109,7 @@ export const IframeNode = memo(
       handleOnload,
       handleRestart,
       handleResize,
+      handlePrompt,
     } = useComlink({ data });
 
     const handleResizeEnd: OnResizeEnd = async (_, params) => {
@@ -182,6 +183,7 @@ export const IframeNode = memo(
           </div>
           <IframeMenu
             data={data}
+            handlePrompt={handlePrompt}
             keepAspectRatio={keepAspectRatio}
             onRestart={handleRestart}
             onSubmitForm={handleSubmitForm}

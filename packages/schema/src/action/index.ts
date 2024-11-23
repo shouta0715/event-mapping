@@ -7,6 +7,7 @@ import {
   leaveActionSchema,
   leaveShapeActionSchema,
   moveVertexActionSchema,
+  promptActionSchema,
   uploadImageActionSchema,
 } from "@event-mapping/schema/action/admin";
 import {
@@ -15,6 +16,7 @@ import {
   eventInitializeSchema,
   eventLeaveShapeSchema,
   eventMoveVertexSchema,
+  eventPromptSchema,
   eventRestartSchema,
   eventUpdateGlobalSchema,
   eventUpdateSchema,
@@ -34,6 +36,7 @@ export const adminActionSchema = z.union([
   moveVertexActionSchema,
   enterShapeActionSchema,
   leaveShapeActionSchema,
+  promptActionSchema,
 ]);
 
 export type AdminAction = z.infer<typeof adminActionSchema>;
@@ -49,6 +52,7 @@ export const eventActionSchema = z.union([
   eventDeleteSchema,
   eventEnterShapeSchema,
   eventLeaveShapeSchema,
+  eventPromptSchema,
 ]);
 
 export type EventAction = z.infer<typeof eventActionSchema>;

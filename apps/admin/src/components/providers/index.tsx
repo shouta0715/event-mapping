@@ -25,7 +25,14 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
-      <Toaster closeButton position="top-right" richColors />
+      <Toaster
+        closeButton
+        position="top-right"
+        richColors
+        toastOptions={{
+          duration: 1000,
+        }}
+      />
     </QueryClientProvider>
   );
 }

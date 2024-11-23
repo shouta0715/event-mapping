@@ -15,6 +15,7 @@ import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { IS_DEVELOPMENT } from "@/env";
+import { usePrompt } from "@/features/iframe/hooks/use-prompt";
 import { useRestart } from "@/features/iframe/hooks/use-restart";
 import { useWebSocketMessage } from "@/features/message/hooks";
 import { mappingModalAtom } from "@/global/modal";
@@ -171,6 +172,18 @@ export function useComlink({ data }: UseComlinkProps) {
     comlinkRef.current.resize(params.width, params.height);
   };
 
+  const { mutateAsync: mutateAsyncPrompt } = usePrompt(sourceId);
+
+  const handlePrompt = async (target: "admin" | "all") => {
+    const targetMessage = target === "admin" ? "管理画面の" : "全端末の";
+
+    toast.promise(mutateAsyncPrompt(target), {
+      loading: `${targetMessage}プロンプトを実行しています...`,
+      success: `${targetMessage}プロンプトを実行しました。`,
+      error: `${targetMessage}プロンプトを実行できませんでした。`,
+    });
+  };
+
   return {
     iframeRef,
     refreshKey,
@@ -178,5 +191,6 @@ export function useComlink({ data }: UseComlinkProps) {
     handleResize,
     handleOnload,
     handleRestart,
+    handlePrompt,
   };
 }

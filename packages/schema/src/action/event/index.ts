@@ -108,3 +108,12 @@ export const eventLeaveShapeSchema = z.object({
 });
 
 export type EventLeaveShape = z.infer<typeof eventLeaveShapeSchema>;
+
+export const eventPromptSchema = z.object({
+  action: z.literal("prompt"),
+  data: z.object({
+    timestamp: z.number(),
+  }),
+});
+
+export type EventPrompt = z.infer<typeof eventPromptSchema>;
