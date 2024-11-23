@@ -9,10 +9,12 @@ import {
 import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip-path";
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
 import { Images } from "@event-mapping/event-sdk/handlers/images";
+import { registerMouseHandlers } from "@event-mapping/event-sdk/handlers/mouse";
 import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
 import { handleEventAction } from "@event-mapping/event-sdk/handlers/websocket/handlers";
+import { sendMessage } from "@event-mapping/event-sdk/handlers/websocket/send";
 import {
   EventClient,
   EventClientOptions,
@@ -36,9 +38,13 @@ export class EventHandler<
 
   protected readonly handleEventAction = handleEventAction.bind(this);
 
+  protected readonly sendMessage = sendMessage.bind(this);
+
   protected readonly initializeMarker = initializeMarker.bind(this);
 
   protected readonly setCanvasClipPath = setCanvasClipPath.bind(this);
+
+  protected readonly registerMouseHandlers = registerMouseHandlers.bind(this);
 
   protected canvas: HTMLCanvasElement | null = null;
 
@@ -71,6 +77,7 @@ export class EventHandler<
   private init() {
     this.connectWebsocket();
     this.initializeMarker();
+    this.registerMouseHandlers();
     this.p.setup = () => {
       this._p5_setup_called = true;
     };

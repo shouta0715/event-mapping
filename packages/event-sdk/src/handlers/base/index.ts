@@ -54,6 +54,31 @@ export abstract class BaseHandler implements EventClient {
 
   prompt: () => void = () => {};
 
+  /**
+   * マウス関連のイベント
+   */
+  mouseIsPressed: boolean = false;
+
+  mouseX: number = 0;
+
+  mouseY: number = 0;
+
+  mousePressed: (props: { x: number; y: number }) => void = () => {};
+
+  mouseReleased: (props: { x: number; y: number }) => void = () => {};
+
+  mouseClicked: (props: { x: number; y: number }) => void = () => {};
+
+  mouseDoubleClicked: (props: { x: number; y: number }) => void = () => {};
+
+  mouseMoved: (props: { x: number; y: number }) => void = () => {};
+
+  mouseDragged: (props: { x: number; y: number }) => void = () => {};
+
+  /**
+   * 描画関連のメソッド
+   */
+
   abstract transform: (fn: () => void) => void;
 
   abstract circle: (x: number, y: number, d: number) => void;

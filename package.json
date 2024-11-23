@@ -9,6 +9,7 @@
     "dev:square": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/square'...",
     "dev:propeller": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/propeller'...",
     "dev:grid-text": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/grid-text'...",
+    "dev:ripple": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/ripple'...",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

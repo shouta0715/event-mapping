@@ -23,8 +23,10 @@ import { hibernationHandler } from "@/subscription/handlers/hibernation";
 
 import { getImageHandler } from "@/subscription/handlers/images/get";
 import { uploadImageHandler } from "@/subscription/handlers/images/upload";
+import { messageHandler } from "@/subscription/handlers/message";
 import { generateAdminMessageHandlers } from "@/subscription/handlers/message/admin";
 
+import { generateMouseMessageHandlers } from "@/subscription/handlers/message/mouse";
 import { registerHandler } from "@/subscription/handlers/register";
 
 const basePath = "/sources/:id/subscribe";
@@ -49,9 +51,15 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     typeof generateAdminMessageHandlers
   >;
 
+  protected readonly mouseMessageHandlers: ReturnType<
+    typeof generateMouseMessageHandlers
+  >;
+
   private readonly registerHandler = registerHandler.bind(this);
 
   private readonly hibernationHandler = hibernationHandler.bind(this);
+
+  private readonly messageHandler = messageHandler.bind(this);
 
   /**
    * API関連のHandlers
@@ -90,6 +98,7 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     this.storage = state.storage;
     this.hibernationHandler();
     this.adminMessageHandlers = generateAdminMessageHandlers.call(this);
+    this.mouseMessageHandlers = generateMouseMessageHandlers.call(this);
     this.registerHandler();
   }
 
@@ -101,21 +110,12 @@ export class Subscription extends DurableObject<Env["Bindings"]> {
     this.adminMessageHandlers.leaveSessionHandler(ws);
   }
 
-  async webSocketMessage(_: WebSocket, message: string) {
+  async webSocketMessage(ws: WebSocket, message: string) {
     const parsed = parseActionMessage("admin", message);
 
     if (!parsed) return;
-    if (parsed.action === "moveVertex") {
-      this.adminMessageHandlers.moveVertexHandler(parsed.data);
-    }
 
-    if (parsed.action === "enterShape") {
-      this.adminMessageHandlers.enterShapeHandler(parsed.data);
-    }
-
-    if (parsed.action === "leaveShape") {
-      this.adminMessageHandlers.leaveShapeHandler(parsed.data);
-    }
+    this.messageHandler(parsed, ws);
   }
 
   fetch(req: Request) {

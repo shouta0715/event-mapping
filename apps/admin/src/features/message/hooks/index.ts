@@ -3,9 +3,15 @@ import {
   InitializeAction,
   JoinAction,
   LeaveAction,
+  MouseClickedAction,
+  MousePressedAction,
+  MouseReleasedAction,
   MoveVertexAction,
   PromptAction,
   UploadImageAction,
+  MouseDoubleClickedAction,
+  MouseMovedAction,
+  MouseDraggedAction,
 } from "@event-mapping/schema";
 import Comlink from "comlink";
 import { useCallback, useEffect } from "react";
@@ -117,6 +123,48 @@ export const useWebSocketMessage = ({
     [comlink]
   );
 
+  const mouseClickedHandler = useCallback(
+    (data: MouseClickedAction["data"]) => {
+      comlink?.mouseClicked(data);
+    },
+    [comlink]
+  );
+
+  const mousePressedHandler = useCallback(
+    (data: MousePressedAction["data"]) => {
+      comlink?.mousePressed(data);
+    },
+    [comlink]
+  );
+
+  const mouseReleasedHandler = useCallback(
+    (data: MouseReleasedAction["data"]) => {
+      comlink?.mouseReleased(data);
+    },
+    [comlink]
+  );
+
+  const mouseDoubleClickedHandler = useCallback(
+    (data: MouseDoubleClickedAction["data"]) => {
+      comlink?.mouseDoubleClicked(data);
+    },
+    [comlink]
+  );
+
+  const mouseMovedHandler = useCallback(
+    (data: MouseMovedAction["data"]) => {
+      comlink?.mouseMoved(data);
+    },
+    [comlink]
+  );
+
+  const mouseDraggedHandler = useCallback(
+    (data: MouseDraggedAction["data"]) => {
+      comlink?.mouseDragged(data);
+    },
+    [comlink]
+  );
+
   useEffect(() => {
     if (!lastJsonMessage) return;
     const { action } = lastJsonMessage;
@@ -144,6 +192,24 @@ export const useWebSocketMessage = ({
       case "prompt":
         promptHandler(lastJsonMessage.data);
         break;
+      case "mouseClicked":
+        mouseClickedHandler(lastJsonMessage.data);
+        break;
+      case "mousePressed":
+        mousePressedHandler(lastJsonMessage.data);
+        break;
+      case "mouseReleased":
+        mouseReleasedHandler(lastJsonMessage.data);
+        break;
+      case "mouseDoubleClicked":
+        mouseDoubleClickedHandler(lastJsonMessage.data);
+        break;
+      case "mouseMoved":
+        mouseMovedHandler(lastJsonMessage.data);
+        break;
+      case "mouseDragged":
+        mouseDraggedHandler(lastJsonMessage.data);
+        break;
       default:
         throw new Error(action satisfies never);
     }
@@ -155,6 +221,12 @@ export const useWebSocketMessage = ({
     uploadImageHandler,
     moveVertexHandler,
     promptHandler,
+    mouseClickedHandler,
+    mousePressedHandler,
+    mouseReleasedHandler,
+    mouseDoubleClickedHandler,
+    mouseMovedHandler,
+    mouseDraggedHandler,
   ]);
 
   return {
