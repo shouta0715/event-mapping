@@ -34,10 +34,23 @@ export function initializeMarker(this: EventHandler) {
     pointerEvents: "none",
     position: "absolute",
     display: "none",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     border: "8px solid #94a3b8",
     borderRadius: "50%",
   });
   markerInner.appendChild(marker);
+
+  const markerCenter = document.createElement("div");
+  markerCenter.id = "marker-center";
+  Object.assign(markerCenter.style, {
+    width: "10px",
+    height: "10px",
+    backgroundColor: "#facc15",
+    borderRadius: "50%",
+  });
+  marker.appendChild(markerCenter);
 
   this.markerContainer = markerContainer;
   this.marker = marker;
