@@ -14,7 +14,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@event-mapping/ui/components/dialog";
-import { Lock, Pointer, TimerReset, Unlock } from "lucide-react";
+import {
+  Lock,
+  Pointer,
+  SquareTerminal,
+  TimerReset,
+  Unlock,
+} from "lucide-react";
 import dynamic from "next/dynamic";
 import React from "react";
 import { useTerminalMenu } from "@/features/terminal-menu/hooks";
@@ -46,7 +52,7 @@ export const TerminalMenu = ({
   open,
   setOpen,
 }: TerminalMenuProps) => {
-  const { handleResetSize } = useTerminalMenu({
+  const { handleResetSize, handlePrompt } = useTerminalMenu({
     data,
     id,
   });
@@ -57,6 +63,10 @@ export const TerminalMenu = ({
         <ContextMenuItem className="cursor-pointer" onClick={handleResetSize}>
           <TimerReset className="mr-2 size-4" />
           デフォルトのサイズに戻す
+        </ContextMenuItem>
+        <ContextMenuItem className="cursor-pointer" onClick={handlePrompt}>
+          <SquareTerminal className="mr-2 size-4" />
+          プロンプトを実行する
         </ContextMenuItem>
         <ContextMenuSeparator />
         <p className="px-2 py-1 text-sm text-muted-foreground">

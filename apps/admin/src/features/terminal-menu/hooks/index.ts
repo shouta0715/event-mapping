@@ -1,4 +1,6 @@
 import { TerminalData } from "@event-mapping/schema";
+import { useEventPrompt } from "@/features/terminal-menu/hooks/use-event-prompt";
+import { useSourceId } from "@/global/store/provider";
 import { useUpdateNodeData } from "@/hooks/node";
 
 type UseTerminalMenu = {
@@ -7,7 +9,10 @@ type UseTerminalMenu = {
 };
 
 export function useTerminalMenu({ data, id }: UseTerminalMenu) {
+  const sourceId = useSourceId();
+
   const { mutate } = useUpdateNodeData();
+  const { mutateAsync: mutateAsyncPrompt } = useEventPrompt(sourceId);
 
   const handleResetSize = () => {
     const w = data.windowWidth;
@@ -18,5 +23,9 @@ export function useTerminalMenu({ data, id }: UseTerminalMenu) {
     });
   };
 
-  return { handleResetSize };
+  const handlePrompt = () => {
+    mutateAsyncPrompt(id);
+  };
+
+  return { handleResetSize, handlePrompt, mutateAsyncPrompt };
 }
