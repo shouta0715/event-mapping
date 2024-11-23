@@ -49,9 +49,9 @@ app.post(
 
     const { timestamp } = c.req.valid("json");
 
-    await obj.eventPrompt(id, timestamp);
+    const time = await obj.eventPrompt(id, timestamp);
 
-    return c.json({ message: "ok" });
+    return c.json({ time });
   }
 );
 

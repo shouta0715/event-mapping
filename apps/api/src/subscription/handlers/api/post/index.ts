@@ -25,8 +25,8 @@ export async function promptHandler(
   this: Subscription,
   target: "all" | "admin" = "all",
   ms = 1000
-): Promise<void> {
-  if (!this.admin) return;
+): Promise<number> {
+  if (!this.admin) return 0;
 
   const timestamp = Date.now() + ms;
 
@@ -56,14 +56,16 @@ export async function promptHandler(
   promises.push(adminPromise());
 
   await Promise.all(promises);
+
+  return timestamp;
 }
 
 export async function eventPromptHandler(
   this: Subscription,
   id: string,
   ms = 1000
-): Promise<void> {
-  if (!this.admin) return;
+): Promise<number> {
+  if (!this.admin) return 0;
 
   const timestamp = Date.now() + ms;
 
@@ -73,7 +75,9 @@ export async function eventPromptHandler(
 
   const target = this.getWsFromId(id);
 
-  if (!target) return;
+  if (!target) return 0;
 
   sendMessage<EventPrompt>(target, { action: "prompt", data });
+
+  return timestamp;
 }

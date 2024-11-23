@@ -2,6 +2,7 @@ import { EventPrompt } from "@event-mapping/schema";
 import { useMutation } from "@tanstack/react-query";
 import { env } from "@/env";
 import { throwHttpErrorFromStatus } from "@/errors";
+import { wait } from "@/utils";
 
 const TIMESTAMP = 1000;
 
@@ -30,7 +31,11 @@ const onEventPrompt = async ({
     throwHttpErrorFromStatus(res.status);
   }
 
-  return res.json<{ time: number }>();
+  const { time } = await res.json<{ time: number }>();
+
+  const waitTime = time - Date.now();
+
+  await wait(waitTime);
 };
 
 export const useEventPrompt = (sourceId: string) => {

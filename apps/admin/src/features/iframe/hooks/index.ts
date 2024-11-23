@@ -175,7 +175,13 @@ export function useComlink({ data }: UseComlinkProps) {
   const { mutateAsync: mutateAsyncPrompt } = usePrompt(sourceId);
 
   const handlePrompt = async (target: "admin" | "all") => {
-    mutateAsyncPrompt(target);
+    const targetMessage = target === "admin" ? "管理画面の" : "全端末の";
+
+    toast.promise(mutateAsyncPrompt(target), {
+      loading: `${targetMessage}プロンプトを実行しています...`,
+      success: `${targetMessage}プロンプトを実行しました。`,
+      error: `${targetMessage}プロンプトを実行できませんでした。`,
+    });
   };
 
   return {

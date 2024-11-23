@@ -123,9 +123,9 @@ app.post(
     const subscription = c.env.SUBSCRIPTION.idFromName(id);
     const stub = c.env.SUBSCRIPTION.get(subscription);
 
-    await stub.prompt(target, timestamp);
+    const time = await stub.prompt(target, timestamp);
 
-    return c.json({ message: "ok" });
+    return c.json({ time });
   }
 );
 
