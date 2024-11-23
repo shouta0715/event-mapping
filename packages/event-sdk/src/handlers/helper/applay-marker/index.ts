@@ -58,7 +58,7 @@ export function applyMatrix3dToMarker(
   const position = getMarkerPosition(selectedIndex, this.markerSize);
   if (!position) return;
   const { top, left, right, bottom } = position;
-  this.marker.style.display = "block";
+  this.marker.style.display = "flex";
 
   this.marker.style.top = "";
   this.marker.style.left = "";
