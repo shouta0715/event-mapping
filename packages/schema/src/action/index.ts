@@ -11,6 +11,11 @@ import {
   uploadImageActionSchema,
 } from "@event-mapping/schema/action/admin";
 import {
+  mouseClickedActionSchema,
+  mousePressedActionSchema,
+  mouseReleasedActionSchema,
+} from "@event-mapping/schema/action/common";
+import {
   eventDeleteSchema,
   eventEnterShapeSchema,
   eventInitializeSchema,
@@ -25,6 +30,7 @@ import {
 } from "@event-mapping/schema/action/event";
 
 export * from "@event-mapping/schema/action/admin";
+export * from "@event-mapping/schema/action/common";
 export * from "@event-mapping/schema/action/event";
 
 export const adminActionSchema = z.union([
@@ -37,6 +43,10 @@ export const adminActionSchema = z.union([
   enterShapeActionSchema,
   leaveShapeActionSchema,
   promptActionSchema,
+  // mouse
+  mousePressedActionSchema,
+  mouseReleasedActionSchema,
+  mouseClickedActionSchema,
 ]);
 
 export type AdminAction = z.infer<typeof adminActionSchema>;
@@ -53,6 +63,10 @@ export const eventActionSchema = z.union([
   eventEnterShapeSchema,
   eventLeaveShapeSchema,
   eventPromptSchema,
+  // mouse
+  mousePressedActionSchema,
+  mouseReleasedActionSchema,
+  mouseClickedActionSchema,
 ]);
 
 export type EventAction = z.infer<typeof eventActionSchema>;
