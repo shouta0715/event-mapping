@@ -5,6 +5,8 @@ export function handleMousePressedAction(
   this: EventHandler,
   data: MousePressedAction["data"]
 ) {
+  this.mouseX = data.x;
+  this.mouseY = data.y;
   this.mouseIsPressed = true;
   this.mousePressed({ x: data.x, y: data.y });
 }

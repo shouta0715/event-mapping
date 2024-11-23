@@ -1,8 +1,8 @@
-import { MouseReleasedAction } from "@event-mapping/schema";
+import { MouseDoubleClickedAction } from "@event-mapping/schema";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 
-export function eventMouseReleased(this: EventHandler): void {
-  this.p.mouseReleased = () => {
+export function eventMouseDoubleClicked(this: EventHandler): void {
+  this.p.doubleClicked = () => {
     const { terminal } = this;
     if (!terminal) return;
 
@@ -12,15 +12,15 @@ export function eventMouseReleased(this: EventHandler): void {
     const x = _x + terminal.startX;
     const y = _y + terminal.startY;
 
-    const message: MouseReleasedAction = {
-      action: "mouseReleased",
+    const message: MouseDoubleClickedAction = {
+      action: "mouseDoubleClicked",
       data: { x, y },
     };
 
     this.mouseX = x;
     this.mouseY = y;
 
-    this.mouseReleased(message.data);
+    this.mouseDoubleClicked(message.data);
     this.sendMessage(message);
   };
 }

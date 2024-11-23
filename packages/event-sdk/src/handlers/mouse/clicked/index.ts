@@ -17,6 +17,9 @@ export function eventMouseClicked(this: EventHandler): void {
       data: { x, y },
     };
 
+    this.mouseX = x;
+    this.mouseY = y;
+
     this.mouseClicked(message.data);
     this.sendMessage(message);
   };
