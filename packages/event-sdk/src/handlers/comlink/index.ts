@@ -1,5 +1,10 @@
 import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 import { uploadedImageHandler } from "@event-mapping/event-sdk/handlers/comlink/image";
+import {
+  mouseClickedHandler,
+  mousePressedHandler,
+  mouseReleasedHandler,
+} from "@event-mapping/event-sdk/handlers/comlink/mouse";
 import { promptHandler } from "@event-mapping/event-sdk/handlers/comlink/prompt";
 import { resizeHandler } from "@event-mapping/event-sdk/handlers/comlink/resize";
 import {
@@ -17,5 +22,8 @@ export function generateComlinkHandlers(this: AdminHandler): ComlinkHandlers {
     initialize: initializeHandler.bind(this),
     uploaded: uploadedImageHandler.bind(this),
     prompt: promptHandler.bind(this),
+    mouseClicked: mouseClickedHandler.bind(this),
+    mousePressed: mousePressedHandler.bind(this),
+    mouseReleased: mouseReleasedHandler.bind(this),
   };
 }

@@ -1,5 +1,8 @@
 import {
   EnterShapeAction,
+  MouseClickedAction,
+  MousePressedAction,
+  MouseReleasedAction,
   PromptAction,
   TerminalData,
   UploadImageAction,
@@ -14,6 +17,9 @@ export type ComlinkHandlers = {
   initialize: (terminals: TerminalData[], global: GlobalData) => void;
   uploaded: (data: UploadImageAction["data"]) => void;
   prompt: (data: PromptAction["data"]) => void;
+  mouseClicked: (data: MouseClickedAction["data"]) => void;
+  mousePressed: (data: MousePressedAction["data"]) => void;
+  mouseReleased: (data: MouseReleasedAction["data"]) => void;
 };
 
 export type AdminComlinkHandlers = {
