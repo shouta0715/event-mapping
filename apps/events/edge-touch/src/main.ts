@@ -38,10 +38,10 @@ function sketch(pi: p5) {
       rectangles.push({
         x: 0,
         y: i * 200,
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 200,
         color: p.color(p.random(255), p.random(255), p.random(255)),
-        speed: p.random(1, 10),
+        speed: p.random(10, 30),
       });
     });
   };
