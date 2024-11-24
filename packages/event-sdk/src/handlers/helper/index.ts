@@ -64,7 +64,8 @@ type TransformedResult = {
 
 export function transformed(
   this: EventHandler,
-  { x, y }: { x: number; y: number }
+  x: number,
+  y: number
 ): TransformedResult {
   if (!this.terminal) return { x: 0, y: 0, scaleX: 1, scaleY: 1 };
 
@@ -84,7 +85,8 @@ export function transformed(
 
 export function adminTransformed(
   this: AdminHandler,
-  { x, y }: { x: number; y: number }
+  x: number,
+  y: number
 ): TransformedResult {
   const { width, height } = this.global;
 
