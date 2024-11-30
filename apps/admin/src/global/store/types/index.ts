@@ -1,12 +1,6 @@
 import { SourceInsert } from "@event-mapping/db";
 import { TerminalData } from "@event-mapping/schema";
-import {
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  Edge,
-  Node,
-} from "@xyflow/react";
+import { OnNodesChange, Edge, Node } from "@xyflow/react";
 
 import { TERMINAL_NODE_TYPE } from "@/constant/node";
 import { IframeNode } from "@/features/iframe/types";
@@ -57,29 +51,13 @@ export type FlowNodeActions = {
 };
 
 /**
- * @description: フローのエッジの状態
- */
-export type FlowEdgeState = {
-  edges: TerminalEdge[];
-};
-
-/**
- * @description: フローのエッジのアクション
- */
-export type FlowEdgeActions = {
-  onEdgesChange: OnEdgesChange<TerminalEdge>;
-  onConnect: OnConnect;
-  setEdges: (edges: TerminalEdge[]) => void;
-};
-
-/**
  * @description: フローの状態（ノードとエッジの状態）
  */
-export type FlowState = FlowNodeState & FlowEdgeState;
+export type FlowState = FlowNodeState;
 
 /**
- * @description: フローのアクション（ノードとエッジのアクション）
+ * @description: フローのアクション（ノードのアクション）
  */
-export type FlowActions = FlowNodeActions & FlowEdgeActions;
+export type FlowActions = FlowNodeActions;
 
 export type FlowGlobalState = FlowState & FlowActions;
