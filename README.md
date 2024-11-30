@@ -1,81 +1,60 @@
-# Turborepo starter
+# Webプロジェクションマッピング同期システム
 
-This is an official starter Turborepo.
+このプロジェクトは、Webプロジェクションマッピングとそれらを同期するシステムの開発を目的としています。p5.jsを使用してプロジェクションマッピングのコンテンツを作成し、Next.jsを使用した管理画面でそれらを管理します。同期サーバーは`apps/api`にあり、実際のコンテンツは`apps/events/`に配置されています。
 
-## Using this example
+## プロジェクト構成
 
-Run the following command:
+- **apps/admin**: Next.jsを使用した管理画面。ReactFlowを利用して、参加中の端末の位置を調節し、コンテンツの表示位置を管理します。
+- **apps/api**: 同期サーバー。複数の端末間でのデータ同期を担当します。
+- **apps/events**: p5.jsを使用して開発されたプロジェクションマッピングのコンテンツが含まれています。
+- **packages/event-sdk**: 複数の端末間での同期や連携を簡略化するためのSDK。
 
-```sh
-npx create-turbo@latest
-```
+## 機能
 
-## What's inside?
+- **プロジェクションマッピングの作成**: p5.jsを使用して、インタラクティブなコンテンツを作成します。
+- **管理画面での位置調整**: ReactFlowを使用して、参加中の端末の位置を調整し、コンテンツの表示位置を管理します。
+- **自動描画位置割り当て**: 管理画面で選択した位置に基づいて、event-sdkが自動的に描画位置を割り当てます。
+- **同期システム**: 複数の端末がつながっているインタラクティブなプロジェクションマッピングを簡単に構築できるようにします。
 
-This Turborepo includes the following packages/apps:
+## 開発環境のセットアップ
 
-### Apps and Packages
+1. **リポジトリをクローン**:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+2. **依存関係のインストール**:
 
-### Utilities
+   ```bash
+   pnpm install
+   ```
 
-This Turborepo has some additional tools already setup for you:
+3. **開発サーバーの起動**:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+   - 管理画面:
+     ```bash
+     pnpm dev:admin
+     ```
+   - 同期サーバー:
+     ```bash
+     pnpm dev:api
+     ```
+   - イベントコンテンツ:
+     ```bash
+     pnpm dev:propeller
+     # 他のイベントも同様に起動可能
+     ```
 
-### Build
+4. **ブラウザで確認**:
+   - 管理画面: [http://localhost:3000](http://localhost:3000)
+   - イベントコンテンツ: 各イベントのポートにアクセス
 
-To build all apps and packages, run the following command:
+## 使用技術
 
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- **p5.js**: プロジェクションマッピングのコンテンツ作成
+- **Next.js**: 管理画面の構築
+- **Turbopack**: ビルドと開発環境の高速化
+- **ReactFlow**: 管理画面での端末位置調整
+- **event-sdk**: 複数端末間の同期と連携
