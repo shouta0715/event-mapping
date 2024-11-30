@@ -6,15 +6,11 @@ import { useDeleteNode, useNodeHandler, useUpdateNodeData } from "@/hooks/node";
 import { assertTerminalNode } from "@/utils";
 
 export const useEventMapping = () => {
-  const { nodes, edges, onEdgesChange, onNodesChange } = useTerminalState(
-    (state) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-      onEdgesChange: state.onEdgesChange,
-      onNodesChange: state.onNodesChange,
-      updateNodeData: state.updateNodeData,
-    })
-  );
+  const { nodes, onNodesChange } = useTerminalState((state) => ({
+    nodes: state.nodes,
+    onNodesChange: state.onNodesChange,
+    updateNodeData: state.updateNodeData,
+  }));
 
   const { mutate } = useUpdateNodeData();
   const { mutateAsync: deleteNode } = useDeleteNode();
@@ -50,8 +46,6 @@ export const useEventMapping = () => {
 
   return {
     nodes,
-    edges,
-    onEdgesChange,
     onNodesChange,
     onNodeClick,
     onNodeDoubleClick,

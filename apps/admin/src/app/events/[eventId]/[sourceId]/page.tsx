@@ -29,7 +29,6 @@ export default async function Page({
     <TerminalStateProvider
       defaultState={{
         nodes: [iframeNode],
-        edges: [],
       }}
     >
       <SourceProvider sourceId={source.id}>

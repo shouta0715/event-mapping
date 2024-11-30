@@ -30,8 +30,6 @@ type Props = {
 function EventMapping({ event, source }: Props) {
   const {
     nodes,
-    edges,
-    onEdgesChange,
     onNodesChange,
     onNodeClick,
     onNodeDoubleClick,
@@ -43,12 +41,10 @@ function EventMapping({ event, source }: Props) {
   return (
     <div className="h-screen">
       <ReactFlow
-        edges={edges}
         fitView
         minZoom={Number.NEGATIVE_INFINITY}
         nodes={nodes}
         nodeTypes={nodeTypes}
-        onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         onNodeDragStop={onNodeDragStop}

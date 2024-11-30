@@ -15,7 +15,6 @@ const Context = React.createContext<ReturnCreateTerminalState | null>(null);
 
 const fallbackState: FlowState = {
   nodes: [],
-  edges: [],
 };
 
 export const TerminalStateProvider = ({
