@@ -21,8 +21,8 @@
 1. **リポジトリをクローン**:
 
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/shouta0715/event-mapping.git
+   cd event-mapping
    ```
 
 2. **依存関係のインストール**:
