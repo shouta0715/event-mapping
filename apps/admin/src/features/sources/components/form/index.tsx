@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+
 "use client";
 
 import { SourceInsert, sourceInsertSchema } from "@event-mapping/db";
@@ -14,57 +16,58 @@ import {
 import { Input } from "@event-mapping/ui/components/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { DefaultValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ToastError } from "@/components/error";
-import { createSource } from "@/features/sources/api";
 
 type SourceFormProps = {
   onClose: () => void;
   eventId: string;
+  defaultValues?: DefaultValues<SourceInsert>;
+  handleSubmit: ({
+    data,
+  }: {
+    data: SourceInsert;
+    eventId: string;
+  }) => Promise<unknown>;
+  messages: {
+    loading: string;
+    success: string;
+    error: string;
+    submit: string;
+  };
 };
 
-export function SourceForm({ onClose, eventId }: SourceFormProps) {
-  const router = useRouter();
+const fallbackDefaultValues: DefaultValues<SourceInsert> = {
+  name: "",
+  slug: "",
+  url: "",
+  dev_url: "",
+  width: 4000,
+  height: 4000,
+};
 
+export function SourceForm({
+  eventId,
+  defaultValues,
+  onClose,
+  handleSubmit,
+  messages,
+}: SourceFormProps) {
   const form = useForm<SourceInsert>({
     resolver: zodResolver(sourceInsertSchema),
     defaultValues: {
-      name: "",
-      slug: "",
-      url: "",
-      dev_url: "",
-      width: 1920,
-      height: 1080,
-    },
-  });
-
-  const { mutateAsync } = useMutation({
-    mutationFn: createSource,
-    onSuccess: () => {
-      router.refresh();
-      onClose();
+      ...fallbackDefaultValues,
+      ...defaultValues,
     },
   });
 
   const onSubmit = async (data: SourceInsert) => {
-    toast.promise(mutateAsync({ data, eventId }), {
-      loading: "作成中...",
-      success: () => {
-        return "イベントを作成しました。";
-      },
-      // eslint-disable-next-line react/no-unstable-nested-components
-      error: (error) => {
-        return (
-          <ToastError
-            error={error}
-            title="コンテンツを作成できませんでした。"
-          />
-        );
-      },
+    toast.promise(handleSubmit({ data, eventId }), {
+      loading: messages.loading,
+      success: messages.success,
+      error: (error) => <ToastError error={error} title={messages.error} />,
     });
   };
 
@@ -179,7 +182,7 @@ export function SourceForm({ onClose, eventId }: SourceFormProps) {
           <Button onClick={onClose} type="button" variant="outline">
             キャンセル
           </Button>
-          <Button type="submit">作成する</Button>
+          <Button type="submit">{messages.submit}</Button>
         </div>
       </form>
     </Form>
