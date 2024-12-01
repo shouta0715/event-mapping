@@ -11,10 +11,15 @@ import {
   DialogTrigger,
 } from "@event-mapping/ui/components/dialog";
 import { useMutation } from "@tanstack/react-query";
-import { EditIcon, PlusIcon } from "lucide-react";
+import { EditIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { createSource, updateSource } from "@/features/sources/api";
+import { toast } from "sonner";
+import {
+  createSource,
+  deleteSource,
+  updateSource,
+} from "@/features/sources/api";
 import { SourceForm } from "@/features/sources/components/form";
 
 type SourceFormDialogProps = {
@@ -115,6 +120,61 @@ export function SourceEditDialog({ defaultValues }: SourceEditDialogProps) {
           }}
           onClose={() => setOpen(false)}
         />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+type SourceDeleteDialogProps = {
+  sourceId: string;
+  name: string;
+};
+
+export function SourceDeleteDialog({
+  sourceId,
+  name,
+}: SourceDeleteDialogProps) {
+  const router = useRouter();
+
+  const [open, setOpen] = React.useState(false);
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteSource,
+    onSuccess: () => {
+      router.refresh();
+      toast.success("コンテンツを削除しました。");
+      setOpen(false);
+    },
+    onError: () => {
+      toast.error("コンテンツを削除できませんでした。");
+    },
+  });
+
+  return (
+    <Dialog onOpenChange={setOpen} open={open}>
+      <DialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <TrashIcon className="size-4" />
+          <span className="sr-only">コンテンツを削除</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="">
+        <DialogHeader>
+          <DialogTitle>コンテンツの削除</DialogTitle>
+          <DialogDescription>
+            <span className="mr-2 inline-block rounded-md bg-muted px-4 py-0.5 font-semibold text-destructive">
+              {name}
+            </span>
+            を削除します。この操作は取り消せません。
+          </DialogDescription>
+        </DialogHeader>
+        <div className="mt-10 flex justify-between">
+          <Button onClick={() => setOpen(false)} variant="outline">
+            キャンセル
+          </Button>
+          <Button onClick={() => mutateAsync(sourceId)} variant="destructive">
+            削除する
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

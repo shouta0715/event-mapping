@@ -56,3 +56,13 @@ export const updateSource = async ({
 
   return json;
 };
+
+export const deleteSource = async (sourceId: string) => {
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/sources/${sourceId}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throwHttpErrorFromStatus(res.status);
+
+  return res.json();
+};

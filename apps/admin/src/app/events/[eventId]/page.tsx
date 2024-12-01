@@ -1,5 +1,4 @@
-import { Button } from "@event-mapping/ui/components/button";
-import { ArrowLeft, TrashIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -7,6 +6,7 @@ import { Container } from "@/components/container";
 import { IconTooltip } from "@/components/icon-tooltip";
 import { getEvent } from "@/features/events/api";
 import {
+  SourceDeleteDialog,
   SourceEditDialog,
   SourceFormDialog,
 } from "@/features/sources/components/dialog";
@@ -70,9 +70,7 @@ export default async function Page({
                 </Link>
                 <div className="flex items-center gap-x-2">
                   <SourceEditDialog defaultValues={source} />
-                  <Button size="icon" variant="destructive">
-                    <TrashIcon className="size-4" />
-                  </Button>
+                  <SourceDeleteDialog name={source.name} sourceId={source.id} />
                 </div>
               </li>
             ))

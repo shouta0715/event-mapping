@@ -154,4 +154,12 @@ app.post("/:eventId", zValidator("json", sourceInsertSchema), async (c) => {
   }
 });
 
+app.delete("/:id", async (c) => {
+  const { id } = c.req.param();
+
+  await c.var.db.delete(sources).where(eq(sources.id, id));
+
+  return c.json({ message: "deleted" });
+});
+
 export { app as sourcesRouter };
