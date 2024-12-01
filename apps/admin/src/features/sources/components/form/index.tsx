@@ -44,8 +44,8 @@ const fallbackDefaultValues: DefaultValues<SourceInsert> = {
   slug: "",
   url: "",
   dev_url: "",
-  width: 1920,
-  height: 1080,
+  width: 4000,
+  height: 4000,
 };
 
 export function SourceForm({
