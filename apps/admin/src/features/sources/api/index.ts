@@ -34,3 +34,25 @@ export const createSource = async ({
 
   return json;
 };
+
+export const updateSource = async ({
+  data,
+  sourceId,
+}: {
+  data: SourceInsert;
+  sourceId: string;
+}) => {
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/sources/${sourceId}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) throwHttpErrorFromStatus(res.status);
+
+  const json = await res.json<Source>();
+
+  return json;
+};

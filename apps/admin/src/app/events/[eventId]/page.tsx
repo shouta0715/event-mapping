@@ -1,11 +1,15 @@
-import { ArrowLeft } from "lucide-react";
+import { Button } from "@event-mapping/ui/components/button";
+import { ArrowLeft, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 import { Container } from "@/components/container";
 import { IconTooltip } from "@/components/icon-tooltip";
 import { getEvent } from "@/features/events/api";
-import { SourceFormDialog } from "@/features/sources/components/dialog";
+import {
+  SourceEditDialog,
+  SourceFormDialog,
+} from "@/features/sources/components/dialog";
 import { SearchSources } from "@/features/sources/components/search";
 import { getQ } from "@/utils";
 
@@ -51,9 +55,12 @@ export default async function Page({
             </p>
           ) : (
             event.sources.map((source) => (
-              <li key={source.id}>
+              <li
+                key={source.id}
+                className="flex items-center gap-x-2 border-b py-4 font-bold transition-colors hover:border-b-primary"
+              >
                 <Link
-                  className="block w-full border-b py-4 font-bold transition-colors hover:border-b-primary hover:text-primary"
+                  className="block w-full flex-1 hover:text-primary"
                   href={`/events/${event.slug}/${source.slug}`}
                 >
                   <p className="mb-2">{source.name}</p>
@@ -61,6 +68,12 @@ export default async function Page({
                     {source.url}
                   </p>
                 </Link>
+                <div className="flex items-center gap-x-2">
+                  <SourceEditDialog defaultValues={source} />
+                  <Button size="icon" variant="destructive">
+                    <TrashIcon className="size-4" />
+                  </Button>
+                </div>
               </li>
             ))
           )}
