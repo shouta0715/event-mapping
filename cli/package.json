@@ -8,8 +8,6 @@
   "scripts": {
     "dev": "tsup src/index.ts --watch --format esm",
     "build": "tsup-node src/index.ts --format esm",
-    "lint": "eslint src",
-    "type-check": "tsc --noEmit",
     "new": "node dist/index.js"
   },
   "dependencies": {

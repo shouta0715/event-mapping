@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --port 3007 --host",
     "build": "vite build",
-    "lint": "eslint src",
     "preview": "vite preview"
   },
   "devDependencies": {
