@@ -6,7 +6,7 @@
     "cli": "./dist/index.js"
   },
   "scripts": {
-    "dev": "tsup src/index.ts --watch --dts --format esm",
+    "dev": "tsup src/index.ts --watch --format esm",
     "build": "tsup-node src/index.ts --format esm",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",

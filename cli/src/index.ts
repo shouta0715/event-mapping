@@ -60,14 +60,17 @@ async function main() {
     await fs.writeJSON(rootPackagePath, rootPackageData, { spaces: 2 });
 
     const line = chalk.yellow(
-      ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+      "================================================================"
     );
     console.log(line);
+    console.log("");
+    console.log(chalk.bold("Next steps:"));
+    console.log("");
+    console.log(`  ${chalk.bold("1.")} ${chalk.cyan("pnpm install")}`);
     console.log(
-      `✅ 「${folderName}」ディレクトリを作成し、ポート「${port}」を設定しました。`
+      `  ${chalk.bold("2.")} ${chalk.cyan(`pnpm run dev:${folderName}`)}`
     );
-    console.log(`pnpm install`);
-    console.log(`pnpm run dev:${folderName}`);
+    console.log("");
     console.log(line);
   } catch (error) {
     console.error("❌ エラーが発生しました:", error);
