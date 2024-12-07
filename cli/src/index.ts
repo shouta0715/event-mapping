@@ -13,6 +13,21 @@ async function main() {
 
   const answers = await inquirer.prompt([
     {
+      type: "list",
+      name: "lang",
+      message: "使用する言語を選択してください:",
+      choices: [
+        {
+          name: chalk.cyan("TypeScript"),
+          value: "ts",
+        },
+        {
+          name: chalk.yellow("JavaScript"),
+          value: "js",
+        },
+      ],
+    },
+    {
       type: "input",
       name: "folderName",
       message:
@@ -36,7 +51,8 @@ async function main() {
     const __dirname = path.dirname(__filename);
 
     const rootDir = path.join(__dirname, "../../");
-    const templateDir = path.join(rootDir, "template");
+    const lang = answers.lang;
+    const templateDir = path.join(rootDir, `template/${lang}`);
     const targetDir = path.join(rootDir, "apps/events", folderName);
 
     await fs.copy(templateDir, targetDir);
