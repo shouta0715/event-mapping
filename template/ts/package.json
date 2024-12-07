@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "@event-mapping/template-ts",
   "private": true,
   "version": "0.0.0",
   "type": "module",
