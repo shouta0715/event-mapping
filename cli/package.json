@@ -10,7 +10,7 @@
     "build": "tsup-node src/index.ts --format esm",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "new": "tsup-node src/index.ts"
+    "new": "node dist/index.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",
