@@ -30,6 +30,10 @@
       "cache": false,
       "persistent": true
     },
+    "new": {
+      "cache": false,
+      "persistent": true
+    },
     "admin#build": {
       "env": [
         "NEXT_PUBLIC_API_URL",
