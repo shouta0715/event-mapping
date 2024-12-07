@@ -86,15 +86,6 @@ async function main() {
     console.log(
       `  ${chalk.bold("2.")} ${chalk.cyan(`pnpm run dev:${folderName}`)}`
     );
-    console.log(
-      `  ${chalk.bold("3.")} ${chalk.cyan(`管理画面にアクセス後コンテンツを作成してください`)}`
-    );
-    console.log(
-      `  ${chalk.bold("3.")} ${chalk.cyan(`管理画面にアクセス後コンテンツを作成してください`)}`
-    );
-    console.log(
-      `apps/events/${folderName}/.env.localのVITE_SOURCE_IDに作成したコンテンツのIDを設定してください。`
-    );
     console.log(line);
   } catch (error) {
     console.error("❌ エラーが発生しました:", error);
