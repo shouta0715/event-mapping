@@ -7,10 +7,10 @@
   },
   "scripts": {
     "dev": "tsup src/index.ts --watch --dts --format esm",
-    "build": "tsup src/index.ts --format esm",
+    "build": "tsup-node src/index.ts --format esm",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "new": "node dist/index.js"
+    "new": "tsup-node src/index.ts"
   },
   "dependencies": {
     "chalk": "^5.3.0",

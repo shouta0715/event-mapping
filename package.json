@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "init:cli": "turbo build --filter='./cli'",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
