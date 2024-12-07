@@ -3,7 +3,15 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "init:cli": "turbo build --filter='./cli'",
     "dev": "turbo dev",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:apply": "turbo db:apply",
+    "db:generate": "turbo db:generate",
+    "db:studio": "turbo db:studio",
+    "new:event": "turbo run new",
     "dev:admin": "turbo dev --filter='./apps/admin'... --filter='./apps/api'...",
     "dev:canal-night": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/canal-night'... --filter='./apps/line/canal-night-liff-app'...",
     "dev:square": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/square'...",
@@ -11,13 +19,7 @@
     "dev:grid-text": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/grid-text'...",
     "dev:mouse-event": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/mouse-event'...",
     "dev:edge-touch": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/edge-touch'...",
-    "dev:pikachu": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/pikachu'...",
-    "lint": "turbo lint",
-    "type-check": "turbo type-check",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:apply": "turbo db:apply",
-    "db:generate": "turbo db:generate",
-    "db:studio": "turbo db:studio"
+    "dev:pikachu": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/pikachu'..."
   },
   "devDependencies": {
     "prettier": "^3.3.3",
