@@ -11,6 +11,7 @@
     "db:apply": "turbo db:apply",
     "db:generate": "turbo db:generate",
     "db:studio": "turbo db:studio",
+    "docs": "turbo dev --filter='./docs'",
     "new:event": "turbo run new",
     "dev:admin": "turbo dev --filter='./apps/admin'... --filter='./apps/api'...",
     "dev:canal-night": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/canal-night'... --filter='./apps/line/canal-night-liff-app'...",
