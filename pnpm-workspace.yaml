@@ -6,3 +6,4 @@ packages:
   - "packages/*"
   - "template/*"
   - "cli"
+  - "docs"
