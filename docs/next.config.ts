@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  basePath: "/event-mapping",
 };
 
 export default withNextra(nextConfig);
