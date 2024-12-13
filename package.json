@@ -23,6 +23,7 @@
     "dev:pikachu": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/pikachu'..."
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "turbo": "^2.1.1",

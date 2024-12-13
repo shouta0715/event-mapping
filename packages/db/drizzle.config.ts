@@ -5,10 +5,14 @@ const apiRoot = path.join("..", "..", "apps", "api");
 
 const migrationsDir = path.join(apiRoot, "src/db/migrations");
 
-const sqlPath = path.join(
-  apiRoot,
-  ".wrangler/state/v3/d1/miniflare-D1DatabaseObject/34d299c3ce1ac43b4463ff5104d1a6d7b80456f1c43f28146c90269b78c9d14d.sqlite"
-);
+// eslint-disable-next-line turbo/no-undeclared-env-vars
+const DB_PATH = process.env.LOCAL_DB_PATH;
+
+if (!DB_PATH) {
+  throw new Error("LOCAL_DB_PATH is not set");
+}
+
+const sqlPath = path.join(DB_PATH);
 
 export default defineConfig({
   schema: "./src/schema.ts",
