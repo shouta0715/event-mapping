@@ -18,16 +18,16 @@ pnpm install
 
 2. データベースのセットアップ
 
-- データベースの初期化
-
-```bash
-pnpm db:generate
-```
-
 - データベースのマイグレーションファイルを生成します。
 
 ```bash
 pnpm db:apply
+```
+
+- データベースの初期化
+
+```bash
+pnpm db:generate
 ```
 
 - seed データの投入
@@ -37,7 +37,7 @@ cd apps/api
 pnpm db:seed
 ```
 
-3. 管理画面の設定
+1. 管理画面の設定
 
 - 管理画面の環境変数の設定
 
