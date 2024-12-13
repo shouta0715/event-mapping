@@ -132,6 +132,7 @@ function sketch(pi: p5) {
   };
 
   p.draw = () => {
+    if (!world) return;
     p.background(0);
     Engine.update(engine);
 
