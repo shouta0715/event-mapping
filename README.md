@@ -1,75 +1,84 @@
 # Webプロジェクションマッピング同期システム
 
-このプロジェクトは、Webプロジェクションマッピングとそれらを同期するシステムの開発を目的としています。p5.jsを使用してプロジェクションマッピングのコンテンツを作成し、Next.jsを使用した管理画面でそれらを管理します。同期サーバーは`apps/api`にあり、実際のコンテンツは`apps/events/`に配置されています。
+## セットアップ
 
-## プロジェクト構成
-
-- **apps/admin**: Next.jsを使用した管理画面。ReactFlowを利用して、参加中の端末の位置を調節し、コンテンツの表示位置を管理します。
-- **apps/api**: 同期サーバー。複数の端末間でのデータ同期を担当します。
-- **apps/events**: p5.jsを使用して開発されたプロジェクションマッピングのコンテンツが含まれています。
-- **packages/event-sdk**: 複数の端末間での同期や連携を簡略化するためのSDK。
-
-## 機能
-
-- **プロジェクションマッピングの作成**: p5.jsを使用して、インタラクティブなコンテンツを作成します。
-- **管理画面での位置調整**: ReactFlowを使用して、参加中の端末の位置を調整し、コンテンツの表示位置を管理します。
-- **自動描画位置割り当て**: 管理画面で選択した位置に基づいて、event-sdkが自動的に描画位置を割り当てます。
-- **同期システム**: 複数の端末がつながっているインタラクティブなプロジェクションマッピングを簡単に構築できるようにします。
-
-## 開発環境のセットアップ
-
-1. **リポジトリをクローン**:
-
-   ```bash
-   git clone https://github.com/shouta0715/event-mapping.git
-   cd event-mapping
-   ```
-
-2. **依存関係のインストール**:
-
-   ```bash
-   pnpm install
-   ```
-
-3. **環境変数の設定**:
-
-   ```bash
-   cd apps/admin
-   cp .env.example .env.local
-   ```
-
-4. **開発サーバーの起動**:
-
-   - イベントコンテンツ:
-     ```bash
-     pnpm dev:propeller
-     # 他のイベントも同様に起動可能 同時に管理画面と同期サーバーも起動します。
-     ```
-
-5. **ブラウザで確認**:
-   - 管理画面: [http://localhost:3000](http://localhost:3000)
-   - イベントコンテンツ: 各イベントのポートにアクセス
-
-## 使用技術
-
-- **p5.js**: プロジェクションマッピングのコンテンツ作成
-- **Next.js**: 管理画面の構築
-- **Turbopack**: ビルドと開発環境の高速化
-- **ReactFlow**: 管理画面での端末位置調整
-- **event-sdk**: 複数端末間の同期と連携
-
-## イベントの追加
-
-イベントの追加は`cli`を使用して行います。
+- pnpm のインストールが必要です。インストール方法は以下のリンクを参照してください。
+  - https://pnpm.io/installation
 
 ```bash
-pnpm new:event
+git clone https://github.com/shouta0715/event-mapping
+cd event-mapping
 ```
 
-1. イベント名を入力
-2. イベントのポートを入力
-3. イベントのディレクトリが作成されます。
+1. 依存関係のインストール
 
-その後、管理画面からイベントを追加してください。
+```bash
+pnpm install
+```
 
-[参考動画](https://scrapbox.io/ogurilab/event-mapping_%E6%96%B0%E3%81%97%E3%81%84%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%81%AE%E8%BF%BD%E5%8A%A0%E6%96%B9%E6%B3%95)
+2. データベースのセットアップ
+
+- データベースの初期化
+
+```bash
+pnpm db:generate
+```
+
+- データベースのマイグレーションファイルを生成します。
+
+```bash
+pnpm db:apply
+```
+
+- seed データの投入
+
+```bash
+cd apps/api
+pnpm db:seed
+```
+
+3. 管理画面の設定
+
+- 管理画面の環境変数の設定
+
+```bash
+cd apps/admin
+cp .env.example .env.local
+```
+
+- パッケージのビルド
+  ルートから実行してください。
+
+```bash
+pnpm build:packages
+```
+
+- 管理画面の起動
+
+ルートから実行してください。
+
+```bash
+pnpm dev:propeller
+```
+
+- 管理画面にアクセス
+
+```bash
+http://localhost:3000
+```
+
+4. イベントの設定
+
+- `http://localhost:3000`にアクセスしてください。
+- サンプル -> プロペラを選択してください。
+- コンテンツIDをコピーしてください。
+- `apps/events/propeller`の`.env.local`のファイルを作成してください。
+  - ```bash
+    cd apps/events/propeller
+    cp .env.example .env.local
+    ```
+- コンテンツIDを`apps/events/propeller`の`.env.local`の`VITE_SOURCE_ID`に設定してください。
+- なにも表示されない場合は、再度`pnpm dev:propeller`を実行してください。
+
+その他のイベントも同様に行ってください。
+イベントの起動方法は`pnpm dev:{event-name}`で行ってください。
