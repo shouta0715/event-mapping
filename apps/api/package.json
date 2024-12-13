@@ -4,7 +4,8 @@
     "dev": "wrangler dev src/index.ts --port 8787",
     "deploy": "wrangler deploy --minify src/index.ts",
     "lint": "eslint src",
-    "db:apply": "wrangler d1 migrations apply event-mapping --local"
+    "db:apply": "wrangler d1 migrations apply event-mapping --local",
+    "db:seed": "wrangler d1 execute event-mapping --file ./src/db/seed.sql"
   },
   "dependencies": {
     "@event-mapping/schema": "workspace:*",
