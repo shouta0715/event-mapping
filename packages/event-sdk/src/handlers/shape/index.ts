@@ -90,6 +90,29 @@ export class Shape<
 
   protected collidingShape = collidingShape.bind(this);
 
+  /**
+   * トラッキングしている場合、現在の位置を変更します。
+   * クライアント側の位置情報は、管理画面と動悸されます。
+   *
+   * @param x - 現在の位置に設定または追加するx座標。
+   * @param y - 現在の位置に設定または追加するy座標。
+   * @param options - 移動のための設定オプション。
+   * @param options.operation - 実行する操作を決定します。位置を設定するには `"set"` を使用します。現在の位置に追加するには `"add"` を使用します。
+   */
+  move(
+    x: number,
+    y: number,
+    { operation = "add" }: { operation?: "set" | "add" } = {}
+  ) {
+    if (!this.isTracking) return;
+
+    if (operation === "set") {
+      this.position.set(x, y);
+    } else {
+      this.position.add(x, y);
+    }
+  }
+
   protected onColliding?: (
     rectId: string,
     shape: TrackingShapeProps<TData, TrackingData>
