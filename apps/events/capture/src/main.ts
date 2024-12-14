@@ -21,7 +21,7 @@ function sketch(pi: p5) {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
 
-    capture = p.createCapture("video", { flipped: true } as never);
+    capture = e.createCapture("video", { flipped: true } as never);
 
     capture.hide();
   };
