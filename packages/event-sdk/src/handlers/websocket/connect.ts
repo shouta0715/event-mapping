@@ -26,6 +26,8 @@ export function connectWebsocket(this: EventHandler) {
       this.ws.send("ping");
       isPinged = true;
     }, 1000);
+
+    this.wsIsconnected = true;
   };
 
   this.ws.onmessage = (event) => {
@@ -47,11 +49,15 @@ export function connectWebsocket(this: EventHandler) {
     if (pingInterval !== undefined) {
       clearInterval(pingInterval);
     }
+
+    this.wsIsconnected = false;
   };
 
   this.ws.onerror = () => {
     if (pingInterval !== undefined) {
       clearInterval(pingInterval);
     }
+
+    this.wsIsconnected = false;
   };
 }
