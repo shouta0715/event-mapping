@@ -65,9 +65,11 @@ export interface IShapes<
 export type TrackingShapeOptions = {
   isCenter: boolean;
   isCircle: boolean;
+  margin: number;
 };
 
 export const defaultTrackingShapeOptions: TrackingShapeOptions = {
   isCenter: false,
   isCircle: false,
+  margin: 0,
 };

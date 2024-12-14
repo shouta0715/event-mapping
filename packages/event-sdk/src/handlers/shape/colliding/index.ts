@@ -6,7 +6,8 @@ import { QuadtreeShape } from "@event-mapping/event-sdk/types";
 export const circleRectangleCollision = <T>(
   circle: Circle<T>,
   rect: QuadtreeShape,
-  isCenter: boolean
+  isCenter: boolean,
+  margin: number
 ): boolean => {
   let { x: circleX, y: circleY, r } = circle;
   let { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rect;
@@ -15,6 +16,9 @@ export const circleRectangleCollision = <T>(
     circleX += r / 2;
     circleY += r / 2;
   }
+
+  circleX -= margin;
+  circleY -= margin;
 
   const closestX = Math.max(rectX, Math.min(circleX, rectX + rectWidth));
   const closestY = Math.max(rectY, Math.min(circleY, rectY + rectHeight));
@@ -45,10 +49,11 @@ export const rectangleRectangleCollision = <T>(
 export function shapeIsColliding<T>(
   this: Shape,
   shape: Circle<T> | Rectangle<T>,
-  rect: QuadtreeShape
+  rect: QuadtreeShape,
+  margin: number
 ): boolean {
   if (shape instanceof Circle) {
-    return circleRectangleCollision(shape, rect, this.options.isCenter);
+    return circleRectangleCollision(shape, rect, this.options.isCenter, margin);
   }
   if (shape instanceof Rectangle) {
     return rectangleRectangleCollision(shape, rect);
