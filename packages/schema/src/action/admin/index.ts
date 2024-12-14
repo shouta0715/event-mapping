@@ -111,6 +111,7 @@ export type PromptAction = z.infer<typeof promptActionSchema>;
 export const moveShapeActionSchema = z.object({
   action: z.literal("moveShape"),
   data: z.object({
+    rectId: z.string(),
     id: z.string(),
     x: z.number(),
     y: z.number(),
