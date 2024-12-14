@@ -23,7 +23,9 @@ pnpm install
 ```bash
 pnpm db:apply
 ```
+
 w
+
 - データベースの初期化
 
 ```bash
@@ -35,16 +37,10 @@ pnpm db:generate
 ```bash
 cd apps/api
 pnpm db:seed
+cd ../..
 ```
 
 1. 管理画面の設定
-
-- 管理画面の環境変数の設定
-
-```bash
-cd apps/admin
-cp .env.example .env.local
-```
 
 - パッケージのビルド
   ルートから実行してください。
@@ -67,7 +63,7 @@ pnpm dev:propeller
 http://localhost:3000
 ```
 
-4. イベントの設定
+1. イベントの設定
 
 - `http://localhost:3000`にアクセスしてください。
 - サンプル -> プロペラを選択してください。
