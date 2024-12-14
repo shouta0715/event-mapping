@@ -1,7 +1,8 @@
+import RWS, { Options } from "reconnecting-websocket";
 import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 import { getSessionId } from "@event-mapping/event-sdk/utils";
 
-export function getWebsocketClient(this: EventHandler): WebSocket {
+export function getWebsocketClient(this: EventHandler): RWS {
   const session_id = getSessionId();
 
   const { wsUrl, sourceId } = this.options;
@@ -17,7 +18,14 @@ export function getWebsocketClient(this: EventHandler): WebSocket {
   url.searchParams.set("width", width.toString());
   url.searchParams.set("height", height.toString());
 
-  const ws = new WebSocket(url.toString());
+  const options: Options = {
+    connectionTimeout: 1000,
+    maxReconnectionDelay: 10000,
+    maxRetries: Infinity,
+    minReconnectionDelay: 1000,
+  };
+
+  const ws = new RWS(url.toString(), [], options);
 
   return ws;
 }
