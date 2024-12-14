@@ -34,6 +34,9 @@ export function messageHandler(
     case "mouseDragged":
       this.mouseMessageHandlers.mouseDraggedHandler(ws, action.data);
       break;
+    case "moveShape":
+      this.adminMessageHandlers.moveShapeHandler(action.data);
+      break;
     default:
       break;
   }

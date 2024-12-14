@@ -3,9 +3,11 @@ import {
   EventAction,
   EventEnterShape,
   EventLeaveShape,
+  EventMoveShape,
   EventMoveVertex,
   GlobalData,
   LeaveShapeAction,
+  MoveShapeAction,
   MoveVertexAction,
   TerminalData,
 } from "@event-mapping/schema";
@@ -163,6 +165,26 @@ function leaveShapeHandler(this: Subscription, data: LeaveShapeAction["data"]) {
   sendMessage(ws, eventData);
 }
 
+function moveShapeHandler(this: Subscription, data: MoveShapeAction["data"]) {
+  if (!this.admin) return;
+  const { id, x, y, meta } = data;
+
+  const ws = this.getWsFromId(id);
+  if (!ws) return;
+
+  const eventData: EventMoveShape = {
+    action: "moveShape",
+    data: {
+      id,
+      x,
+      y,
+      meta,
+    },
+  };
+
+  sendMessage(ws, eventData);
+}
+
 export function generateAdminMessageHandlers(this: Subscription) {
   return {
     joinSessionHandler: joinSessionHandler.bind(this),
@@ -171,5 +193,6 @@ export function generateAdminMessageHandlers(this: Subscription) {
     moveVertexHandler: moveVertexHandler.bind(this),
     enterShapeHandler: enterShapeHandler.bind(this),
     leaveShapeHandler: leaveShapeHandler.bind(this),
+    moveShapeHandler: moveShapeHandler.bind(this),
   };
 }
