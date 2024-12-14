@@ -6,6 +6,9 @@ export function handleEnterShapeAction(
   this: EventHandler,
   data: EventEnterShape["data"]
 ) {
+  const isAlreadyExist = this.shapes.get(data.id);
+  if (isAlreadyExist) return;
+
   const position = this.p.createVector(data.position.x, data.position.y);
   const velocity = this.p.createVector(data.velocity.x, data.velocity.y);
 

@@ -210,8 +210,6 @@ function sketch(pi: p5) {
   };
 
   e.shapes.enter = (id, { meta, position, velocity, size }) => {
-    const isAlreadyExist = e.shapes.get(id);
-    if (isAlreadyExist) return;
     const { ...circle } = createCircle(
       id,
       position.x,

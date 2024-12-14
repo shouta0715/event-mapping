@@ -5,5 +5,8 @@ export function handleLeaveShapeAction(
   this: EventHandler,
   data: EventLeaveShape["data"]
 ) {
+  const isAlreadyRemoved = this.shapes.get(data.id);
+  if (!isAlreadyRemoved) return;
+
   this.shapes.exit(data.id);
 }
