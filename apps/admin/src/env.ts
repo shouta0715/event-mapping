@@ -17,11 +17,11 @@ export const env = createEnv({
     /**
      * APIのエンドポイント
      */
-    NEXT_PUBLIC_API_URL: z.string().url().default("http://localhost:8787"),
+    NEXT_PUBLIC_API_URL: z.string().url(),
     /**
      * WebSocketのエンドポイント
      */
-    NEXT_PUBLIC_WS_URL: z.string().url().default("ws://localhost:8787"),
+    NEXT_PUBLIC_WS_URL: z.string().url(),
     /**
      * NODE_ENV
      */
