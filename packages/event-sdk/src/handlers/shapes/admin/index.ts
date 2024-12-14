@@ -60,6 +60,7 @@ export class AdminShapes<
       qt: this.qt,
       shareData: data.shareData,
       options: _options,
+      wsIsconnected: true,
     });
     this.items.push(shape);
     this._cache_items.set(id, shape);
@@ -69,6 +70,7 @@ export class AdminShapes<
     const shape = new Shape<TData, TrackingData>({
       isTracking: false,
       shape: data,
+      wsIsconnected: true,
     });
     this.items.push(shape);
     if (data.id) this._cache_items.set(data.id, shape);

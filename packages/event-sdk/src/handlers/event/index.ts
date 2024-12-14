@@ -29,6 +29,30 @@ export class EventHandler<
 > extends BaseHandler {
   protected ws: RWS;
 
+  private _wsIsconnected = false;
+
+  private wsStatusSubscribers = new Set<(value: boolean) => void>();
+
+  get wsIsconnected() {
+    return this._wsIsconnected;
+  }
+
+  set wsIsconnected(value: boolean) {
+    this._wsIsconnected = value;
+
+    for (const callback of this.wsStatusSubscribers) {
+      callback(value);
+    }
+  }
+
+  subscribeWsStatus(callback: (value: boolean) => void) {
+    this.wsStatusSubscribers.add(callback);
+  }
+
+  unsubscribeWsStatus(callback: (value: boolean) => void) {
+    this.wsStatusSubscribers.delete(callback);
+  }
+
   protected terminal: TerminalData | null = null;
 
   protected restartTime: number = 0;
@@ -69,8 +93,8 @@ export class EventHandler<
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
-    this.shapes = new EventShapes<TData>();
     this.images = new Images(p, false, this.baseImageUrl);
+    this.shapes = new EventShapes<TData, TrackingData>(this);
     this.ws = this.getWebSocketClient();
     this.init();
   }

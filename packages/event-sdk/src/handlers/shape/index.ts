@@ -47,10 +47,12 @@ type ConstructorProps<
       qt: Quadtree<QuadtreeShape> | null;
       shareData?: TrackingData;
       options: TrackingShapeOptions;
+      wsIsconnected: boolean;
     }
   : {
       isTracking: false;
       shape: ShapeProps<TData>;
+      wsIsconnected: boolean;
     };
 
 export class Shape<
@@ -74,6 +76,12 @@ export class Shape<
   readonly meta: TData;
 
   readonly qt?: Quadtree<QuadtreeShape> | null;
+
+  private wsIsconnected = false;
+
+  public setWsIsconnected(value: boolean) {
+    this.wsIsconnected = value;
+  }
 
   protected readonly onEnter?: (
     rectId: string,
@@ -104,7 +112,7 @@ export class Shape<
     y: number,
     { operation = "add" }: { operation?: "set" | "add" } = {}
   ) {
-    if (!this.isTracking) return;
+    if (!this.isTracking && this.wsIsconnected) return;
 
     if (operation === "set") {
       this.position.set(x, y);
@@ -130,6 +138,7 @@ export class Shape<
 
   constructor(props: ConstructorProps<TData, TrackingData, TIsTracking>) {
     this.isTracking = props.isTracking;
+    this.wsIsconnected = props.wsIsconnected;
 
     if (props.isTracking) {
       this.id = props.shape.id || createId();

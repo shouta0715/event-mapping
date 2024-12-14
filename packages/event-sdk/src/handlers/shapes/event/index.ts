@@ -1,3 +1,4 @@
+import { EventHandler } from "@event-mapping/event-sdk/handlers/event";
 import { Shape } from "@event-mapping/event-sdk/handlers/shape";
 import { TTData, TTrackingData } from "@event-mapping/event-sdk/types";
 import {
@@ -14,7 +15,20 @@ export class EventShapes<
 {
   items: Shape<TData>[] = [];
 
+  private wsIsconnected = false;
+
   private readonly _cache_items: Map<string, Shape<TData>> = new Map();
+
+  constructor(private readonly client: EventHandler) {
+    this.client.subscribeWsStatus(this.notifyWsStatusChange.bind(this));
+  }
+
+  private notifyWsStatusChange(value: boolean) {
+    this.wsIsconnected = value;
+    for (const shape of this.items) {
+      shape.setWsIsconnected(value);
+    }
+  }
 
   add(data: ShapeProps<TData>): void {
     if (!data.id) throw new Error("Shape id is required");
@@ -22,6 +36,7 @@ export class EventShapes<
     const shape = new Shape<TData>({
       isTracking: false,
       shape: data,
+      wsIsconnected: this.wsIsconnected,
     });
 
     this.items.push(shape);
