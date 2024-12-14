@@ -33,11 +33,16 @@ export class AdminShapes<
       rectId: string,
       shape: TrackingShapeProps<TData, TrackingData>
     ) => void,
-    private readonly onExit: (rectId: string, shape_id: string) => void
+    private readonly onExit: (rectId: string, shape_id: string) => void,
+    private readonly onColliding: (
+      rectId: string,
+      shape: TrackingShapeProps<TData, TrackingData>
+    ) => void
   ) {
     this.qt = qt;
     this.onEnter = onEnter;
     this.onExit = onExit;
+    this.onColliding = onColliding;
   }
 
   tracking(
@@ -51,6 +56,7 @@ export class AdminShapes<
       shape: { ...data, id },
       onEnter: this.onEnter,
       onExit: this.onExit,
+      onColliding: this.onColliding,
       qt: this.qt,
       shareData: data.shareData,
       options: _options,

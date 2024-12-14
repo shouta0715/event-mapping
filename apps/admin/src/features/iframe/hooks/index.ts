@@ -7,6 +7,7 @@ import {
 import {
   EnterShapeAction,
   LeaveShapeAction,
+  MoveShapeAction,
   TerminalData,
 } from "@event-mapping/schema";
 import { OnResize } from "@xyflow/react";
@@ -100,12 +101,25 @@ export function useComlink({ data }: UseComlinkProps) {
     [sendJsonMessage]
   );
 
+  const moveShapeHandler: AdminComlinkHandlers["moveShape"] = useCallback(
+    (rectId, { x, y, meta, id }) => {
+      if (!rectId) return;
+
+      sendJsonMessage<MoveShapeAction>({
+        action: "moveShape",
+        data: { rectId, id, x, y, meta },
+      });
+    },
+    [sendJsonMessage]
+  );
+
   const exposeHandlers = useCallback((): AdminComlinkHandlers => {
     return {
       enterShape: enterShapeHandler,
       leaveShape: leaveShapeHandler,
+      moveShape: moveShapeHandler,
     };
-  }, [enterShapeHandler, leaveShapeHandler]);
+  }, [enterShapeHandler, leaveShapeHandler, moveShapeHandler]);
 
   const handleOnload = useCallback(async () => {
     const iframe = iframeRef.current;

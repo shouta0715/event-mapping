@@ -117,3 +117,15 @@ export const eventPromptSchema = z.object({
 });
 
 export type EventPrompt = z.infer<typeof eventPromptSchema>;
+
+export const eventMoveShapeSchema = z.object({
+  action: z.literal("moveShape"),
+  data: z.object({
+    id: z.string(),
+    x: z.number(),
+    y: z.number(),
+    meta: z.record(z.any()),
+  }),
+});
+
+export type EventMoveShape = z.infer<typeof eventMoveShapeSchema>;
