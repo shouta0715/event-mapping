@@ -6,6 +6,7 @@ import {
   joinActionSchema,
   leaveActionSchema,
   leaveShapeActionSchema,
+  moveShapeActionSchema,
   moveVertexActionSchema,
   promptActionSchema,
   uploadImageActionSchema,
@@ -23,6 +24,7 @@ import {
   eventEnterShapeSchema,
   eventInitializeSchema,
   eventLeaveShapeSchema,
+  eventMoveShapeSchema,
   eventMoveVertexSchema,
   eventPromptSchema,
   eventRestartSchema,
@@ -46,6 +48,7 @@ export const adminActionSchema = z.union([
   enterShapeActionSchema,
   leaveShapeActionSchema,
   promptActionSchema,
+  moveShapeActionSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,
@@ -69,6 +72,7 @@ export const eventActionSchema = z.union([
   eventEnterShapeSchema,
   eventLeaveShapeSchema,
   eventPromptSchema,
+  eventMoveShapeSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,
