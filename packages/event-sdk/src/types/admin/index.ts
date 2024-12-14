@@ -9,6 +9,7 @@ import {
   MouseDoubleClickedAction,
   MouseMovedAction,
   MouseDraggedAction,
+  MoveShapeAction,
 } from "@event-mapping/schema";
 import { Rectangle } from "@timohausmann/quadtree-ts";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
@@ -32,6 +33,10 @@ export type ComlinkHandlers = {
 export type AdminComlinkHandlers = {
   enterShape: (rectId: string, shape: EnterShapeAction["data"]) => void;
   leaveShape: (rectId: string, id: string) => void;
+  moveShape: (
+    rectId: string,
+    data: Omit<MoveShapeAction["data"], "id">
+  ) => void;
 };
 
 export type QuadtreeShape = Rectangle<TerminalData>;
