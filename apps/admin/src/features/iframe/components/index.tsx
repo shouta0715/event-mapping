@@ -24,6 +24,7 @@ export const Iframe = memo(
     return (
       <iframe
         ref={ref}
+        allow="camera"
         sandbox="allow-scripts allow-same-origin"
         title={title}
         {...props}

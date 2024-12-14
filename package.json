@@ -22,7 +22,8 @@
     "dev:grid-text": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/grid-text'...",
     "dev:mouse-event": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/mouse-event'...",
     "dev:edge-touch": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/edge-touch'...",
-    "dev:pikachu": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/pikachu'..."
+    "dev:pikachu": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/pikachu'...",
+    "dev:capture": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/capture'..."
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
