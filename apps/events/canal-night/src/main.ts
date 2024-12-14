@@ -178,7 +178,8 @@ function sketch(pi: p5) {
       x: 500,
       y: e.global.height - 300,
     };
-    const velocity = p.createVector(p.random(-1, 10), p.random(-1, 10));
+
+    const velocity = p.createVector(p.random(0.01, 1), p.random(0.01, 1));
 
     const { d, ...circle } = createCircle(
       data.id,
@@ -239,6 +240,16 @@ function sketch(pi: p5) {
 
     e.shapes.remove(id);
     e.images.remove(id);
+  };
+
+  e.prompt = () => {
+    for (const body of Matter.Composite.allBodies(world)) {
+      const windForce = p.createVector(
+        p.random(-0.5, 0.5),
+        p.random(-0.5, 0.5)
+      );
+      Matter.Body.applyForce(body, body.position, windForce);
+    }
   };
 }
 
