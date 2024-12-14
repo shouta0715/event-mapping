@@ -3,6 +3,7 @@ import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import RWS from "reconnecting-websocket";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
+import { createCapture } from "@event-mapping/event-sdk/handlers/capture/events";
 import {
   transform,
   transformed,
@@ -70,6 +71,8 @@ export class EventHandler<
   protected readonly setCanvasClipPath = setCanvasClipPath.bind(this);
 
   protected readonly registerMouseHandlers = registerMouseHandlers.bind(this);
+
+  protected readonly _createCapture = createCapture.bind(this);
 
   protected canvas: HTMLCanvasElement | null = null;
 
@@ -151,5 +154,9 @@ export class EventHandler<
 
   triangle: EventClient["triangle"] = (x1, y1, x2, y2, x3, y3) => {
     this.transform(() => this.p.triangle(x1, y1, x2, y2, x3, y3));
+  };
+
+  capture: EventClient["capture"] = (type, options) => {
+    return this._createCapture(type, options);
   };
 }
