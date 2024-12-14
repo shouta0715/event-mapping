@@ -139,15 +139,9 @@ function sketch(pi: p5) {
     for (const shape of e.shapes) {
       shape.tracking();
 
-      shape.position.set(
-        shape.meta.body.position.x,
-        shape.meta.body.position.y
-      );
-
-      shape.velocity.set(
-        shape.meta.body.velocity.x,
-        shape.meta.body.velocity.y
-      );
+      shape.move(shape.meta.body.position.x, shape.meta.body.position.y, {
+        operation: "set",
+      });
 
       const img = e.images.get(shape.meta.image);
 
