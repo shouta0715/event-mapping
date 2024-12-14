@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
+import RWS from "reconnecting-websocket";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
 import {
   transform,
@@ -26,7 +27,7 @@ export class EventHandler<
   TData extends TTData = any,
   TrackingData extends TTrackingData = any,
 > extends BaseHandler {
-  protected ws: WebSocket;
+  protected ws: RWS;
 
   protected terminal: TerminalData | null = null;
 
