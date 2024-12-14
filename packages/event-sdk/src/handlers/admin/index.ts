@@ -9,6 +9,7 @@ import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
+import { createCapture } from "@event-mapping/event-sdk/handlers/capture/admin";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
 import {
   adminTransform,
@@ -52,6 +53,8 @@ export class AdminHandler<
   readonly transform = adminTransform.bind(this);
 
   readonly transformed = adminTransformed.bind(this);
+
+  protected readonly _createCapture = createCapture.bind(this);
 
   protected quadtree: Quadtree<QuadtreeShape> | null = null;
 
@@ -163,5 +166,9 @@ export class AdminHandler<
 
   triangle: EventClient["triangle"] = (x1, y1, x2, y2, x3, y3) => {
     this.transform(() => this.p.triangle(x1, y1, x2, y2, x3, y3));
+  };
+
+  capture: EventClient["capture"] = (type, options) => {
+    return this._createCapture(type, options);
   };
 }
