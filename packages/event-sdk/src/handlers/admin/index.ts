@@ -168,7 +168,7 @@ export class AdminHandler<
     this.transform(() => this.p.triangle(x1, y1, x2, y2, x3, y3));
   };
 
-  capture: EventClient["capture"] = (type, options) => {
+  createCapture: EventClient["createCapture"] = (type, options) => {
     return this._createCapture(type, options);
   };
 }
