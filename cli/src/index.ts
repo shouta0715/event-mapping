@@ -71,7 +71,7 @@ async function main() {
 
     rootPackageData.scripts = rootPackageData.scripts || {};
     rootPackageData.scripts[`dev:${folderName}`] =
-      `turbo dev --filter='./apps/admin' --filter='./apps/api' --filter='./apps/events/${folderName}'`;
+      `pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/${folderName}'...`;
 
     await fs.writeJSON(rootPackagePath, rootPackageData, { spaces: 2 });
 
