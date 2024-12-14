@@ -13,7 +13,7 @@ export function trackingShape(this: Shape): void {
     const rectId = terminalData?.id;
     if (!rectId) continue;
 
-    const isColliding = this.shapeIsColliding(shape, rect);
+    const isColliding = this.shapeIsColliding(shape, rect, this.options.margin);
 
     if (isColliding) {
       if (this.collidingShapes.has(rectId)) continue;
