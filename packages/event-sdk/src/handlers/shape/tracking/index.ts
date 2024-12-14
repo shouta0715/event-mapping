@@ -16,6 +16,7 @@ export function trackingShape(this: Shape): void {
     const isColliding = this.shapeIsColliding(shape, rect, this.options.margin);
 
     if (isColliding) {
+      this.collidingShape(rectId);
       if (this.collidingShapes.has(rectId)) continue;
 
       this.enterRectangle(rectId);

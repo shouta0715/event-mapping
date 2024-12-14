@@ -2,6 +2,7 @@
 import { createId } from "@paralleldrive/cuid2";
 import { Quadtree } from "@timohausmann/quadtree-ts";
 import p5 from "p5";
+import { collidingShape } from "@event-mapping/event-sdk/handlers/shape/actions/colliding";
 import { enterRectangle } from "@event-mapping/event-sdk/handlers/shape/actions/enter";
 import { exitRectangle } from "@event-mapping/event-sdk/handlers/shape/actions/exit";
 import { shapeIsColliding } from "@event-mapping/event-sdk/handlers/shape/colliding";
@@ -39,6 +40,10 @@ type ConstructorProps<
         shape: TrackingShapeProps<TData, TrackingData>
       ) => void;
       onExit: (rectId: string, shape_id: string) => void;
+      onColliding: (
+        rectId: string,
+        shape: TrackingShapeProps<TData, TrackingData>
+      ) => void;
       qt: Quadtree<QuadtreeShape> | null;
       shareData?: TrackingData;
       options: TrackingShapeOptions;
@@ -83,6 +88,13 @@ export class Shape<
 
   protected exitRectangle = exitRectangle.bind(this);
 
+  protected collidingShape = collidingShape.bind(this);
+
+  protected onColliding?: (
+    rectId: string,
+    shape: TrackingShapeProps<TData, TrackingData>
+  ) => void;
+
   protected collidingShapes: Set<string> = new Set();
 
   protected readonly options: NonNullable<TrackingShapeOptions>;
@@ -108,6 +120,7 @@ export class Shape<
       this.qt = props.qt;
       this.onEnter = props.onEnter ?? fallbackOnEnter;
       this.onExit = props.onExit ?? fallbackOnExit;
+      this.onColliding = props.onColliding;
     } else {
       this.id = props.shape.id || createId();
       this.position = props.shape.position;
