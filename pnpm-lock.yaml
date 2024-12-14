@@ -11,6 +11,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -4798,6 +4801,10 @@ packages:
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
   drizzle-kit@0.24.2:
@@ -12820,6 +12827,8 @@ snapshots:
       no-case: 2.3.2
 
   dotenv@16.0.3: {}
+
+  dotenv@16.4.7: {}
 
   drizzle-kit@0.24.2:
     dependencies:

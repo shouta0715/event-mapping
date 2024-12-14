@@ -1,7 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": ["NODE_ENV", "BASIC_AUTH_USERNAME", "BASIC_AUTH_PASSWORD"],
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

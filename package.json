@@ -2,6 +2,7 @@
   "name": "event-mapping",
   "private": true,
   "scripts": {
+    "with-env": "dotenv -e .env.local --",
     "build": "turbo build",
     "build:packages": "turbo build --filter='./packages/*'",
     "init:cli": "turbo build --filter='./cli'",
@@ -15,7 +16,7 @@
     "docs": "turbo dev --filter='./docs'",
     "new:event": "turbo run new",
     "dev:admin": "turbo dev --filter='./apps/admin'... --filter='./apps/api'...",
-    "dev:canal-night": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/canal-night'... --filter='./apps/line/canal-night-liff-app'...",
+    "dev:canal-night": "pnpm run with-env turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/canal-night'... --filter='./apps/line/canal-night-liff-app'...",
     "dev:square": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/square'...",
     "dev:propeller": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/propeller'...",
     "dev:grid-text": "turbo dev --filter='./apps/admin'... --filter='./apps/api'... --filter='./apps/events/grid-text'...",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "turbo": "^2.1.1",
