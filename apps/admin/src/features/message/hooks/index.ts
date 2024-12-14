@@ -189,6 +189,8 @@ export const useWebSocketMessage = ({
         break;
       case "leaveShape":
         break;
+      case "moveShape":
+        break;
       case "prompt":
         promptHandler(lastJsonMessage.data);
         break;
@@ -210,6 +212,7 @@ export const useWebSocketMessage = ({
       case "mouseDragged":
         mouseDraggedHandler(lastJsonMessage.data);
         break;
+
       default:
         throw new Error(action satisfies never);
     }
