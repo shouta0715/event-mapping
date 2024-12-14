@@ -102,12 +102,12 @@ export function useComlink({ data }: UseComlinkProps) {
   );
 
   const moveShapeHandler: AdminComlinkHandlers["moveShape"] = useCallback(
-    (rectId, { x, y, meta }) => {
+    (rectId, { x, y, meta, id }) => {
       if (!rectId) return;
 
       sendJsonMessage<MoveShapeAction>({
         action: "moveShape",
-        data: { id: rectId, x, y, meta },
+        data: { rectId, id, x, y, meta },
       });
     },
     [sendJsonMessage]

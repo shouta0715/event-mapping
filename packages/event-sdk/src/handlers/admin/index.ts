@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-restricted-globals */
-import { EnterShapeAction, TerminalData } from "@event-mapping/schema";
+import {
+  EnterShapeAction,
+  MoveShapeAction,
+  TerminalData,
+} from "@event-mapping/schema";
 import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
@@ -65,7 +69,8 @@ export class AdminHandler<
     this.shapes = new AdminShapes<TData, TrackingData>(
       this.quadtree,
       this.onEnter,
-      this.onLeave
+      this.onLeave,
+      this.onColliding
     );
     this.images = new Images(p, true, this.baseImageUrl);
     this.init();
@@ -88,6 +93,23 @@ export class AdminHandler<
 
   private onLeave = async (rectId: string, id: string) => {
     this.adminComlinkHandlers?.leaveShape(rectId, id);
+  };
+
+  private onColliding = async (
+    rectId: string,
+    shape: TrackingShapeProps<TData, TrackingData>
+  ) => {
+    if (!shape.id) return;
+
+    const data: MoveShapeAction["data"] = {
+      rectId,
+      id: shape.id,
+      x: shape.position.x,
+      y: shape.position.y,
+      meta: shape.shareData,
+    };
+
+    this.adminComlinkHandlers?.moveShape(rectId, data);
   };
 
   private init() {

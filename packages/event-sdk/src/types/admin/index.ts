@@ -33,10 +33,7 @@ export type ComlinkHandlers = {
 export type AdminComlinkHandlers = {
   enterShape: (rectId: string, shape: EnterShapeAction["data"]) => void;
   leaveShape: (rectId: string, id: string) => void;
-  moveShape: (
-    rectId: string,
-    data: Omit<MoveShapeAction["data"], "id">
-  ) => void;
+  moveShape: (rectId: string, data: MoveShapeAction["data"]) => void;
 };
 
 export type QuadtreeShape = Rectangle<TerminalData>;

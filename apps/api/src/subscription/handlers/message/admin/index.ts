@@ -167,9 +167,9 @@ function leaveShapeHandler(this: Subscription, data: LeaveShapeAction["data"]) {
 
 function moveShapeHandler(this: Subscription, data: MoveShapeAction["data"]) {
   if (!this.admin) return;
-  const { id, x, y, meta } = data;
+  const { id, x, y, meta, rectId } = data;
 
-  const ws = this.getWsFromId(id);
+  const ws = this.getWsFromId(rectId);
   if (!ws) return;
 
   const eventData: EventMoveShape = {
