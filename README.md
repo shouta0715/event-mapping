@@ -16,15 +16,22 @@ cd event-mapping
 pnpm install
 ```
 
-2. データベースのセットアップ
+2. 環境変数の設定
+
+```bash
+cp .env.example .env.local
+```
+
+`.env.local`内の`BASE_API_URL`と`BASE_WS_URL`を変更することにより、すべてのプロジェクトのURLが変更されます。
+cloudflare tunnelなどを利用する場合は、このファイルの`BASE_API_URL`と`BASE_WS_URL`を変更してください。
+
+3. データベースのセットアップ
 
 - データベースのマイグレーションファイルを生成します。（実行後 Enter押してY）
 
 ```bash
 pnpm db:apply
 ```
-
-w
 
 - データベースの初期化
 
@@ -40,7 +47,7 @@ pnpm db:seed
 cd ../..
 ```
 
-1. 管理画面の設定
+4. 管理画面の設定
 
 - パッケージのビルド
   ルートから実行してください。
@@ -63,7 +70,7 @@ pnpm dev:propeller
 http://localhost:3000
 ```
 
-1. イベントの設定
+5. イベントの設定
 
 - `http://localhost:3000`にアクセスしてください。
 - サンプル -> プロペラを選択してください。
