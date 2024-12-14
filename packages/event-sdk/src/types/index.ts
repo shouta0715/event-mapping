@@ -52,4 +52,5 @@ export interface EventClient {
     x3: number,
     y3: number
   ) => void;
+  capture: (type: "video" | "audio", options?: { flipped: boolean }) => void;
 }
