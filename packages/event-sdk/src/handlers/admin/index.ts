@@ -30,6 +30,7 @@ import {
   AdminComlinkHandlers,
   TTrackingData,
   TrackingShapeProps,
+  ComlinkHandlers,
 } from "@event-mapping/event-sdk/types";
 import { p5VectorToObject } from "@event-mapping/event-sdk/utils";
 
@@ -38,6 +39,8 @@ export class AdminHandler<
   TrackingData extends TTrackingData = any,
 > extends BaseHandler {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
+
+  private handlers: ComlinkHandlers | null = null;
 
   /**
    * @description Quadtree handlers
@@ -65,6 +68,12 @@ export class AdminHandler<
   readonly __is_admin__ = true;
 
   readonly images: Images;
+
+  private _capture: p5.MediaElement | null = null;
+
+  get capture() {
+    return this._capture;
+  }
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
@@ -116,8 +125,8 @@ export class AdminHandler<
   };
 
   private init() {
-    const handlers = this.comlinkHandlers();
-    Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
+    this.handlers = this.comlinkHandlers();
+    Comlink.expose(this.handlers, Comlink.windowEndpoint(self.parent));
     this.adminComlinkHandlers = Comlink.wrap(
       Comlink.windowEndpoint(self.parent)
     );
@@ -169,6 +178,18 @@ export class AdminHandler<
   };
 
   createCapture: EventClient["createCapture"] = (type, options) => {
-    return this._createCapture(type, options);
+    const { media, rtc } = this._createCapture(type, options);
+
+    if (rtc) {
+      if (!this.handlers) return media;
+
+      this.handlers.streamingAnswer = rtc.onAnswer.bind(rtc);
+    }
+
+    this._capture = media;
+
+    media.hide?.();
+
+    return this._capture;
   };
 }
