@@ -57,5 +57,6 @@ export interface EventClient {
   createCapture: (
     type: "video" | "audio",
     options?: { flipped: boolean }
-  ) => p5.MediaElement;
+  ) => p5.MediaElement | null;
+  capture: p5.MediaElement | null;
 }
