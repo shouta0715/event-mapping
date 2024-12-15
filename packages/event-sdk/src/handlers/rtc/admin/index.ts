@@ -19,8 +19,6 @@ export class AdminWebRTC {
 
   private stream: MediaStream;
 
-  private sessions: TerminalData[] = [];
-
   private connections: Map<string, RTCPeerConnection> = new Map();
 
   constructor(private readonly client: Constructor) {
@@ -29,7 +27,7 @@ export class AdminWebRTC {
 
     this.canvas = _canvas;
 
-    this.stream = this.canvas.captureStream(30);
+    this.stream = this.canvas.captureStream(60);
 
     this.init();
   }
@@ -38,18 +36,6 @@ export class AdminWebRTC {
     this.client.event.subscribe((sessions) =>
       this.registerStreamings(sessions)
     );
-  }
-
-  private tracks() {
-    this.stream.getTracks().forEach((track) => {
-      this.connections.forEach((connection) =>
-        this.addTrack(track, connection)
-      );
-    });
-  }
-
-  private addTrack(track: MediaStreamTrack, connection: RTCPeerConnection) {
-    connection.addTrack(track, this.stream);
   }
 
   private sendSignaling(id: string, data: RTCSessionDescriptionInit) {
@@ -70,24 +56,12 @@ export class AdminWebRTC {
     });
   }
 
-  private onCandidate() {
-    for (const [id, connection] of this.connections) {
-      connection.onicecandidate = (event) => {
-        if (!event.candidate) return;
-
-        this.sendCandidate(id, event.candidate);
-      };
-    }
-  }
-
   private async registerStreamings(sessions: TerminalData[]) {
     for (const connection of this.connections.values()) {
       connection.close();
     }
 
     this.connections.clear();
-
-    this.sessions = sessions;
 
     const promises = sessions.map((session) => this.setupConnection(session));
 

@@ -6,6 +6,8 @@ import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
+let isStreaming = false;
+
 function sketch(pi: p5) {
   const p = pi;
 
@@ -24,6 +26,7 @@ function sketch(pi: p5) {
   };
 
   p.draw = () => {
+    if (!isStreaming) return;
     if (!e.capture) return;
     const video = e.capture;
 
@@ -34,6 +37,10 @@ function sketch(pi: p5) {
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
+
+  e.prompt = () => {
+    isStreaming = !isStreaming;
   };
 }
 
