@@ -6,8 +6,6 @@ import { createEventClient } from "@event-mapping/event-sdk";
 import p5 from "p5";
 import { env } from "@/env.js";
 
-let capture: p5.Element;
-
 function sketch(pi: p5) {
   const p = pi;
 
@@ -21,14 +19,16 @@ function sketch(pi: p5) {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.noFill();
 
-    capture = e.createCapture("video", { flipped: true } as never);
-
-    capture.hide();
+    e.createCapture("video", { flipped: true } as never);
+    e.capture?.hide?.();
   };
 
   p.draw = () => {
+    if (!e.capture) return;
+    const video = e.capture;
+
     e.transform(() => {
-      p.image(capture, 0, 0, e.global.width, e.global.height);
+      p.image(video, 0, 0, e.global.width, e.global.height);
     });
   };
 
