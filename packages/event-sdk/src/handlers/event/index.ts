@@ -12,7 +12,9 @@ import { setCanvasClipPath } from "@event-mapping/event-sdk/handlers/helper/clip
 import { initializeMarker } from "@event-mapping/event-sdk/handlers/helper/initialize-marker";
 import { Images } from "@event-mapping/event-sdk/handlers/images";
 import { registerMouseHandlers } from "@event-mapping/event-sdk/handlers/mouse";
+import { EventWebRTC } from "@event-mapping/event-sdk/handlers/rtc/events";
 import { EventShapes } from "@event-mapping/event-sdk/handlers/shapes/event";
+import { trackStream } from "@event-mapping/event-sdk/handlers/stream";
 import { getWebsocketClient } from "@event-mapping/event-sdk/handlers/websocket";
 import { connectWebsocket } from "@event-mapping/event-sdk/handlers/websocket/connect";
 import { handleEventAction } from "@event-mapping/event-sdk/handlers/websocket/handlers";
@@ -74,6 +76,10 @@ export class EventHandler<
 
   protected readonly _createCapture = createCapture.bind(this);
 
+  protected readonly trackStream = trackStream.bind(this);
+
+  protected rtc: EventWebRTC | null = null;
+
   protected canvas: HTMLCanvasElement | null = null;
 
   readonly transform = transform.bind(this);
@@ -93,6 +99,12 @@ export class EventHandler<
   readonly images: Images;
 
   readonly __is_admin__ = false;
+
+  protected _capture: p5.MediaElement | null = null;
+
+  get capture() {
+    return this._capture;
+  }
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
@@ -156,7 +168,11 @@ export class EventHandler<
     this.transform(() => this.p.triangle(x1, y1, x2, y2, x3, y3));
   };
 
-  createCapture: EventClient["createCapture"] = (type, options) => {
-    return this._createCapture(type, options);
+  createCapture: EventClient["createCapture"] = () => {
+    this.rtc = this._createCapture(this.trackStream);
+
+    this._capture?.hide?.();
+
+    return this._capture;
   };
 }
