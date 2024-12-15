@@ -1,0 +1,17 @@
+{
+  "extends": "@event-mapping/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "tailwind.config.ts",
+    "postcss.config.mjs"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
