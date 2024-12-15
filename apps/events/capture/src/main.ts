@@ -20,7 +20,6 @@ function sketch(pi: p5) {
     p.noFill();
 
     e.createCapture("video", { flipped: true } as never);
-    e.capture?.hide?.();
   };
 
   p.draw = () => {
