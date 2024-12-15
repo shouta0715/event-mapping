@@ -37,6 +37,15 @@ export function messageHandler(
     case "moveShape":
       this.adminMessageHandlers.moveShapeHandler(action.data);
       break;
+    case "streamingOffer":
+      this.adminMessageHandlers.streamingOfferHandler(action.data);
+      break;
+    case "streamingAnswer":
+      this.adminMessageHandlers.streamingAnswerHandler(action.data);
+      break;
+    case "streamingCandidate":
+      this.adminMessageHandlers.streamingCandidateHandler(action.data);
+      break;
     default:
       break;
   }

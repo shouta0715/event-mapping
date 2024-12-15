@@ -5,10 +5,15 @@ import {
   EventLeaveShape,
   EventMoveShape,
   EventMoveVertex,
+  EventStreamingCandidate,
+  EventStreamingOffer,
   GlobalData,
   LeaveShapeAction,
   MoveShapeAction,
   MoveVertexAction,
+  StreamingAnswerAction,
+  StreamingCandidateAction,
+  StreamingOfferAction,
   TerminalData,
 } from "@event-mapping/schema";
 import { Subscription } from "@/subscription";
@@ -185,6 +190,55 @@ function moveShapeHandler(this: Subscription, data: MoveShapeAction["data"]) {
   sendMessage(ws, eventData);
 }
 
+function streamingOfferHandler(
+  this: Subscription,
+  data: StreamingOfferAction["data"]
+) {
+  if (!this.admin) return;
+  const { id, session: offer } = data;
+
+  const ws = this.getWsFromId(id);
+  if (!ws) return;
+
+  const eventData: EventStreamingOffer = {
+    action: "streamingOffer",
+    data: {
+      id,
+      offer,
+    },
+  };
+
+  sendMessage<EventStreamingOffer>(ws, eventData);
+}
+
+function streamingCandidateHandler(
+  this: Subscription,
+  data: StreamingCandidateAction["data"]
+) {
+  const { id, candidate } = data;
+  const ws = this.getWsFromId(id);
+  if (!ws) return;
+
+  const eventData: EventStreamingCandidate = {
+    action: "streamingCandidate",
+    data: candidate,
+  };
+
+  sendMessage(ws, eventData);
+}
+
+function streamingAnswerHandler(
+  this: Subscription,
+  data: StreamingAnswerAction["data"]
+) {
+  if (!this.admin) return;
+
+  sendMessage<StreamingAnswerAction>(this.admin, {
+    action: "streamingAnswer",
+    data,
+  });
+}
+
 export function generateAdminMessageHandlers(this: Subscription) {
   return {
     joinSessionHandler: joinSessionHandler.bind(this),
@@ -194,5 +248,8 @@ export function generateAdminMessageHandlers(this: Subscription) {
     enterShapeHandler: enterShapeHandler.bind(this),
     leaveShapeHandler: leaveShapeHandler.bind(this),
     moveShapeHandler: moveShapeHandler.bind(this),
+    streamingOfferHandler: streamingOfferHandler.bind(this),
+    streamingCandidateHandler: streamingCandidateHandler.bind(this),
+    streamingAnswerHandler: streamingAnswerHandler.bind(this),
   };
 }
