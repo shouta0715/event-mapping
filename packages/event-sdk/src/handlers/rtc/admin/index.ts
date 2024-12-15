@@ -4,21 +4,24 @@ import {
   StreamingOfferAction,
   TerminalData,
 } from "@event-mapping/schema";
+import { AdminHandler } from "@event-mapping/event-sdk/handlers/admin";
 
 const ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
 
 type Constructor = {
+  event: AdminHandler;
   streamingOffer: (data: StreamingOfferAction["data"]) => void;
   streamingCandidate: (data: StreamingCandidateAction["data"]) => void;
-  sessions: TerminalData[];
 };
 
 export class AdminWebRTC {
-  private peerConnection: RTCPeerConnection;
-
   private canvas: HTMLCanvasElement;
 
   private stream: MediaStream;
+
+  private sessions: TerminalData[] = [];
+
+  private connections: Map<string, RTCPeerConnection> = new Map();
 
   constructor(private readonly client: Constructor) {
     const _canvas = document.querySelector<HTMLCanvasElement>("canvas");
@@ -28,22 +31,25 @@ export class AdminWebRTC {
 
     this.stream = this.canvas.captureStream(30);
 
-    this.peerConnection = new RTCPeerConnection({
-      iceServers: ICE_SERVERS,
-    });
-
     this.init();
   }
 
   private init() {
-    this.tracks();
-    this.onCandidate();
+    this.client.event.subscribe((sessions) =>
+      this.registerStreamings(sessions)
+    );
   }
 
   private tracks() {
     this.stream.getTracks().forEach((track) => {
-      this.peerConnection.addTrack(track, this.stream);
+      this.connections.forEach((connection) =>
+        this.addTrack(track, connection)
+      );
     });
+  }
+
+  private addTrack(track: MediaStreamTrack, connection: RTCPeerConnection) {
+    connection.addTrack(track, this.stream);
   }
 
   private sendSignaling(id: string, data: RTCSessionDescriptionInit) {
@@ -65,30 +71,67 @@ export class AdminWebRTC {
   }
 
   private onCandidate() {
-    this.peerConnection.onicecandidate = (event) => {
-      if (!event.candidate) return;
+    for (const [id, connection] of this.connections) {
+      connection.onicecandidate = (event) => {
+        if (!event.candidate) return;
 
-      for (const session of this.client.sessions) {
-        this.sendCandidate(session.id, event.candidate);
-      }
+        this.sendCandidate(id, event.candidate);
+      };
+    }
+  }
+
+  private async registerStreamings(sessions: TerminalData[]) {
+    for (const connection of this.connections.values()) {
+      connection.close();
+    }
+
+    this.connections.clear();
+
+    this.sessions = sessions;
+
+    const promises = sessions.map((session) => this.setupConnection(session));
+
+    await Promise.all(promises);
+  }
+
+  private async setupConnection(session: TerminalData) {
+    const connection = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+
+    connection.onicecandidate = (event) => {
+      if (!event.candidate) return;
+      this.sendCandidate(session.id, event.candidate);
     };
+
+    this.stream.getTracks().forEach((track) => {
+      connection.addTrack(track, this.stream);
+    });
+
+    const offer = await connection.createOffer();
+    await connection.setLocalDescription(offer);
+    if (connection.localDescription) {
+      this.sendSignaling(session.id, connection.localDescription);
+    }
+
+    this.connections.set(session.id, connection);
   }
 
   async onAnswer(data: StreamingAnswerAction["data"]) {
     if (data.answer.type !== "answer") return;
 
+    const { id } = data;
+    const connection = this.connections.get(id);
+    if (!connection) return;
+
     const session = new RTCSessionDescription(data.answer);
 
-    await this.peerConnection.setRemoteDescription(session);
+    await connection.setRemoteDescription(session);
   }
 
-  async startStreaming(sessions: TerminalData[]) {
-    const offer = await this.peerConnection.createOffer();
-    await this.peerConnection.setLocalDescription(offer);
-    if (!this.peerConnection.localDescription) return;
+  async startStreaming(session: TerminalData, connection: RTCPeerConnection) {
+    const offer = await connection.createOffer();
+    await connection.setLocalDescription(offer);
+    if (!connection.localDescription) return;
 
-    for (const session of sessions) {
-      this.sendSignaling(session.id, this.peerConnection.localDescription);
-    }
+    this.sendSignaling(session.id, connection.localDescription);
   }
 }

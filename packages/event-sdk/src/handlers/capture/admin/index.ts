@@ -23,12 +23,10 @@ export function createCapture(
   }
 
   const rtc = new AdminWebRTC({
-    sessions: this.terminals,
     streamingCandidate: this.adminComlinkHandlers?.streamingCandidate,
     streamingOffer: this.adminComlinkHandlers?.streamingOffer,
+    event: this,
   });
-
-  rtc.startStreaming(this.terminals);
 
   return {
     media: this.p.createCapture(type, options as any) as p5.MediaElement,

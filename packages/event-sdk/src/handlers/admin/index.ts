@@ -75,6 +75,16 @@ export class AdminHandler<
     return this._capture;
   }
 
+  protected subscriptions: Set<(sessions: TerminalData[]) => void> = new Set();
+
+  readonly subscribe = (fn: (sessions: TerminalData[]) => void) => {
+    this.subscriptions.add(fn);
+  };
+
+  readonly unsubscribe = (fn: (sessions: TerminalData[]) => void) => {
+    this.subscriptions.delete(fn);
+  };
+
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
 
