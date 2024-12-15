@@ -30,8 +30,8 @@ VALUES (
     'dvp0vp9dt37abdg9nqj9lacz',
     'http://localhost:3001',
     'http://localhost:3001',
-    4000,
-    4000,
+    2671,
+    1721,
     '2024'
   ),
   (
@@ -103,4 +103,24 @@ VALUES (
     4000,
     4000,
     'sample'
+  ),
+  (
+    'vp27o8hk45dx4j1yoww38d1p',
+    'キャプチャー',
+    'aj8b2u3976bkkbijxdhp2adf',
+    'http://localhost:3009',
+    'http://localhost:3009',
+    2248,
+    2198,
+    'capture'
+  ),
+  (
+    's9bm3116aroj9h8jzv8xy9sg',
+    'メディアパイプ',
+    'aj8b2u3976bkkbijxdhp2adf',
+    'http://localhost:3010',
+    'http://localhost:3010',
+    2241,
+    2000,
+    'medi-pipe'
   );
