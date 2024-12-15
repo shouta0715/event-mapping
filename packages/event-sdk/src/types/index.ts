@@ -1,3 +1,5 @@
+import p5 from "p5";
+
 export * from "./admin";
 export * from "./global";
 export * from "./shape";
@@ -52,4 +54,9 @@ export interface EventClient {
     x3: number,
     y3: number
   ) => void;
+  createCapture: (
+    type: "video" | "audio",
+    options?: { flipped: boolean }
+  ) => p5.MediaElement | null;
+  capture: p5.MediaElement | null;
 }

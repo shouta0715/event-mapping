@@ -9,6 +9,7 @@ import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
 import * as Comlink from "comlink";
 import p5 from "p5";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
+import { createCapture } from "@event-mapping/event-sdk/handlers/capture/admin";
 import { generateComlinkHandlers } from "@event-mapping/event-sdk/handlers/comlink";
 import {
   adminTransform,
@@ -29,6 +30,7 @@ import {
   AdminComlinkHandlers,
   TTrackingData,
   TrackingShapeProps,
+  ComlinkHandlers,
 } from "@event-mapping/event-sdk/types";
 import { p5VectorToObject } from "@event-mapping/event-sdk/utils";
 
@@ -37,6 +39,8 @@ export class AdminHandler<
   TrackingData extends TTrackingData = any,
 > extends BaseHandler {
   private readonly comlinkHandlers = generateComlinkHandlers.bind(this);
+
+  private handlers: ComlinkHandlers | null = null;
 
   /**
    * @description Quadtree handlers
@@ -53,6 +57,8 @@ export class AdminHandler<
 
   readonly transformed = adminTransformed.bind(this);
 
+  protected readonly _createCapture = createCapture.bind(this);
+
   protected quadtree: Quadtree<QuadtreeShape> | null = null;
 
   shapes: AdminShapes<TData, TrackingData>;
@@ -62,6 +68,22 @@ export class AdminHandler<
   readonly __is_admin__ = true;
 
   readonly images: Images;
+
+  private _capture: p5.MediaElement | null = null;
+
+  get capture() {
+    return this._capture;
+  }
+
+  protected subscriptions: Set<(sessions: TerminalData[]) => void> = new Set();
+
+  readonly subscribe = (fn: (sessions: TerminalData[]) => void) => {
+    this.subscriptions.add(fn);
+  };
+
+  readonly unsubscribe = (fn: (sessions: TerminalData[]) => void) => {
+    this.subscriptions.delete(fn);
+  };
 
   constructor(p: p5, options: EventClientOptions) {
     super(p, options);
@@ -113,8 +135,8 @@ export class AdminHandler<
   };
 
   private init() {
-    const handlers = this.comlinkHandlers();
-    Comlink.expose(handlers, Comlink.windowEndpoint(self.parent));
+    this.handlers = this.comlinkHandlers();
+    Comlink.expose(this.handlers, Comlink.windowEndpoint(self.parent));
     this.adminComlinkHandlers = Comlink.wrap(
       Comlink.windowEndpoint(self.parent)
     );
@@ -163,5 +185,21 @@ export class AdminHandler<
 
   triangle: EventClient["triangle"] = (x1, y1, x2, y2, x3, y3) => {
     this.transform(() => this.p.triangle(x1, y1, x2, y2, x3, y3));
+  };
+
+  createCapture: EventClient["createCapture"] = (type, options) => {
+    const { media, rtc } = this._createCapture(type, options);
+
+    if (rtc) {
+      if (!this.handlers) return media;
+
+      this.handlers.streamingAnswer = rtc.onAnswer.bind(rtc);
+    }
+
+    this._capture = media;
+
+    media.hide?.();
+
+    return this._capture;
   };
 }

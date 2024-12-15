@@ -120,3 +120,35 @@ export const moveShapeActionSchema = z.object({
 });
 
 export type MoveShapeAction = z.infer<typeof moveShapeActionSchema>;
+
+export const streamingOfferActionSchema = z.object({
+  action: z.literal("streamingOffer"),
+  data: z.object({
+    id: z.string(),
+    session: z.string(),
+  }),
+});
+
+export type StreamingOfferAction = z.infer<typeof streamingOfferActionSchema>;
+
+export const streamingAnswerActionSchema = z.object({
+  action: z.literal("streamingAnswer"),
+  data: z.object({
+    id: z.string(),
+    answer: z.custom<RTCSessionDescriptionInit>(),
+  }),
+});
+
+export type StreamingAnswerAction = z.infer<typeof streamingAnswerActionSchema>;
+
+export const streamingCandidateActionSchema = z.object({
+  action: z.literal("streamingCandidate"),
+  data: z.object({
+    id: z.string(),
+    candidate: z.custom<RTCIceCandidateInit>(),
+  }),
+});
+
+export type StreamingCandidateAction = z.infer<
+  typeof streamingCandidateActionSchema
+>;

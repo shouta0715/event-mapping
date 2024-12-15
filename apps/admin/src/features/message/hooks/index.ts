@@ -12,8 +12,9 @@ import {
   MouseDoubleClickedAction,
   MouseMovedAction,
   MouseDraggedAction,
+  StreamingAnswerAction,
 } from "@event-mapping/schema";
-import Comlink from "comlink";
+import * as Comlink from "comlink";
 import { useCallback, useEffect } from "react";
 import { useWs } from "@/features/websocket/hooks";
 import { useTerminalState } from "@/global/store/provider";
@@ -165,6 +166,19 @@ export const useWebSocketMessage = ({
     [comlink]
   );
 
+  const streamingAnswerHandler = useCallback(
+    async (data: StreamingAnswerAction["data"]) => {
+      if (!comlink?.streamingAnswer) return;
+
+      const fn = comlink.streamingAnswer;
+
+      if (typeof fn !== "function") return;
+
+      fn(data);
+    },
+    [comlink]
+  );
+
   useEffect(() => {
     if (!lastJsonMessage) return;
     const { action } = lastJsonMessage;
@@ -212,7 +226,13 @@ export const useWebSocketMessage = ({
       case "mouseDragged":
         mouseDraggedHandler(lastJsonMessage.data);
         break;
-
+      case "streamingAnswer":
+        streamingAnswerHandler(lastJsonMessage.data);
+        break;
+      case "streamingOffer":
+        break;
+      case "streamingCandidate":
+        break;
       default:
         throw new Error(action satisfies never);
     }
@@ -230,6 +250,7 @@ export const useWebSocketMessage = ({
     mouseDoubleClickedHandler,
     mouseMovedHandler,
     mouseDraggedHandler,
+    streamingAnswerHandler,
   ]);
 
   return {

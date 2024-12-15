@@ -9,6 +9,9 @@ import {
   moveShapeActionSchema,
   moveVertexActionSchema,
   promptActionSchema,
+  streamingAnswerActionSchema,
+  streamingCandidateActionSchema,
+  streamingOfferActionSchema,
   uploadImageActionSchema,
 } from "@event-mapping/schema/action/admin";
 import {
@@ -28,6 +31,9 @@ import {
   eventMoveVertexSchema,
   eventPromptSchema,
   eventRestartSchema,
+  eventStreamingAnswerSchema,
+  eventStreamingCandidateSchema,
+  eventStreamingOfferSchema,
   eventUpdateGlobalSchema,
   eventUpdateSchema,
   eventUploadImageSchema,
@@ -49,6 +55,9 @@ export const adminActionSchema = z.union([
   leaveShapeActionSchema,
   promptActionSchema,
   moveShapeActionSchema,
+  streamingOfferActionSchema,
+  streamingAnswerActionSchema,
+  streamingCandidateActionSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,
@@ -73,6 +82,9 @@ export const eventActionSchema = z.union([
   eventLeaveShapeSchema,
   eventPromptSchema,
   eventMoveShapeSchema,
+  eventStreamingOfferSchema,
+  eventStreamingAnswerSchema,
+  eventStreamingCandidateSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,

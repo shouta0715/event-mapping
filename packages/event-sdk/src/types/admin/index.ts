@@ -10,6 +10,9 @@ import {
   MouseMovedAction,
   MouseDraggedAction,
   MoveShapeAction,
+  StreamingOfferAction,
+  StreamingAnswerAction,
+  StreamingCandidateAction,
 } from "@event-mapping/schema";
 import { Rectangle } from "@timohausmann/quadtree-ts";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
@@ -28,12 +31,15 @@ export type ComlinkHandlers = {
   mouseDoubleClicked: (data: MouseDoubleClickedAction["data"]) => void;
   mouseMoved: (data: MouseMovedAction["data"]) => void;
   mouseDragged: (data: MouseDraggedAction["data"]) => void;
+  streamingAnswer?: (data: StreamingAnswerAction["data"]) => void;
 };
 
 export type AdminComlinkHandlers = {
   enterShape: (rectId: string, shape: EnterShapeAction["data"]) => void;
   leaveShape: (rectId: string, id: string) => void;
   moveShape: (rectId: string, data: MoveShapeAction["data"]) => void;
+  streamingOffer: (data: StreamingOfferAction["data"]) => void;
+  streamingCandidate: (data: StreamingCandidateAction["data"]) => void;
 };
 
 export type QuadtreeShape = Rectangle<TerminalData>;

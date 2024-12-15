@@ -75,6 +75,14 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
     case "moveShape":
       handleMoveShapeAction.call(this, action.data);
       break;
+    case "streamingAnswer":
+      break;
+    case "streamingOffer":
+      this.rtc?.startReceiving(action.data);
+      break;
+    case "streamingCandidate":
+      this.rtc?.onCandidate(action.data);
+      break;
     default:
       throw new Error(action satisfies never);
   }

@@ -137,4 +137,11 @@ export abstract class BaseHandler implements EventClient {
     x3: number,
     y3: number
   ) => void;
+
+  abstract createCapture: (
+    type: "video" | "audio",
+    options?: { flipped: boolean }
+  ) => p5.MediaElement | null;
+
+  abstract capture: p5.MediaElement | null;
 }

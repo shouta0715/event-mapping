@@ -17,7 +17,12 @@ export const parseActionMessage = <T extends "admin" | "event">(
 
   const parsed = schema.safeParse(jsonV);
 
-  if (!parsed.success) return null;
+  if (!parsed.success) {
+    // eslint-disable-next-line no-console
+    console.warn("parse action failed", parsed.error);
+
+    return null;
+  }
 
   return parsed.data as T extends "admin" ? AdminAction : EventAction;
 };

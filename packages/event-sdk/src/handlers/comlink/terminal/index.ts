@@ -6,6 +6,8 @@ export function joinHandler(this: AdminHandler, terminal: TerminalData) {
   this.join(terminal);
 
   this.insertTerminal(terminal);
+
+  this.subscriptions.forEach((fn) => fn(this.terminals));
 }
 
 export function leaveHandler(this: AdminHandler, id: string) {
@@ -22,5 +24,6 @@ export function initializeHandler(
   this.terminals = terminals;
   this.initializeQuadtree();
   this.setup(global, terminals, undefined);
+  this.subscriptions.forEach((fn) => fn(this.terminals));
   this.initialized = true;
 }
