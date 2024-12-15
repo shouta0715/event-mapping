@@ -8,6 +8,8 @@ import {
   EnterShapeAction,
   LeaveShapeAction,
   MoveShapeAction,
+  StreamingCandidateAction,
+  StreamingOfferAction,
   TerminalData,
 } from "@event-mapping/schema";
 import { OnResize } from "@xyflow/react";
@@ -113,13 +115,43 @@ export function useComlink({ data }: UseComlinkProps) {
     [sendJsonMessage]
   );
 
+  const streamingOfferHandler: AdminComlinkHandlers["streamingOffer"] =
+    useCallback(
+      (props) => {
+        sendJsonMessage<StreamingOfferAction>({
+          action: "streamingOffer",
+          data: props,
+        });
+      },
+      [sendJsonMessage]
+    );
+
+  const streamingCandidateHandler: AdminComlinkHandlers["streamingCandidate"] =
+    useCallback(
+      (props) => {
+        sendJsonMessage<StreamingCandidateAction>({
+          action: "streamingCandidate",
+          data: props,
+        });
+      },
+      [sendJsonMessage]
+    );
+
   const exposeHandlers = useCallback((): AdminComlinkHandlers => {
     return {
       enterShape: enterShapeHandler,
       leaveShape: leaveShapeHandler,
       moveShape: moveShapeHandler,
+      streamingOffer: streamingOfferHandler,
+      streamingCandidate: streamingCandidateHandler,
     };
-  }, [enterShapeHandler, leaveShapeHandler, moveShapeHandler]);
+  }, [
+    enterShapeHandler,
+    leaveShapeHandler,
+    moveShapeHandler,
+    streamingOfferHandler,
+    streamingCandidateHandler,
+  ]);
 
   const handleOnload = useCallback(async () => {
     const iframe = iframeRef.current;

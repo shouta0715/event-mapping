@@ -11,6 +11,7 @@ import {
 } from "@event-mapping/event-sdk/handlers/comlink/mouse";
 import { promptHandler } from "@event-mapping/event-sdk/handlers/comlink/prompt";
 import { resizeHandler } from "@event-mapping/event-sdk/handlers/comlink/resize";
+
 import {
   initializeHandler,
   joinHandler,
