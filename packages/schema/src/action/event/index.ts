@@ -129,3 +129,32 @@ export const eventMoveShapeSchema = z.object({
 });
 
 export type EventMoveShape = z.infer<typeof eventMoveShapeSchema>;
+
+export const eventStreamingOfferSchema = z.object({
+  action: z.literal("streamingOffer"),
+  data: z.object({
+    id: z.string(),
+    offer: z.string(),
+  }),
+});
+
+export type EventStreamingOffer = z.infer<typeof eventStreamingOfferSchema>;
+
+export const eventStreamingAnswerSchema = z.object({
+  action: z.literal("streamingAnswer"),
+  data: z.object({
+    id: z.string(),
+    answer: z.custom<RTCSessionDescriptionInit>(),
+  }),
+});
+
+export type EventStreamingAnswer = z.infer<typeof eventStreamingAnswerSchema>;
+
+export const eventStreamingCandidateSchema = z.object({
+  action: z.literal("streamingCandidate"),
+  data: z.custom<RTCIceCandidateInit>(),
+});
+
+export type EventStreamingCandidate = z.infer<
+  typeof eventStreamingCandidateSchema
+>;
