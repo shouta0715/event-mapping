@@ -46,6 +46,9 @@ export function messageHandler(
     case "streamingCandidate":
       this.adminMessageHandlers.streamingCandidateHandler(action.data);
       break;
+    case "processor":
+      this.adminMessageHandlers.processorHandler(action.data);
+      break;
     default:
       break;
   }

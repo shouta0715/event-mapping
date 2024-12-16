@@ -11,6 +11,7 @@ import {
   LeaveShapeAction,
   MoveShapeAction,
   MoveVertexAction,
+  ProcessorAction,
   StreamingAnswerAction,
   StreamingCandidateAction,
   StreamingOfferAction,
@@ -239,6 +240,17 @@ function streamingAnswerHandler(
   });
 }
 
+function processorHandler(this: Subscription, data: ProcessorAction["data"]) {
+  if (!this.admin) return;
+
+  for (const session of this.sessions.keys()) {
+    sendMessage<ProcessorAction>(session, {
+      action: "processor",
+      data,
+    });
+  }
+}
+
 export function generateAdminMessageHandlers(this: Subscription) {
   return {
     joinSessionHandler: joinSessionHandler.bind(this),
@@ -251,5 +263,6 @@ export function generateAdminMessageHandlers(this: Subscription) {
     streamingOfferHandler: streamingOfferHandler.bind(this),
     streamingCandidateHandler: streamingCandidateHandler.bind(this),
     streamingAnswerHandler: streamingAnswerHandler.bind(this),
+    processorHandler: processorHandler.bind(this),
   };
 }
