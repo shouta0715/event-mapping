@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TerminalData } from "@event-mapping/schema";
+import { ProcessorAction, TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 import RWS from "reconnecting-websocket";
 import { BaseHandler } from "@event-mapping/event-sdk/handlers/base";
@@ -77,6 +77,8 @@ export class EventHandler<
   protected readonly _createCapture = createCapture.bind(this);
 
   protected readonly trackStream = trackStream.bind(this);
+
+  protected processed: unknown | null = null;
 
   protected rtc: EventWebRTC | null = null;
 
@@ -175,4 +177,8 @@ export class EventHandler<
 
     return this._capture;
   };
+
+  processor<T extends ProcessorAction["data"]>(): T | null {
+    return this.processed as T | null;
+  }
 }

@@ -1,4 +1,4 @@
-import { TerminalData } from "@event-mapping/schema";
+import { ProcessorAction, TerminalData } from "@event-mapping/schema";
 import p5 from "p5";
 
 import {
@@ -144,4 +144,8 @@ export abstract class BaseHandler implements EventClient {
   ) => p5.MediaElement | null;
 
   abstract capture: p5.MediaElement | null;
+
+  abstract processor<T extends ProcessorAction["data"]>(
+    generator: () => T
+  ): T | null;
 }

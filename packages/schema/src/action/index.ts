@@ -21,6 +21,7 @@ import {
   mouseMovedActionSchema,
   mousePressedActionSchema,
   mouseReleasedActionSchema,
+  processorActionSchema,
 } from "@event-mapping/schema/action/common";
 import {
   eventDeleteSchema,
@@ -58,6 +59,7 @@ export const adminActionSchema = z.union([
   streamingOfferActionSchema,
   streamingAnswerActionSchema,
   streamingCandidateActionSchema,
+  processorActionSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,
@@ -85,6 +87,7 @@ export const eventActionSchema = z.union([
   eventStreamingOfferSchema,
   eventStreamingAnswerSchema,
   eventStreamingCandidateSchema,
+  processorActionSchema,
   // mouse
   mousePressedActionSchema,
   mouseReleasedActionSchema,

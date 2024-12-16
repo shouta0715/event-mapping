@@ -59,4 +59,5 @@ export interface EventClient {
     options?: { flipped: boolean }
   ) => p5.MediaElement | null;
   capture: p5.MediaElement | null;
+  processor<T extends Record<string, unknown>>(generator: () => T): T | null;
 }
