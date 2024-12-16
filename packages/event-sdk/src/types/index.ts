@@ -1,3 +1,4 @@
+import { ProcessorAction } from "@event-mapping/schema";
 import p5 from "p5";
 
 export * from "./admin";
@@ -59,5 +60,5 @@ export interface EventClient {
     options?: { flipped: boolean }
   ) => p5.MediaElement | null;
   capture: p5.MediaElement | null;
-  processor<T extends Record<string, unknown>>(generator: () => T): T | null;
+  processor<T extends ProcessorAction["data"]>(generator: () => T): T | null;
 }
