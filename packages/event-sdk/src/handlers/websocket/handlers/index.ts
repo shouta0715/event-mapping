@@ -13,6 +13,7 @@ import { handleMouseMovedAction } from "@event-mapping/event-sdk/handlers/websoc
 import { handleMousePressedAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/mouse/pressed";
 import { handleMouseReleasedAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/mouse/release";
 import { handleMoveShapeAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/move";
+import { handleProcessorAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/processor";
 import { handlePromptAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/prompt";
 import { handleRestartAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/restart";
 import { handleUpdateAction } from "@event-mapping/event-sdk/handlers/websocket/handlers/update";
@@ -82,6 +83,9 @@ export function handleEventAction(this: EventHandler, action: EventAction) {
       break;
     case "streamingCandidate":
       this.rtc?.onCandidate(action.data);
+      break;
+    case "processor":
+      handleProcessorAction.call(this, action.data);
       break;
     default:
       throw new Error(action satisfies never);

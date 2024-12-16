@@ -13,6 +13,7 @@ import {
   StreamingOfferAction,
   StreamingAnswerAction,
   StreamingCandidateAction,
+  ProcessorAction,
 } from "@event-mapping/schema";
 import { Rectangle } from "@timohausmann/quadtree-ts";
 import { GlobalData } from "@event-mapping/event-sdk/types/global";
@@ -40,6 +41,7 @@ export type AdminComlinkHandlers = {
   moveShape: (rectId: string, data: MoveShapeAction["data"]) => void;
   streamingOffer: (data: StreamingOfferAction["data"]) => void;
   streamingCandidate: (data: StreamingCandidateAction["data"]) => void;
+  processor: (data: ProcessorAction["data"]) => void;
 };
 
 export type QuadtreeShape = Rectangle<TerminalData>;

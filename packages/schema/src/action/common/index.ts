@@ -49,3 +49,10 @@ export const mouseDraggedActionSchema = z.object({
 });
 
 export type MouseDraggedAction = z.infer<typeof mouseDraggedActionSchema>;
+
+export const processorActionSchema = z.object({
+  action: z.literal("processor"),
+  data: z.record(z.any()),
+});
+
+export type ProcessorAction = z.infer<typeof processorActionSchema>;

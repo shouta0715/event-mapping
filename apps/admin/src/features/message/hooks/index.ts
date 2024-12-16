@@ -233,6 +233,8 @@ export const useWebSocketMessage = ({
         break;
       case "streamingCandidate":
         break;
+      case "processor":
+        break;
       default:
         throw new Error(action satisfies never);
     }

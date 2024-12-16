@@ -3,6 +3,7 @@
 import {
   EnterShapeAction,
   MoveShapeAction,
+  ProcessorAction,
   TerminalData,
 } from "@event-mapping/schema";
 import { Quadtree, Rectangle } from "@timohausmann/quadtree-ts";
@@ -202,4 +203,11 @@ export class AdminHandler<
 
     return this._capture;
   };
+
+  processor<T extends ProcessorAction["data"]>(generator: () => T): T {
+    const data = generator();
+    this.adminComlinkHandlers?.processor(data);
+
+    return data;
+  }
 }

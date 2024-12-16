@@ -8,6 +8,7 @@ import {
   EnterShapeAction,
   LeaveShapeAction,
   MoveShapeAction,
+  ProcessorAction,
   StreamingCandidateAction,
   StreamingOfferAction,
   TerminalData,
@@ -137,6 +138,16 @@ export function useComlink({ data }: UseComlinkProps) {
       [sendJsonMessage]
     );
 
+  const processorHandler: AdminComlinkHandlers["processor"] = useCallback(
+    (props) => {
+      sendJsonMessage<ProcessorAction>({
+        action: "processor",
+        data: props,
+      });
+    },
+    [sendJsonMessage]
+  );
+
   const exposeHandlers = useCallback((): AdminComlinkHandlers => {
     return {
       enterShape: enterShapeHandler,
@@ -144,6 +155,7 @@ export function useComlink({ data }: UseComlinkProps) {
       moveShape: moveShapeHandler,
       streamingOffer: streamingOfferHandler,
       streamingCandidate: streamingCandidateHandler,
+      processor: processorHandler,
     };
   }, [
     enterShapeHandler,
@@ -151,6 +163,7 @@ export function useComlink({ data }: UseComlinkProps) {
     moveShapeHandler,
     streamingOfferHandler,
     streamingCandidateHandler,
+    processorHandler,
   ]);
 
   const handleOnload = useCallback(async () => {
